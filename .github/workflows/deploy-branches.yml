@@ -1,7 +1,7 @@
 name: Build Hostinger deploy branches
 
 # Builds the two Vite frontends and a vendor-less copy of the API, then pushes
-# each to its own branch (deploy-web, deploy-dashboard, deploy-api). hPanel's
+# them together to the "deploy" branch. hPanel's
 # Git deployment pulls those branches into the matching folders on Hostinger
 # Business (shared hosting has no Node.js, so the build has to happen here).
 # See HOSTINGER_BUSINESS_DEPLOYMENT.md.
@@ -82,6 +82,15 @@ jobs:
               git -C "$tmp" push -q origin "$branch"
             fi
           }
-          publish web/dist deploy-web
-          publish dashboard/dist deploy-dashboard
-          publish out/api deploy-api
+          # hPanel allows one Git deployment per website, so everything goes
+          # into a single "deploy" branch deployed to public_html:
+          #   /            -> web (restaurantgo.org)
+          #   /rgo-app/    -> dashboard (app.restaurantgo.org)
+          #   /rgo-api/    -> api (api.restaurantgo.org -> rgo-api/public)
+          # rgo-api/.gitignore keeps vendor/, .env and uploads on the server
+          # across deployments (hPanel preserves git-ignored paths).
+          mkdir -p out/deploy
+          rsync -a web/dist/ out/deploy/
+          rsync -a dashboard/dist/ out/deploy/rgo-app/
+          rsync -a out/api/ out/deploy/rgo-api/
+          publish out/deploy deploy
