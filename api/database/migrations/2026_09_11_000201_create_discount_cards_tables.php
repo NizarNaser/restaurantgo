@@ -8,6 +8,9 @@ return new class extends Migration
 {
     public function up(): void
     {
+        // Guards below: this migration can be half-applied on MySQL (DDL is not
+        // transactional), so a re-run must skip what already exists.
+        if (! Schema::hasTable('discount_cards')) {
         Schema::create('discount_cards', function (Blueprint $table) {
             $table->id();
             $table->foreignId('tenant_id')->constrained()->cascadeOnDelete();
@@ -24,10 +27,12 @@ return new class extends Migration
 
             $table->unique(['tenant_id', 'card_number']);
         });
+        }
 
         // One request/approval event on an order against a card — 'deduct'
         // (off this invoice), 'accumulate' (credit for later, this invoice
         // untouched), or 'redeem' (spend previously-accumulated credit).
+        if (! Schema::hasTable('discount_applications')) {
         Schema::create('discount_applications', function (Blueprint $table) {
             $table->id();
             $table->foreignId('tenant_id')->constrained()->cascadeOnDelete();
@@ -45,12 +50,17 @@ return new class extends Migration
             $table->index(['tenant_id', 'order_id']);
             $table->index(['tenant_id', 'discount_card_id']);
         });
+        }
 
+        // No ->after('shift_id'): orders.shift_id is only added by the later
+        // 2026_09_11_000302 migration, which MySQL rejects (SQLite ignores it).
+        if (! Schema::hasColumn('orders', 'discount_card_id')) {
         Schema::table('orders', function (Blueprint $table) {
-            $table->foreignId('discount_card_id')->nullable()->after('shift_id')
+            $table->foreignId('discount_card_id')->nullable()
                 ->constrained('discount_cards')->nullOnDelete();
             $table->decimal('discount_amount', 10, 2)->default(0)->after('discount_card_id');
         });
+        }
     }
 
     public function down(): void
