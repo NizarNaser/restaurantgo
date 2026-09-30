@@ -1,10 +1,12 @@
 # النشر على Hostinger Business (استضافة مشتركة)
 
-هذا الدليل مخصص لخطة **Hostinger Business** (استضافة مشتركة/shared hosting عبر hPanel، بدون Docker ولا Root access). إن كانت لديك خطة **VPS**، استخدم [`HOSTINGER_DEPLOYMENT.md`](HOSTINGER_DEPLOYMENT.md) بدلاً من هذا الملف — تلك الخطة تدعم subdomain تلقائي لكل مطعم عبر شهادة SSL Wildcard، بينما هذا الدليل يعتمد بنية مختلفة (مبنية أصلاً في الكود) تعمل بدون أي منهما.
+هذا الدليل مخصص لخطة **Hostinger Business** (استضافة مشتركة/shared hosting عبر hPanel، بدون Docker ولا Root access). إن كانت لديك خطة **VPS**، استخدم [`HOSTINGER_DEPLOYMENT.md`](HOSTINGER_DEPLOYMENT.md) بدلاً من هذا الملف.
 
-## الفكرة الأساسية: بدون Wildcard subdomain
+المسار الافتراضي في هذا الدليل هو `https://app.restaurantgo.org/p/{slug}` لكل مطعم (بدل `https://{slug}.restaurantgo.org`)، لأنه يعمل مضمونًا بدون أي إعداد إضافي. **تحديث:** تبيّن أن Hostinger Business يدعم فعليًا SSL Wildcard مجانًا (DNS validation) — راجع §9 أدناه لمحاولة تفعيل subdomain حقيقي لكل مطعم بدل المسار الثابت، إن كنت تفضّله.
 
-استضافة Business المشتركة **لا تدعم**: Docker، عمليات خلفية دائمة (queue worker/scheduler كـ daemon)، ولا شهادة SSL Wildcard (`*.restaurantgo.org`) بسهولة. الكود أصلاً مبني ليدعم بديلاً لكل هذا:
+## الفكرة الأساسية: بدون Wildcard subdomain (الوضع الافتراضي)
+
+Docker وعمليات خلفية دائمة (queue worker/scheduler كـ daemon) غير مدعومة على استضافة مشتركة بأي حال. الكود أصلاً مبني ليدعم بديلاً لكل هذا:
 
 - **مطعم بدون subdomain خاص** يظهر على مسار ثابت: `https://app.restaurantgo.org/p/{slug}` بدلاً من `https://{slug}.restaurantgo.org`. هذا مفعّل تلقائيًا في الكود بمجرد ترك `APP_BASE_DOMAIN` (الباك-إند) و`VITE_BASE_DOMAIN` (الواجهتان) **فارغين** — راجع `SeoService::tenantBaseUrl()` و`dashboard/src/lib/publicSite.ts`، كلاهما جاهز مسبقًا لهذا الوضع ولا يحتاج أي تعديل.
 - **الـ queue** (ترجمة AI بالجملة، إلخ) يعمل عبر جدول قاعدة بيانات (`QUEUE_CONNECTION=database`) — يمكن تفريغه بأمر cron كل دقيقة بدل عملية دائمة.
@@ -155,6 +157,28 @@ cd ../dashboard && npm ci && npm run build   # ينتج dashboard/dist
    - صفحة معاينة بدون JavaScript لكل مطعم على `https://app.restaurantgo.org/p/{slug}/preview` (تُبنى في Laravel مباشرة عبر `SeoRenderController`، بنفس بيانات `SeoService` المستخدمة في الواجهة).
    - في `dashboard/public/.htaccess`: أي طلب من أحد هذه الزواحف على `/p/{slug}` يُوجَّه تلقائيًا (بنفس الرابط الذي يراه الزائر العادي) إلى تلك الصفحة عبر `bot-render.php` بدل `index.html` الفارغ تقنيًا لغير منفّذي JS.
 4. **لكل مطعم**: صفحة "الإعدادات → السيو" في لوحة التحكم (موجودة مسبقًا) تسمح بتعيين عنوان/وصف/صورة OG وربط Google Search Console الخاص بالمطعم (`google_site_verification`) — لا تغيير مطلوب هنا، فقط تأكد من توجيه أصحاب المطاعم لتعبئتها.
+
+## 9) محاولة تفعيل subdomain حقيقي لكل مطعم (`{slug}.restaurantgo.org`)
+
+هذا اختياري وغير مضمون النجاح 100% — جرّبه فقط بعد أن يعمل الموقع بوضعه الافتراضي (§1-8)، لأنه لا يحتاج أي تعديل كود، فقط DNS + إعدادات، ويمكن التراجع عنه بإعادة الإعدادات لفارغة إن لم يعمل.
+
+**لماذا قد يعمل الآن رغم أن الدليل الأصلي (`HOSTINGER_DEPLOYMENT.md`) يقول العكس:** Hostinger Business يوفر فعليًا SSL Wildcard مجانًا (زر "Wildcard SSL" في لوحة SSL، تحقق DNS تلقائي)، وسجل DNS من نوع "CNAME Wildcard" (`*` → وجهة واحدة). **الجزء غير المؤكد:** هل طلب subdomain لم يُنشأ يدويًا في hPanel (مثل `random-test-123.restaurantgo.org`) يصل فعليًا لمجلد `app.restaurantgo.org` بدل صفحة 404 — هذا يعتمد على ضبط Apache الداخلي لحسابك تحديدًا في Hostinger، ولا توجد وثيقة رسمية تؤكده بشكل قاطع لاستضافة Business. **اختبره بنفسك أولًا (خطوة 1 أدناه) قبل تفعيله فعليًا.**
+
+### الخطوات
+
+1. **اختبار أولي (لا يغيّر شيئًا في الموقع الحالي):**
+   - من hPanel → Domains → DNS Zone، أضف سجل: النوع `CNAME`، الاسم `*`، القيمة `app.restaurantgo.org`.
+   - من hPanel → SSL، فعّل **Wildcard SSL** لـ `restaurantgo.org` (تحقق DNS، قد يأخذ دقائق).
+   - انتظر انتشار DNS (حتى ساعة)، ثم افتح `https://random-test-xyz.restaurantgo.org` (subdomain عشوائي لم تُنشئه يدويًا) في متصفح.
+     - **إن ظهرت نفس الواجهة (SPA فارغة أو شاشة تحميل) ولم تظهر صفحة 404 من Hostinger** → نجح، انتقل للخطوة 2.
+     - **إن ظهرت صفحة خطأ من Hostinger (404/"Domain not found")** → الاستضافة المشتركة لا توجّه subdomain غير منشأ يدويًا، وسيتوجّب عليك إما إنشاء subdomain يدويًا في hPanel لكل مطعم جديد يسجّل (خطوة تشغيلية متكررة، غير تلقائية)، أو البقاء على المسار الافتراضي `/p/{slug}`، أو الانتقال لخطة VPS (`HOSTINGER_DEPLOYMENT.md`) حيث التوجيه التلقائي مضمون 100%.
+
+2. **تفعيل الوضع فعليًا (فقط إن نجحت الخطوة 1):**
+   - `api/.env`: عدّل `APP_BASE_DOMAIN=restaurantgo.org` (كان فارغًا).
+   - `dashboard/.env.production` و`web/.env.production`: عدّل `VITE_BASE_DOMAIN=restaurantgo.org` (كان فارغًا).
+   - أعد بناء `web` و`dashboard` (`npm run build`) وارفع `dist/` من جديد فوق الموجود.
+   - سجّل مطعمًا تجريبيًا وتأكد أن `https://{slug}.restaurantgo.org` يفتح صفحته مباشرة.
+   - `/p/{slug}` يبقى يعمل دائمًا كخيار احتياطي (`SeoService::tenantBaseUrl()` يفضّل الـ subdomain إن كان مضبوطًا، لكن المسار القديم لا يُحذف من الكود).
 
 ## القيود المعروفة
 
