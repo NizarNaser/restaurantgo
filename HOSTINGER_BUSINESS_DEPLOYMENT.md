@@ -2,7 +2,7 @@
 
 هذا الدليل مخصص لخطة **Hostinger Business** (استضافة مشتركة/shared hosting عبر hPanel، بدون Docker ولا Root access). إن كانت لديك خطة **VPS**، استخدم [`HOSTINGER_DEPLOYMENT.md`](HOSTINGER_DEPLOYMENT.md) بدلاً من هذا الملف.
 
-المسار الافتراضي في هذا الدليل هو `https://app.restaurantgo.org/p/{slug}` لكل مطعم (بدل `https://{slug}.restaurantgo.org`)، لأنه يعمل مضمونًا بدون أي إعداد إضافي. **تحديث:** تبيّن أن Hostinger Business يدعم فعليًا SSL Wildcard مجانًا (DNS validation) — راجع §9 أدناه لمحاولة تفعيل subdomain حقيقي لكل مطعم بدل المسار الثابت، إن كنت تفضّله.
+المسار الوحيد المدعوم لكل مطعم على هذه الخطة هو `https://app.restaurantgo.org/p/{slug}` (وليس `https://{slug}.restaurantgo.org`). **تحديث (2026-09-30):** جُرِّب تفعيل subdomain حقيقي لكل مطعم فعليًا على حساب Business حقيقي وفشل — راجع §9 أدناه لتفاصيل السبب ولماذا لا يُنصح بإعادة المحاولة على هذه الخطة.
 
 ## الفكرة الأساسية: بدون Wildcard subdomain (الوضع الافتراضي)
 
@@ -158,26 +158,23 @@ cd ../dashboard && npm ci && npm run build   # ينتج dashboard/dist
    - في `dashboard/public/.htaccess`: أي طلب من أحد هذه الزواحف على `/p/{slug}` يُوجَّه تلقائيًا (بنفس الرابط الذي يراه الزائر العادي) إلى تلك الصفحة عبر `bot-render.php` بدل `index.html` الفارغ تقنيًا لغير منفّذي JS.
 4. **لكل مطعم**: صفحة "الإعدادات → السيو" في لوحة التحكم (موجودة مسبقًا) تسمح بتعيين عنوان/وصف/صورة OG وربط Google Search Console الخاص بالمطعم (`google_site_verification`) — لا تغيير مطلوب هنا، فقط تأكد من توجيه أصحاب المطاعم لتعبئتها.
 
-## 9) محاولة تفعيل subdomain حقيقي لكل مطعم (`{slug}.restaurantgo.org`)
+## 9) subdomain حقيقي لكل مطعم (`{slug}.restaurantgo.org`) — جُرِّب وفشل على Business
 
-هذا اختياري وغير مضمون النجاح 100% — جرّبه فقط بعد أن يعمل الموقع بوضعه الافتراضي (§1-8)، لأنه لا يحتاج أي تعديل كود، فقط DNS + إعدادات، ويمكن التراجع عنه بإعادة الإعدادات لفارغة إن لم يعمل.
+**نتيجة اختبار فعلي على حساب Hostinger Business حقيقي بتاريخ 2026-09-30:** لا يعمل، ولا يُنصح بإعادة المحاولة على هذه الخطة. لا حاجة لتكرار الخطوات أدناه إلا بعد الترقية لخطة تدعم SSL Wildcard (مثل VPS، راجع `HOSTINGER_DEPLOYMENT.md`).
 
-**لماذا قد يعمل الآن رغم أن الدليل الأصلي (`HOSTINGER_DEPLOYMENT.md`) يقول العكس:** Hostinger Business يوفر فعليًا SSL Wildcard مجانًا (زر "Wildcard SSL" في لوحة SSL، تحقق DNS تلقائي)، وسجل DNS من نوع "CNAME Wildcard" (`*` → وجهة واحدة). **الجزء غير المؤكد:** هل طلب subdomain لم يُنشأ يدويًا في hPanel (مثل `random-test-123.restaurantgo.org`) يصل فعليًا لمجلد `app.restaurantgo.org` بدل صفحة 404 — هذا يعتمد على ضبط Apache الداخلي لحسابك تحديدًا في Hostinger، ولا توجد وثيقة رسمية تؤكده بشكل قاطع لاستضافة Business. **اختبره بنفسك أولًا (خطوة 1 أدناه) قبل تفعيله فعليًا.**
+**ما تم اختباره وتبيّن:**
+1. **DNS** يعمل: سجل `CNAME` بالاسم `*` والقيمة `app.restaurantgo.org` نجح فورًا — أي subdomain عشوائي (`random-test-xyz.restaurantgo.org`) يُحل فعليًا لنفس سيرفر `app.restaurantgo.org`.
+2. **لا يوجد خيار Wildcard SSL على خطة Business.** لوحة SSL (Websites → Security → SSL) تعرض فقط شهادات لكل subdomain **مُنشأ يدويًا مسبقًا** (الدومين الرئيسي، `app`، `api`) بخيارَي "Uninstall"/"Enforce HTTPS" فقط — لا زر لطلب شهادة wildcard. لوحة الدومين (DNS/Nameservers → SSL) تعرض شهادة "Lifetime SSL" عادية فقط، وهي لا تغطي subdomains غير مُنشأة.
+3. **نتيجة الفتح الفعلي لـ `https://random-test-xyz.restaurantgo.org`:** خطأ شهادة SSL في المتصفح (متوقع، لعدم وجود شهادة تغطيه). وعبر `http://` (لعزل مشكلة الشهادة عن التوجيه): ظهرت صفحة Hostinger الافتراضية "Registered at Hostinger / Manage domain" (صفحة parking)، وليس موقع `app.restaurantgo.org` — أي أن سيرفرات الاستضافة المشتركة تعرض المحتوى فقط للعناوين المُنشأة يدويًا في hPanel، وأي subdomain آخر (رغم وصول DNS الصحيح) يذهب لصفحة parking بدلاً من أي موقع فعلي.
 
-### الخطوات
+**الخلاصة:** المشكلتان معًا (لا Wildcard SSL + لا توجيه تلقائي لـ subdomain غير مُسجَّل يدويًا) تمنعان هذا الأسلوب على خطة Business بشكل قاطع — وليس فقط بشكل غير مؤكد كما افترضت نسخة سابقة من هذا القسم. إنشاء subdomain باسم `*` يدويًا من hPanel → Domains → Subdomains (احتمال لم يُختبر) لن يحل مشكلة الشهادة أصلاً حتى لو نجح في التوجيه، فلا فائدة من تجربته.
 
-1. **اختبار أولي (لا يغيّر شيئًا في الموقع الحالي):**
-   - من hPanel → Domains → DNS Zone، أضف سجل: النوع `CNAME`، الاسم `*`، القيمة `app.restaurantgo.org`.
-   - من hPanel → SSL، فعّل **Wildcard SSL** لـ `restaurantgo.org` (تحقق DNS، قد يأخذ دقائق).
-   - انتظر انتشار DNS (حتى ساعة)، ثم افتح `https://random-test-xyz.restaurantgo.org` (subdomain عشوائي لم تُنشئه يدويًا) في متصفح.
-     - **إن ظهرت نفس الواجهة (SPA فارغة أو شاشة تحميل) ولم تظهر صفحة 404 من Hostinger** → نجح، انتقل للخطوة 2.
-     - **إن ظهرت صفحة خطأ من Hostinger (404/"Domain not found")** → الاستضافة المشتركة لا توجّه subdomain غير منشأ يدويًا، وسيتوجّب عليك إما إنشاء subdomain يدويًا في hPanel لكل مطعم جديد يسجّل (خطوة تشغيلية متكررة، غير تلقائية)، أو البقاء على المسار الافتراضي `/p/{slug}`، أو الانتقال لخطة VPS (`HOSTINGER_DEPLOYMENT.md`) حيث التوجيه التلقائي مضمون 100%.
+**تنظيف اختياري:** سجل `CNAME *` الذي أُضيف للاختبار لا يؤثر على `restaurantgo.org`/`app.restaurantgo.org`/`api.restaurantgo.org` الحاليين، لكن يمكن حذفه من DNS Zone بأمان بما أنه لا فائدة منه الآن (أي subdomain عشوائي سيستمر بالذهاب لصفحة parking سواء بقي السجل أو حُذف، فحذفه تنظيف فقط وليس ضروريًا).
 
-2. **تفعيل الوضع فعليًا (فقط إن نجحت الخطوة 1):**
-   - الواجهتان (`web`/`dashboard`) تُبنَيان وتُنشَران تلقائيًا عبر `.github/workflows/deploy-branches.yml` عند أي push إلى `main` (وليس ببناء محلي يدوي كما في نسخة سابقة من هذا الدليل) — `VITE_BASE_DOMAIN=restaurantgo.org` مضبوط فيه بالفعل.
-   - `api/.env.hostinger` (القالب المستخدم فقط عند إعداد سيرفر جديد من الصفر) مضبوط بالفعل على `APP_BASE_DOMAIN=restaurantgo.org`. **لكن** على سيرفر منشور مسبقًا، `hostinger-cron.sh` لا يلمس `.env` الموجود فعليًا (ينسخ القالب مرة واحدة فقط عند غيابه) — لذا عدّل `APP_BASE_DOMAIN=restaurantgo.org` **يدويًا** في `api/.env` الحيّ على السيرفر (عبر hPanel File Manager أو SSH)، ثم شغّل `php artisan config:clear`.
-   - سجّل مطعمًا تجريبيًا وتأكد أن `https://{slug}.restaurantgo.org` يفتح صفحته مباشرة.
-   - `/p/{slug}` يبقى يعمل دائمًا كخيار احتياطي (`SeoService::tenantBaseUrl()` يفضّل الـ subdomain إن كان مضبوطًا، لكن المسار القديم لا يُحذف من الكود).
+**الخيارات المتبقية لكل مطعم:**
+- البقاء على `https://app.restaurantgo.org/p/{slug}` (الوضع الافتراضي في هذا الدليل، §1-8) — يعمل بشكل مضمون بدون أي قيد.
+- ربط دومين مطعم خاص به يدويًا (custom domain، راجع §1 والقيد رقم 1 أدناه) — ممكن لعدد قليل من المطاعم.
+- الانتقال لخطة VPS (`HOSTINGER_DEPLOYMENT.md`) إن أصبح subdomain تلقائي لكل مطعم أولوية حقيقية — هناك Wildcard SSL والتوجيه التلقائي مضمونان دون قيد الاستضافة المشتركة.
 
 ## القيود المعروفة
 

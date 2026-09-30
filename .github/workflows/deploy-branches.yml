@@ -6,11 +6,12 @@ name: Build Hostinger deploy branches
 # Business (shared hosting has no Node.js, so the build has to happen here).
 # See HOSTINGER_BUSINESS_DEPLOYMENT.md.
 #
-# VITE_BASE_DOMAIN=restaurantgo.org below serves each restaurant at
-# {slug}.restaurantgo.org instead of app.restaurantgo.org/p/{slug} — see §9.
-# Requires wildcard DNS + Wildcard SSL for *.restaurantgo.org to already be
-# working (tested per §9 step 1) AND api/.env's APP_BASE_DOMAIN set to match
-# on the server, or restaurant links will point at a subdomain that 404s.
+# VITE_BASE_DOMAIN is left empty on purpose: tested 2026-09-30 on the actual
+# Hostinger Business account and per-tenant subdomains don't work on this
+# plan (no Wildcard SSL option; an unregistered subdomain hits Hostinger's
+# parking page, not this app) — see §9. Restaurants are served at
+# app.restaurantgo.org/p/{slug} instead. Do not re-enable without first
+# re-testing §9 step 1 on an upgraded/VPS plan.
 
 on:
   push:
@@ -37,14 +38,14 @@ jobs:
       - name: Build web
         working-directory: web
         run: |
-          printf 'VITE_API_URL=https://api.restaurantgo.org/api\nVITE_RESTAURANT_SITE_URL=https://app.restaurantgo.org\nVITE_BASE_DOMAIN=restaurantgo.org\n' > .env.production
+          printf 'VITE_API_URL=https://api.restaurantgo.org/api\nVITE_RESTAURANT_SITE_URL=https://app.restaurantgo.org\nVITE_BASE_DOMAIN=\n' > .env.production
           npm ci
           npm run build
 
       - name: Build dashboard
         working-directory: dashboard
         run: |
-          printf 'VITE_API_URL=https://api.restaurantgo.org/api\nVITE_BASE_DOMAIN=restaurantgo.org\n' > .env.production
+          printf 'VITE_API_URL=https://api.restaurantgo.org/api\nVITE_BASE_DOMAIN=\n' > .env.production
           npm ci
           npm run build
 
