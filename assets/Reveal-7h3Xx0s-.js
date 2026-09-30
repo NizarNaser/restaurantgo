@@ -1,0 +1,1 @@
+import{n as e}from"./axios-DFKDYRkt.js";import{t}from"./react-BWHCxFsB.js";var n=e();function r({children:e,delay:r=0,className:i=``,y:a=24}){return(0,n.jsx)(t.div,{className:i,initial:{opacity:0,y:a},whileInView:{opacity:1,y:0},viewport:{once:!0,margin:`-60px`},transition:{duration:.55,delay:r,ease:[.22,1,.36,1]},children:e})}export{r as t};

@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+
+Sitemap: https://restaurantgo.org/sitemap.xml
+Sitemap: https://api.restaurantgo.org/sitemap.xml
