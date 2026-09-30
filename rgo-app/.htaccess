@@ -1,0 +1,18 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Known search/AI crawler user-agents hitting a tenant's public menu page
+    # get a server-rendered copy instead of this SPA's static index.html —
+    # see bot-render.php for why and how.
+    RewriteCond %{REQUEST_URI} ^/p/[^/]+/?$
+    RewriteCond %{HTTP_USER_AGENT} (googlebot|bingbot|slurp|duckduckbot|baiduspider|yandex|sogou|exabot|facebookexternalhit|facebot|twitterbot|linkedinbot|whatsapp|telegrambot|applebot|gptbot|chatgpt-user|oai-searchbot|anthropic-ai|claudebot|claude-web|perplexitybot|ccbot|bytespider|amazonbot|google-extended|ia_archiver|semrushbot|ahrefsbot|mj12bot|petalbot) [NC]
+    RewriteRule ^ bot-render.php [L]
+
+    # Real files/directories (assets, robots.txt, ...) are served as-is.
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    # Everything else is a client-side route — let the SPA's router handle it.
+    RewriteRule ^ index.html [L]
+</IfModule>
