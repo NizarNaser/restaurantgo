@@ -1,0 +1,87 @@
+name: Build Hostinger deploy branches
+
+# Builds the two Vite frontends and a vendor-less copy of the API, then pushes
+# each to its own branch (deploy-web, deploy-dashboard, deploy-api). hPanel's
+# Git deployment pulls those branches into the matching folders on Hostinger
+# Business (shared hosting has no Node.js, so the build has to happen here).
+# See HOSTINGER_BUSINESS_DEPLOYMENT.md.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: deploy-branches
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Build web
+        working-directory: web
+        run: |
+          printf 'VITE_API_URL=https://api.restaurantgo.org/api\nVITE_RESTAURANT_SITE_URL=https://app.restaurantgo.org\nVITE_BASE_DOMAIN=\n' > .env.production
+          npm ci
+          npm run build
+
+      - name: Build dashboard
+        working-directory: dashboard
+        run: |
+          printf 'VITE_API_URL=https://api.restaurantgo.org/api\nVITE_BASE_DOMAIN=\n' > .env.production
+          npm ci
+          npm run build
+
+      - name: Prepare api (without vendor; composer runs on the server)
+        run: |
+          mkdir -p out/api
+          rsync -a --exclude vendor --exclude node_modules --exclude .env api/ out/api/
+          # The api folder sits inside public_html on shared hosting. Only
+          # api.restaurantgo.org (whose document root is api/public) may reach
+          # it; any other host (e.g. restaurantgo.org/<folder>/.env) gets 403.
+          cat > out/api/.htaccess <<'EOF'
+          <IfModule mod_rewrite.c>
+              RewriteEngine On
+              RewriteCond %{HTTP_HOST} !^api\.restaurantgo\.org$ [NC]
+              RewriteRule ^ - [F]
+          </IfModule>
+          <FilesMatch "^\.">
+              Require all denied
+          </FilesMatch>
+          EOF
+
+      - name: Push deploy branches
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+          REPO="https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          publish() {
+            src="$1"; branch="$2"; tmp="$(mktemp -d)"
+            if git clone -q --depth 1 --branch "$branch" "$REPO" "$tmp" 2>/dev/null; then :; else
+              git init -q -b "$branch" "$tmp"
+              git -C "$tmp" remote add origin "$REPO"
+            fi
+            rsync -a --delete --exclude .git "$src"/ "$tmp"/
+            git -C "$tmp" add -A
+            if git -C "$tmp" diff --cached --quiet; then
+              echo "$branch: no changes"
+            else
+              git -C "$tmp" -c user.name=github-actions -c user.email=github-actions@users.noreply.github.com \
+                commit -q -m "Build ${GITHUB_SHA::7}"
+              git -C "$tmp" push -q origin "$branch"
+            fi
+          }
+          publish web/dist deploy-web
+          publish dashboard/dist deploy-dashboard
+          publish out/api deploy-api
