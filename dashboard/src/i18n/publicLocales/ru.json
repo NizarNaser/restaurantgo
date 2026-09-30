@@ -1,0 +1,145 @@
+{
+  "common": {
+    "backToMenu": "Назад в меню",
+    "close": "Закрыть",
+    "continue": "Продолжить",
+    "total": "Итого",
+    "yourName": "Ваше имя",
+    "phoneNumber": "Номер телефона",
+    "decreaseQuantity": "Уменьшить количество",
+    "increaseQuantity": "Увеличить количество",
+    "noImage": "Нет изображения",
+    "oops": "Ой!",
+    "notFound": "Не найдено",
+    "call": "Позвонить",
+    "whatsapp": "WhatsApp",
+    "logout": "Выйти"
+  },
+  "menu": {
+    "allItems": "Все блюда",
+    "fullMenu": "Полное меню",
+    "trendingNow": "Популярно сейчас",
+    "noItemsInCategory": "В этой категории нет доступных блюд.",
+    "addToCart": "Добавить в корзину",
+    "currentlyUnavailable": "Сейчас недоступно",
+    "noReviewsYet": "Пока нет отзывов",
+    "notFoundOrUnavailable": "Ресторан не найден или меню недоступно.",
+    "scanToOrderBanner": "Отсканируйте QR-код вашего столика, чтобы заказать здесь, или выберите доставку.",
+    "scanWithCamera": "Сканировать камерой",
+    "scanTableQrTitle": "Отсканируйте QR-код вашего столика",
+    "itemsInCart": "{{count}} товаров",
+    "visitOrContact": "Посетите нас или свяжитесь с нами",
+    "contactUnavailable": "Контактные данные пока недоступны.",
+    "readOurBlog": "Читайте наш блог",
+    "serviceRating": "оценка обслуживания",
+    "reviews": "отзывов",
+    "previousPage": "Предыдущая страница",
+    "nextPage": "Следующая страница",
+    "copyright": "© {{year}} {{name}}. Все права защищены.",
+    "poweredBy": "Работает на"
+  },
+  "product": {
+    "itemNotFound": "Блюдо не найдено.",
+    "scanToOrderItem": "Отсканируйте QR-код вашего столика, чтобы заказать это блюдо.",
+    "reviewsTitle": "Отзывы",
+    "noReviewsBeFirst": "Пока нет отзывов — будьте первым, кто поделится мнением.",
+    "youMightAlsoLike": "Вам может также понравиться",
+    "leaveAReview": "Оставить отзыв"
+  },
+  "cart": {
+    "yourOrder": "Ваш заказ",
+    "cartEmpty": "Ваша корзина пуста.",
+    "browseMenu": "Просмотреть меню",
+    "removeItem": "Удалить товар",
+    "yourDetails": "Ваши данные",
+    "staffOrderNote": "This order will be recorded under your staff account — no customer name or phone needed.",
+    "scanToPlaceOrder": "Отсканируйте QR-код вашего столика, чтобы оформить этот заказ.",
+    "addressPlaceholder": "Адрес",
+    "cityPlaceholder": "Город",
+    "deliveryInstructionsPlaceholder": "Инструкции по доставке (необязательно)",
+    "kitchenNotesPlaceholder": "Пожелания для кухни? (аллергии, особые просьбы...)",
+    "dineInPaymentNote": "Оплатите официанту напрямую при получении заказа — онлайн-оплата не требуется при посещении заведения.",
+    "deliveryPaymentNote": "Вы оплатите онлайн картой — вас перенаправят на безопасную страницу оплаты.",
+    "missingAddress": "Пожалуйста, укажите адрес доставки.",
+    "placeOrderFailed": "Не удалось оформить заказ, попробуйте ещё раз.",
+    "checkoutFailed": "Не удалось начать оплату, попробуйте ещё раз.",
+    "placeOrder": "Оформить заказ · {{amount}}"
+  },
+  "order": {
+    "steps": {
+      "pending": "Заказ получен",
+      "preparing": "Готовится",
+      "ready": "Готово",
+      "completed": "Завершено"
+    },
+    "orderNotFound": "Заказ не найден.",
+    "orderNumber": "Заказ №{{id}}",
+    "autoUpdateNotice": "Эта страница будет автоматически обновляться по мере выполнения вашего заказа.",
+    "paymentConfirmed": "Оплата подтверждена — спасибо!",
+    "confirmingPayment": "Подтверждение оплаты…",
+    "cancelledNotice": "Этот заказ был отменён.",
+    "orderSummary": "Сводка заказа",
+    "deliveringTo": "Доставка по адресу"
+  },
+  "halls": {
+    "findYourTable": "Найдите свой столик",
+    "legend": "Зелёный = свободно, красный = занято",
+    "noHalls": "Залы ещё не настроены.",
+    "noTables": "В этом зале пока нет столиков.",
+    "continueToMenu": "Перейти к меню"
+  },
+  "blog": {
+    "blogUnavailable": "Этот блог недоступен.",
+    "noPosts": "Пока нет опубликованных статей.",
+    "articleNotFound": "Статья не найдена.",
+    "backToBlog": "Назад в блог"
+  },
+  "review": {
+    "namePlaceholder": "Ваше имя",
+    "commentPlaceholder": "Расскажите, что вы думаете (необязательно)",
+    "submitFailed": "Не удалось отправить ваш отзыв. Попробуйте ещё раз.",
+    "thanks": "Спасибо за отзыв!",
+    "leaveAnother": "Оставить ещё один отзыв",
+    "submit": "Отправить",
+    "rateOurService": "Оцените наш сервис"
+  },
+  "customerInfo": {
+    "title": "Прежде чем сделать заказ",
+    "subtitle": "Скажите нам, кто вы, чтобы кухня и официант знали, для кого этот заказ."
+  },
+  "orderType": {
+    "question": "Как вы хотите сделать заказ?",
+    "subtitle": "Вы можете просмотреть меню в любом случае.",
+    "delivery": "Доставка",
+    "dineIn": "В заведении"
+  },
+  "qrScanner": {
+    "defaultTitle": "Сканировать QR-код",
+    "defaultHint": "Наведите камеру на QR-код.",
+    "cameraError": "Не удалось получить доступ к камере. Проверьте разрешения камеры в браузере и попробуйте снова."
+  },
+  "assistant": {
+    "askAboutMenu": "Спросить об этом меню",
+    "intro": "Спрашивайте меня о меню, часах работы или местоположении — я не могу оформить заказ за вас, но могу помочь с выбором.",
+    "unreachable": "Не удалось связаться с помощником, попробуйте ещё раз.",
+    "askPlaceholder": "Задайте вопрос...",
+    "send": "Отправить",
+    "toggle": "Показать/скрыть помощника по меню"
+  },
+  "tags": {
+    "vegetarian": "Вегетарианское",
+    "vegan": "Веганское",
+    "gluten_free": "Без глютена",
+    "spicy": "Острое",
+    "halal": "Халяль"
+  },
+  "weekdays": {
+    "mon": "Понедельник",
+    "tue": "Вторник",
+    "wed": "Среда",
+    "thu": "Четверг",
+    "fri": "Пятница",
+    "sat": "Суббота",
+    "sun": "Воскресенье"
+  }
+}

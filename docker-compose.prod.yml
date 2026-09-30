@@ -1,0 +1,145 @@
+# Production compose file for a single Hostinger VPS. See
+# HOSTINGER_DEPLOYMENT.md for the full setup (DNS, wildcard SSL, first boot).
+#
+#   docker compose -f docker-compose.prod.yml up -d --build
+#
+# Same shape as docker-compose.yml (local dev): api/.env is bind-mounted
+# as-is, so APP_KEY, APP_BASE_DOMAIN, STRIPE_*, MAIL_* etc. all come from
+# that one file — copy api/.env.example to api/.env on the server and fill
+# in real production values first. dashboard/web bake VITE_* into the
+# static build instead (Vite can't read them at runtime), so those are
+# passed as build args here, sourced from a root-level `.env` file (see
+# HOSTINGER_DEPLOYMENT.md) that docker compose reads automatically.
+
+services:
+  mysql:
+    image: mysql:8.4
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: restaurantgo
+      MYSQL_USER: restaurantgo
+      MYSQL_PASSWORD: ${DB_PASSWORD:?set DB_PASSWORD in .env}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:?set DB_ROOT_PASSWORD in .env}
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    # No host port published — only reachable from other containers on this
+    # compose's own network, unlike local dev which doesn't need that guard.
+
+  api:
+    build: ./api
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    volumes:
+      - ./api/.env:/var/www/html/.env
+      - api-storage:/var/www/html/storage
+    environment:
+      DB_CONNECTION: mysql
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_DATABASE: restaurantgo
+      DB_USERNAME: restaurantgo
+      DB_PASSWORD: ${DB_PASSWORD:?set DB_PASSWORD in .env}
+    # No published port — nginx reaches it over the compose network at api:80.
+    expose:
+      - "80"
+
+  queue-worker:
+    build: ./api
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    volumes:
+      - ./api/.env:/var/www/html/.env
+      - api-storage:/var/www/html/storage
+    environment:
+      DB_CONNECTION: mysql
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_DATABASE: restaurantgo
+      DB_USERNAME: restaurantgo
+      DB_PASSWORD: ${DB_PASSWORD:?set DB_PASSWORD in .env}
+    command: php artisan queue:work --sleep=3 --tries=3
+
+  # Runs routes/console.php's Schedule::command(...) entries (scheduled
+  # article publishing, daily exchange-rate refresh, ...) — nothing on this
+  # VPS calls `php artisan schedule:run` every minute otherwise, since
+  # there's no system cron wired up inside the container.
+  scheduler:
+    build: ./api
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    volumes:
+      - ./api/.env:/var/www/html/.env
+      - api-storage:/var/www/html/storage
+    environment:
+      DB_CONNECTION: mysql
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_DATABASE: restaurantgo
+      DB_USERNAME: restaurantgo
+      DB_PASSWORD: ${DB_PASSWORD:?set DB_PASSWORD in .env}
+    command: php artisan schedule:work
+
+  dashboard:
+    build:
+      context: ./dashboard
+      args:
+        VITE_API_URL: https://api.${BASE_DOMAIN:?set BASE_DOMAIN in .env}/api
+        VITE_BASE_DOMAIN: ${BASE_DOMAIN:?set BASE_DOMAIN in .env}
+    restart: unless-stopped
+    expose:
+      - "80"
+
+  web:
+    build:
+      context: ./web
+      args:
+        VITE_API_URL: https://api.${BASE_DOMAIN:?set BASE_DOMAIN in .env}/api
+        VITE_RESTAURANT_SITE_URL: https://app.${BASE_DOMAIN:?set BASE_DOMAIN in .env}
+        VITE_BASE_DOMAIN: ${BASE_DOMAIN:?set BASE_DOMAIN in .env}
+    restart: unless-stopped
+    expose:
+      - "80"
+
+  nginx:
+    image: nginx:alpine
+    restart: unless-stopped
+    depends_on:
+      - api
+      - dashboard
+      - web
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./deploy/nginx/restaurantgo.conf:/etc/nginx/conf.d/default.conf:ro
+      - certbot-etc:/etc/letsencrypt:ro
+      - certbot-www:/var/www/certbot:ro
+
+  # Not started by `up -d` (kept out of the default profile) — issuing and
+  # renewing the wildcard certificate is a deliberate, occasional command,
+  # not a long-running service. See HOSTINGER_DEPLOYMENT.md for the actual
+  # `docker compose run --rm certbot ...` invocations (one for the first
+  # issuance via DNS-01, one for the renewal cron entry).
+  certbot:
+    image: certbot/certbot
+    profiles: ["certbot"]
+    volumes:
+      - certbot-etc:/etc/letsencrypt
+      - certbot-www:/var/www/certbot
+
+volumes:
+  mysql-data:
+  api-storage:
+  certbot-etc:
+  certbot-www:

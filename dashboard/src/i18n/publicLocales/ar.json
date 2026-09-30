@@ -1,0 +1,145 @@
+{
+  "common": {
+    "backToMenu": "العودة إلى القائمة",
+    "close": "إغلاق",
+    "continue": "متابعة",
+    "total": "الإجمالي",
+    "yourName": "اسمك",
+    "phoneNumber": "رقم الهاتف",
+    "decreaseQuantity": "إنقاص الكمية",
+    "increaseQuantity": "زيادة الكمية",
+    "noImage": "لا توجد صورة",
+    "oops": "عذرًا!",
+    "notFound": "غير موجود",
+    "call": "اتصال",
+    "whatsapp": "واتساب",
+    "logout": "تسجيل الخروج"
+  },
+  "menu": {
+    "allItems": "كل الأصناف",
+    "fullMenu": "القائمة الكاملة",
+    "trendingNow": "الأكثر رواجًا",
+    "noItemsInCategory": "لا توجد أصناف متاحة في هذا التصنيف.",
+    "addToCart": "أضف إلى السلة",
+    "currentlyUnavailable": "غير متوفر حاليًا",
+    "noReviewsYet": "لا توجد تقييمات بعد",
+    "notFoundOrUnavailable": "المطعم غير موجود أو القائمة غير متاحة.",
+    "scanToOrderBanner": "امسح رمز QR الخاص بطاولتك للطلب هنا، أو اختر التوصيل بدلاً من ذلك.",
+    "scanWithCamera": "مسح بالكاميرا",
+    "scanTableQrTitle": "امسح رمز QR الخاص بطاولتك",
+    "itemsInCart": "{{count}} صنف",
+    "visitOrContact": "زرنا أو تواصل معنا",
+    "contactUnavailable": "معلومات التواصل غير متاحة بعد.",
+    "readOurBlog": "اقرأ مدونتنا",
+    "serviceRating": "تقييم الخدمة",
+    "reviews": "تقييم",
+    "previousPage": "الصفحة السابقة",
+    "nextPage": "الصفحة التالية",
+    "copyright": "© {{year}} {{name}}. جميع الحقوق محفوظة.",
+    "poweredBy": "بدعم من"
+  },
+  "product": {
+    "itemNotFound": "الصنف غير موجود.",
+    "scanToOrderItem": "امسح رمز QR الخاص بطاولتك لطلب هذا الصنف.",
+    "reviewsTitle": "التقييمات",
+    "noReviewsBeFirst": "لا توجد تقييمات بعد — كن أول من يشارك رأيه.",
+    "youMightAlsoLike": "قد يعجبك أيضًا",
+    "leaveAReview": "أضف تقييمًا"
+  },
+  "cart": {
+    "yourOrder": "طلبك",
+    "cartEmpty": "سلتك فارغة.",
+    "browseMenu": "تصفّح القائمة",
+    "removeItem": "إزالة الصنف",
+    "yourDetails": "بياناتك",
+    "staffOrderNote": "سيُسجَّل هذا الطلب باسم حسابك الوظيفي — لا حاجة لإدخال اسم أو رقم هاتف العميل.",
+    "scanToPlaceOrder": "امسح رمز QR الخاص بطاولتك لإتمام هذا الطلب.",
+    "addressPlaceholder": "العنوان",
+    "cityPlaceholder": "المدينة",
+    "deliveryInstructionsPlaceholder": "تعليمات التوصيل (اختياري)",
+    "kitchenNotesPlaceholder": "أي ملاحظات للمطبخ؟ (حساسية، طلبات خاصة...)",
+    "dineInPaymentNote": "ادفع للنادل مباشرة عند وصول طلبك — لا حاجة للدفع الإلكتروني للجلوس في المطعم.",
+    "deliveryPaymentNote": "سيتم الدفع إلكترونيًا بالبطاقة — سيتم تحويلك إلى صفحة دفع آمنة.",
+    "missingAddress": "الرجاء إدخال عنوان التوصيل.",
+    "placeOrderFailed": "تعذّر إرسال طلبك، حاول مرة أخرى.",
+    "checkoutFailed": "تعذّر بدء عملية الدفع، حاول مرة أخرى.",
+    "placeOrder": "إرسال الطلب · {{amount}}"
+  },
+  "order": {
+    "steps": {
+      "pending": "تم استلام الطلب",
+      "preparing": "قيد التحضير",
+      "ready": "جاهز",
+      "completed": "مكتمل"
+    },
+    "orderNotFound": "الطلب غير موجود.",
+    "orderNumber": "طلب رقم #{{id}}",
+    "autoUpdateNotice": "سنحدّث هذه الصفحة تلقائيًا مع تقدّم طلبك.",
+    "paymentConfirmed": "تم تأكيد الدفع — شكرًا لك!",
+    "confirmingPayment": "جارٍ تأكيد دفعتك…",
+    "cancelledNotice": "تم إلغاء هذا الطلب.",
+    "orderSummary": "ملخص الطلب",
+    "deliveringTo": "التوصيل إلى"
+  },
+  "halls": {
+    "findYourTable": "ابحث عن طاولتك",
+    "legend": "أخضر = شاغرة، أحمر = مشغولة",
+    "noHalls": "لم يتم إعداد أي صالة طعام بعد.",
+    "noTables": "لا توجد طاولات في هذه الصالة بعد.",
+    "continueToMenu": "متابعة إلى القائمة"
+  },
+  "blog": {
+    "blogUnavailable": "هذه المدونة غير متاحة.",
+    "noPosts": "لا توجد مقالات منشورة بعد.",
+    "articleNotFound": "المقال غير موجود.",
+    "backToBlog": "العودة إلى المدونة"
+  },
+  "review": {
+    "namePlaceholder": "اسمك",
+    "commentPlaceholder": "أخبرنا برأيك (اختياري)",
+    "submitFailed": "تعذّر إرسال تقييمك. حاول مرة أخرى.",
+    "thanks": "شكرًا لملاحظاتك!",
+    "leaveAnother": "أضف تقييمًا آخر",
+    "submit": "إرسال",
+    "rateOurService": "قيّم خدمتنا"
+  },
+  "customerInfo": {
+    "title": "قبل أن تطلب",
+    "subtitle": "أخبرنا من أنت ليعرف المطبخ والنادل صاحب هذا الطلب."
+  },
+  "orderType": {
+    "question": "كيف تريد أن تطلب؟",
+    "subtitle": "يمكنك تصفّح القائمة بأي من الطريقتين.",
+    "delivery": "توصيل",
+    "dineIn": "تناول في المطعم"
+  },
+  "qrScanner": {
+    "defaultTitle": "امسح رمز QR",
+    "defaultHint": "وجّه كاميرتك نحو رمز QR.",
+    "cameraError": "تعذّر الوصول إلى الكاميرا. تحقق من أذونات الكاميرا في متصفحك وحاول مرة أخرى."
+  },
+  "assistant": {
+    "askAboutMenu": "اسأل عن هذه القائمة",
+    "intro": "اسألني أي شيء عن القائمة أو أوقات العمل أو الموقع — لا يمكنني تقديم طلب نيابة عنك، لكن يمكنني مساعدتك في الاختيار.",
+    "unreachable": "تعذّر الوصول إلى المساعد، حاول مرة أخرى.",
+    "askPlaceholder": "اطرح سؤالًا...",
+    "send": "إرسال",
+    "toggle": "تبديل مساعد القائمة"
+  },
+  "tags": {
+    "vegetarian": "نباتي",
+    "vegan": "نباتي صرف",
+    "gluten_free": "خالٍ من الغلوتين",
+    "spicy": "حار",
+    "halal": "حلال"
+  },
+  "weekdays": {
+    "mon": "الإثنين",
+    "tue": "الثلاثاء",
+    "wed": "الأربعاء",
+    "thu": "الخميس",
+    "fri": "الجمعة",
+    "sat": "السبت",
+    "sun": "الأحد"
+  }
+}

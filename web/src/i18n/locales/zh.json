@@ -1,0 +1,221 @@
+{
+  "nav": {
+    "home": "首页",
+    "restaurants": "餐厅",
+    "contact": "联系我们",
+    "registerCta": "注册您的餐厅",
+    "menuAriaLabel": "菜单",
+    "languageAriaLabel": "语言"
+  },
+  "footer": {
+    "tagline": "一体化的数字餐厅管理平台——菜单、预订、薪资和报表尽在一处。",
+    "quickLinks": "快速链接",
+    "browseRestaurants": "浏览餐厅",
+    "rightsReserved": "版权所有。"
+  },
+  "assistant": {
+    "title": "RestaurantGo 助手",
+    "greeting": "你好！可以问我任何关于 RestaurantGo 的问题——功能、价格或使用方法。",
+    "placeholder": "输入问题...",
+    "error": "无法连接助手，请重试。",
+    "toggleAriaLabel": "切换助手"
+  },
+  "adminNav": {
+    "overview": "概览",
+    "tenants": "已订阅餐厅",
+    "payments": "付款",
+    "plans": "订阅套餐",
+    "coupons": "优惠券",
+    "staff": "员工",
+    "attendance": "考勤",
+    "payroll": "薪资",
+    "advertisements": "广告",
+    "contactMessages": "联系消息",
+    "auditLogs": "审计日志",
+    "panelSubtitle": "公司控制面板",
+    "logout": "退出登录"
+  },
+  "common": {
+    "citySeparator": "，"
+  },
+  "errorFallback": {
+    "title": "发生了意外错误",
+    "message": "页面遇到了意外问题。请尝试重新加载——如果问题持续存在，请联系我们。",
+    "reload": "重新加载页面"
+  },
+  "pagination": {
+    "nav": "分页导航",
+    "previous": "上一页",
+    "next": "下一页"
+  },
+  "adSlot": {
+    "sponsored": "广告",
+    "previous": "上一条广告",
+    "next": "下一条广告",
+    "goToAd": "转到第 {{number}} 条广告"
+  },
+  "directory": {
+    "title": "餐厅目录",
+    "subtitle": "按国家和城市浏览我们已注册的餐厅。",
+    "searchPlaceholder": "按餐厅名称搜索...",
+    "allCountries": "所有国家",
+    "allCities": "所有城市",
+    "noResults": "没有与您的搜索匹配的餐厅。"
+  },
+  "contact": {
+    "subtitle": "有问题或想咨询付费广告？给我们留言，我们会尽快回复您。",
+    "success": "您的消息已成功发送！",
+    "error": "无法发送您的消息，请重试。",
+    "social": {
+      "whatsapp": "WhatsApp",
+      "facebook": "Facebook",
+      "instagram": "Instagram",
+      "telegram": "Telegram"
+    },
+    "form": {
+      "name": "姓名",
+      "email": "电子邮箱",
+      "subject": "主题（可选）",
+      "message": "您的留言",
+      "submit": "发送"
+    }
+  },
+  "home": {
+    "hero": {
+      "eyebrow": "一体化数字平台",
+      "title": "一个平台，数字化管理您的<hl>餐厅</hl>",
+      "subtitle": "菜单、预订、薪资和财务报表——您的餐厅所需的一切尽在一处。",
+      "ctaPrimary": "免费开始",
+      "ctaSecondary": "浏览已注册餐厅"
+    },
+    "search": {
+      "placeholder": "搜索餐厅...",
+      "button": "搜索"
+    },
+    "stats": {
+      "restaurants": "已注册餐厅",
+      "bookings": "每月预订量",
+      "rating": "平均评分",
+      "countries": "国家/地区"
+    },
+    "adFallback": {
+      "title": "在此推广您的餐厅",
+      "desc": "让您的餐厅成为访客在我们首页看到的第一件事——联系我们预订此广告位。"
+    },
+    "topRated": {
+      "eyebrow": "评分最高",
+      "title": "我们的最佳餐厅"
+    },
+    "viewAll": "查看全部",
+    "registered": {
+      "eyebrow": "我们的目录",
+      "title": "已在我们平台注册的餐厅",
+      "viewAll": "查看所有餐厅"
+    },
+    "services": {
+      "eyebrow": "我们的服务",
+      "title": "您的餐厅所需的一切，尽在一处",
+      "menu": {
+        "title": "数字菜单",
+        "desc": "每桌配备二维码的多语言、多币种菜单。"
+      },
+      "reservations": {
+        "title": "预订",
+        "desc": "直接从您的公开页面接收餐桌和活动预订。"
+      },
+      "financial": {
+        "title": "财务报表",
+        "desc": "收入、支出、盈亏一目了然。"
+      },
+      "hr": {
+        "title": "员工管理",
+        "desc": "为您的餐厅团队提供考勤、请假和薪资管理。"
+      },
+      "delivery": {
+        "title": "外送订单",
+        "desc": "在线接受并管理外送订单，与堂食订单一并处理，无需额外系统。"
+      },
+      "settingsHelp": {
+        "title": "引导式设置",
+        "desc": "分步设置向导，帮助新餐厅在几分钟内完成菜单、桌位和各项设置的配置。"
+      },
+      "invoicePrinting": {
+        "title": "厨房与吧台直连打印",
+        "desc": "订单一经下单，账单即自动打印到相应部门——厨房、吧台等，无需人工传递。"
+      },
+      "reservationScreen": {
+        "title": "实时大厅屏幕",
+        "desc": "一目了然地查看每张桌子的状态，并直接在交互式大厅平面图上管理预订。"
+      },
+      "inventory": {
+        "title": "库存追踪",
+        "desc": "自动追踪进货、已售出及剩余库存——随着订单出单实时更新。"
+      },
+      "multiLanguage": {
+        "title": "多语言菜单",
+        "desc": "以顾客真正使用的语言呈现菜单，可按餐厅所在国家单独选择。"
+      },
+      "aiChat": {
+        "title": "AI 智能助手",
+        "desc": "AI 驱动的翻译，以及可解答顾客关于菜单与餐厅信息问题的智能聊天助手。"
+      }
+    },
+    "cta": {
+      "title": "您有餐厅吗？",
+      "desc": "加入我们已注册的餐厅，今天就开始接受订单和预订。"
+    }
+  },
+  "register": {
+    "trialBadge": "3 个月免费试用",
+    "title": "注册您的餐厅",
+    "subtitle": "立即开始免费试用——无需信用卡。",
+    "planStep": {
+      "title": "Choose a plan",
+      "subtitle": "Pick the plan that fits your restaurant today — you can upgrade or switch anytime from Billing.",
+      "loadError": "Couldn't load plans right now. Continuing with the Starter plan — you can change it anytime from Billing.",
+      "monthly": "Monthly",
+      "yearly": "Yearly",
+      "month": "month",
+      "year": "year",
+      "branchesCount": "{{count}} branch(es)",
+      "unlimitedBranches": "Unlimited branches",
+      "menuItemsCount": "{{count}} menu items",
+      "unlimitedMenuItems": "Unlimited menu items",
+      "teamMembersCount": "{{count}} team members",
+      "unlimitedTeamMembers": "Unlimited team members",
+      "customDomain": "Custom domain",
+      "advancedReports": "Advanced reports",
+      "whiteLabel": "White-label",
+      "selected": "Selected",
+      "select": "Select",
+      "continue": "Continue",
+      "changePlan": "Change plan"
+    },
+    "fields": {
+      "restaurantName": "餐厅名称",
+      "subdomain": "子域名（例如：my-restaurant）",
+      "ownerName": "您的全名",
+      "email": "电子邮箱",
+      "password": "密码",
+      "passwordConfirmation": "确认密码"
+    },
+    "dashboardLanguage": {
+      "label": "控制面板语言"
+    },
+    "restaurantLanguages": {
+      "label": "餐厅界面语言",
+      "hint": "选择您餐厅公开菜单和网站将支持的语言。",
+      "required": "请至少选择一种语言。"
+    },
+    "genericError": "发生错误，请重试。",
+    "back": "Back",
+    "submit": "创建账户",
+    "success": {
+      "title": "您的账户已创建！",
+      "subtitle": "您的 3 个月免费试用已开始。登录以开始设置您的餐厅。",
+      "subtitleFree": "Your account is ready. Log in to start setting up your restaurant.",
+      "siteReadyAt": "Your restaurant's page is live at:",
+      "cta": "前往控制面板"
+    }
+  }
+}

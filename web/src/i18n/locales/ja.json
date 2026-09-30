@@ -1,0 +1,221 @@
+{
+  "nav": {
+    "home": "ホーム",
+    "restaurants": "レストラン",
+    "contact": "お問い合わせ",
+    "registerCta": "レストランを登録",
+    "menuAriaLabel": "メニュー",
+    "languageAriaLabel": "言語"
+  },
+  "footer": {
+    "tagline": "レストランをデジタルに運営できるオールインワンプラットフォーム——メニュー、予約、給与、レポートをひとつの場所で。",
+    "quickLinks": "クイックリンク",
+    "browseRestaurants": "レストランを見る",
+    "rightsReserved": "全著作権所有。"
+  },
+  "assistant": {
+    "title": "RestaurantGo アシスタント",
+    "greeting": "こんにちは！RestaurantGoの機能、料金、仕組みについて何でも聞いてください。",
+    "placeholder": "質問を入力...",
+    "error": "アシスタントに接続できませんでした。もう一度お試しください。",
+    "toggleAriaLabel": "アシスタントの表示切替"
+  },
+  "adminNav": {
+    "overview": "概要",
+    "tenants": "契約中のレストラン",
+    "payments": "支払い",
+    "plans": "サブスクリプションプラン",
+    "coupons": "クーポン",
+    "staff": "スタッフ",
+    "attendance": "勤怠",
+    "payroll": "給与",
+    "advertisements": "広告",
+    "contactMessages": "お問い合わせメッセージ",
+    "auditLogs": "監査ログ",
+    "panelSubtitle": "会社コントロールパネル",
+    "logout": "ログアウト"
+  },
+  "common": {
+    "citySeparator": "、"
+  },
+  "errorFallback": {
+    "title": "予期しないエラーが発生しました",
+    "message": "ページで予期しない問題が発生しました。再読み込みをお試しください。問題が解決しない場合はお問い合わせください。",
+    "reload": "ページを再読み込み"
+  },
+  "pagination": {
+    "nav": "ページ送り",
+    "previous": "前のページ",
+    "next": "次のページ"
+  },
+  "adSlot": {
+    "sponsored": "広告",
+    "previous": "前の広告",
+    "next": "次の広告",
+    "goToAd": "広告 {{number}} へ移動"
+  },
+  "directory": {
+    "title": "レストランディレクトリ",
+    "subtitle": "国や都市別に登録レストランを閲覧できます。",
+    "searchPlaceholder": "レストラン名で検索...",
+    "allCountries": "すべての国",
+    "allCities": "すべての都市",
+    "noResults": "検索条件に一致するレストランがありません。"
+  },
+  "contact": {
+    "subtitle": "ご質問や有料広告についてのお問い合わせがありましたら、メッセージをお送りください。近日中にご返信いたします。",
+    "success": "メッセージが正常に送信されました！",
+    "error": "メッセージを送信できませんでした。もう一度お試しください。",
+    "social": {
+      "whatsapp": "WhatsApp",
+      "facebook": "Facebook",
+      "instagram": "Instagram",
+      "telegram": "Telegram"
+    },
+    "form": {
+      "name": "お名前",
+      "email": "メールアドレス",
+      "subject": "件名（任意）",
+      "message": "メッセージ",
+      "submit": "送信"
+    }
+  },
+  "home": {
+    "hero": {
+      "eyebrow": "オールインワンのデジタルプラットフォーム",
+      "title": "<hl>レストラン</hl>をデジタルに運営できる、たった一つのプラットフォーム",
+      "subtitle": "メニュー、予約、給与、財務レポート——レストランに必要なすべてをひとつの場所で。",
+      "ctaPrimary": "無料で始める",
+      "ctaSecondary": "登録レストランを見る"
+    },
+    "search": {
+      "placeholder": "レストランを検索...",
+      "button": "検索"
+    },
+    "stats": {
+      "restaurants": "登録レストラン数",
+      "bookings": "月間予約数",
+      "rating": "平均評価",
+      "countries": "対応国数"
+    },
+    "adFallback": {
+      "title": "ここでレストランを宣伝",
+      "desc": "ホームページで訪問者が最初に目にする場所にレストランを表示——この広告枠のご予約はお問い合わせください。"
+    },
+    "topRated": {
+      "eyebrow": "評価上位",
+      "title": "おすすめレストラン"
+    },
+    "viewAll": "すべて見る",
+    "registered": {
+      "eyebrow": "ディレクトリ",
+      "title": "登録レストラン",
+      "viewAll": "すべてのレストランを見る"
+    },
+    "services": {
+      "eyebrow": "サービス内容",
+      "title": "レストランに必要なすべてを、ひとつの場所で",
+      "menu": {
+        "title": "デジタルメニュー",
+        "desc": "各テーブルにQRコード付きの多言語・多通貨対応メニュー。"
+      },
+      "reservations": {
+        "title": "予約管理",
+        "desc": "公開ページから直接テーブルやイベントの予約を受け付けます。"
+      },
+      "financial": {
+        "title": "財務レポート",
+        "desc": "収益、費用、損益をひと目で確認。"
+      },
+      "hr": {
+        "title": "スタッフ管理",
+        "desc": "レストランチームの勤怠、休暇、給与を管理。"
+      },
+      "delivery": {
+        "title": "デリバリー注文",
+        "desc": "デリバリー注文をオンラインで受け付け、店内注文と同じ画面で一元管理——別システムは不要です。"
+      },
+      "settingsHelp": {
+        "title": "セットアップ支援",
+        "desc": "ステップ形式のセットアップウィザードが、メニュー・テーブル・各種設定の構成を数分でサポートします。"
+      },
+      "invoicePrinting": {
+        "title": "厨房・バー直接印刷",
+        "desc": "注文が入ると同時に、伝票がキッチンやバーなど該当部署へ自動的に印刷されます。"
+      },
+      "reservationScreen": {
+        "title": "フロアのリアルタイム表示",
+        "desc": "各テーブルの状況を一目で確認し、インタラクティブなフロアマップから予約を直接管理できます。"
+      },
+      "inventory": {
+        "title": "在庫管理",
+        "desc": "入荷・販売済み・残り在庫を、注文が出るたびに自動で追跡します。"
+      },
+      "multiLanguage": {
+        "title": "多言語メニュー",
+        "desc": "お客様が実際に話す言語でメニューを提供——レストランごとに国に合わせて選択できます。"
+      },
+      "aiChat": {
+        "title": "AIアシスタント",
+        "desc": "AIによる翻訳に加え、メニューやレストラン情報についての質問に答える顧客向けチャットアシスタントです。"
+      }
+    },
+    "cta": {
+      "title": "レストランをお持ちですか？",
+      "desc": "登録レストランに加わり、今すぐ注文や予約の受付を始めましょう。"
+    }
+  },
+  "register": {
+    "trialBadge": "3か月間無料トライアル",
+    "title": "レストランを登録",
+    "subtitle": "今すぐ無料トライアルを開始——クレジットカード不要。",
+    "planStep": {
+      "title": "Choose a plan",
+      "subtitle": "Pick the plan that fits your restaurant today — you can upgrade or switch anytime from Billing.",
+      "loadError": "Couldn't load plans right now. Continuing with the Starter plan — you can change it anytime from Billing.",
+      "monthly": "Monthly",
+      "yearly": "Yearly",
+      "month": "month",
+      "year": "year",
+      "branchesCount": "{{count}} branch(es)",
+      "unlimitedBranches": "Unlimited branches",
+      "menuItemsCount": "{{count}} menu items",
+      "unlimitedMenuItems": "Unlimited menu items",
+      "teamMembersCount": "{{count}} team members",
+      "unlimitedTeamMembers": "Unlimited team members",
+      "customDomain": "Custom domain",
+      "advancedReports": "Advanced reports",
+      "whiteLabel": "White-label",
+      "selected": "Selected",
+      "select": "Select",
+      "continue": "Continue",
+      "changePlan": "Change plan"
+    },
+    "fields": {
+      "restaurantName": "レストラン名",
+      "subdomain": "サブドメイン（例：my-restaurant）",
+      "ownerName": "お名前（フルネーム）",
+      "email": "メールアドレス",
+      "password": "パスワード",
+      "passwordConfirmation": "パスワード（確認）"
+    },
+    "dashboardLanguage": {
+      "label": "コントロールパネルの言語"
+    },
+    "restaurantLanguages": {
+      "label": "レストランインターフェースの言語",
+      "hint": "レストランの公開メニューとサイトで対応する言語を選択してください。",
+      "required": "少なくとも1つの言語を選択してください。"
+    },
+    "genericError": "エラーが発生しました。もう一度お試しください。",
+    "back": "Back",
+    "submit": "アカウントを作成",
+    "success": {
+      "title": "アカウントが作成されました！",
+      "subtitle": "3か月間の無料トライアルが開始されました。ログインしてレストランの設定を始めましょう。",
+      "subtitleFree": "Your account is ready. Log in to start setting up your restaurant.",
+      "siteReadyAt": "Your restaurant's page is live at:",
+      "cta": "コントロールパネルへ"
+    }
+  }
+}

@@ -1,0 +1,145 @@
+{
+  "common": {
+    "backToMenu": "メニューに戻る",
+    "close": "閉じる",
+    "continue": "続ける",
+    "total": "合計",
+    "yourName": "お名前",
+    "phoneNumber": "電話番号",
+    "decreaseQuantity": "数量を減らす",
+    "increaseQuantity": "数量を増やす",
+    "noImage": "画像なし",
+    "oops": "おっと！",
+    "notFound": "見つかりません",
+    "call": "電話する",
+    "whatsapp": "WhatsApp",
+    "logout": "ログアウト"
+  },
+  "menu": {
+    "allItems": "すべての商品",
+    "fullMenu": "フルメニュー",
+    "trendingNow": "今人気の商品",
+    "noItemsInCategory": "このカテゴリーには利用可能な商品がありません。",
+    "addToCart": "カートに追加",
+    "currentlyUnavailable": "現在ご利用いただけません",
+    "noReviewsYet": "まだレビューがありません",
+    "notFoundOrUnavailable": "レストランが見つからないか、メニューが利用できません。",
+    "scanToOrderBanner": "テーブルのQRコードをスキャンしてここで注文するか、配達をお選びください。",
+    "scanWithCamera": "カメラでスキャン",
+    "scanTableQrTitle": "テーブルのQRコードをスキャンしてください",
+    "itemsInCart": "{{count}}点",
+    "visitOrContact": "ご来店・お問い合わせ",
+    "contactUnavailable": "連絡先情報はまだ登録されていません。",
+    "readOurBlog": "ブログを読む",
+    "serviceRating": "サービス評価",
+    "reviews": "件のレビュー",
+    "previousPage": "前のページ",
+    "nextPage": "次のページ",
+    "copyright": "© {{year}} {{name}}. 無断複写・転載を禁じます。",
+    "poweredBy": "提供:"
+  },
+  "product": {
+    "itemNotFound": "商品が見つかりません。",
+    "scanToOrderItem": "この商品を注文するにはテーブルのQRコードをスキャンしてください。",
+    "reviewsTitle": "レビュー",
+    "noReviewsBeFirst": "まだレビューがありません — 最初のレビューを投稿してみませんか。",
+    "youMightAlsoLike": "こちらもおすすめです",
+    "leaveAReview": "レビューを書く"
+  },
+  "cart": {
+    "yourOrder": "ご注文内容",
+    "cartEmpty": "カートは空です。",
+    "browseMenu": "メニューを見る",
+    "removeItem": "商品を削除",
+    "yourDetails": "お客様情報",
+    "staffOrderNote": "This order will be recorded under your staff account — no customer name or phone needed.",
+    "scanToPlaceOrder": "この注文を確定するにはテーブルのQRコードをスキャンしてください。",
+    "addressPlaceholder": "住所",
+    "cityPlaceholder": "市区町村",
+    "deliveryInstructionsPlaceholder": "配達に関するご要望（任意）",
+    "kitchenNotesPlaceholder": "厨房への連絡事項はありますか？（アレルギー、特別なご要望など）",
+    "dineInPaymentNote": "ご注文が届いたら店員に直接お支払いください — 店内飲食ではオンライン決済は不要です。",
+    "deliveryPaymentNote": "オンラインでカード決済を行います — 安全な決済画面に移動します。",
+    "missingAddress": "配達先の住所を入力してください。",
+    "placeOrderFailed": "注文を確定できませんでした。もう一度お試しください。",
+    "checkoutFailed": "決済を開始できませんでした。もう一度お試しください。",
+    "placeOrder": "注文する · {{amount}}"
+  },
+  "order": {
+    "steps": {
+      "pending": "注文を受け付けました",
+      "preparing": "調理中",
+      "ready": "準備完了",
+      "completed": "完了"
+    },
+    "orderNotFound": "注文が見つかりません。",
+    "orderNumber": "注文 #{{id}}",
+    "autoUpdateNotice": "このページは注文の進行状況に応じて自動的に更新されます。",
+    "paymentConfirmed": "お支払いが確認されました — ありがとうございます！",
+    "confirmingPayment": "お支払いを確認しています…",
+    "cancelledNotice": "この注文はキャンセルされました。",
+    "orderSummary": "注文内容の確認",
+    "deliveringTo": "配達先"
+  },
+  "halls": {
+    "findYourTable": "テーブルを探す",
+    "legend": "緑 = 空席、赤 = 使用中",
+    "noHalls": "ダイニングエリアはまだ設定されていません。",
+    "noTables": "このエリアにはまだテーブルがありません。",
+    "continueToMenu": "メニューに進む"
+  },
+  "blog": {
+    "blogUnavailable": "このブログは現在ご利用いただけません。",
+    "noPosts": "まだ投稿がありません。",
+    "articleNotFound": "記事が見つかりません。",
+    "backToBlog": "ブログに戻る"
+  },
+  "review": {
+    "namePlaceholder": "お名前",
+    "commentPlaceholder": "ご感想をお聞かせください（任意）",
+    "submitFailed": "レビューを送信できませんでした。もう一度お試しください。",
+    "thanks": "ご意見ありがとうございました！",
+    "leaveAnother": "別のレビューを書く",
+    "submit": "送信",
+    "rateOurService": "サービスを評価する"
+  },
+  "customerInfo": {
+    "title": "ご注文の前に",
+    "subtitle": "厨房と担当スタッフがこの注文が誰のものか分かるよう、お客様情報をご入力ください。"
+  },
+  "orderType": {
+    "question": "ご注文方法を選択してください",
+    "subtitle": "どちらを選んでもメニューをご覧いただけます。",
+    "delivery": "配達",
+    "dineIn": "店内飲食"
+  },
+  "qrScanner": {
+    "defaultTitle": "QRコードをスキャン",
+    "defaultHint": "カメラをQRコードに向けてください。",
+    "cameraError": "カメラにアクセスできませんでした。ブラウザのカメラ権限を確認して、もう一度お試しください。"
+  },
+  "assistant": {
+    "askAboutMenu": "このメニューについて質問する",
+    "intro": "メニュー、営業時間、場所について何でもお尋ねください — 代わりに注文はできませんが、選択のお手伝いをします。",
+    "unreachable": "アシスタントに接続できませんでした。もう一度お試しください。",
+    "askPlaceholder": "質問を入力...",
+    "send": "送信",
+    "toggle": "メニューアシスタントの表示/非表示"
+  },
+  "tags": {
+    "vegetarian": "ベジタリアン",
+    "vegan": "ヴィーガン",
+    "gluten_free": "グルテンフリー",
+    "spicy": "辛口",
+    "halal": "ハラール"
+  },
+  "weekdays": {
+    "mon": "月曜日",
+    "tue": "火曜日",
+    "wed": "水曜日",
+    "thu": "木曜日",
+    "fri": "金曜日",
+    "sat": "土曜日",
+    "sun": "日曜日"
+  }
+}

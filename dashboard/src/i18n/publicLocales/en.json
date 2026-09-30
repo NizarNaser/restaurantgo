@@ -1,0 +1,145 @@
+{
+  "common": {
+    "backToMenu": "Back to the menu",
+    "close": "Close",
+    "continue": "Continue",
+    "total": "Total",
+    "yourName": "Your name",
+    "phoneNumber": "Phone number",
+    "decreaseQuantity": "Decrease quantity",
+    "increaseQuantity": "Increase quantity",
+    "noImage": "No image",
+    "oops": "Oops!",
+    "notFound": "Not found",
+    "call": "Call",
+    "whatsapp": "WhatsApp",
+    "logout": "Logout"
+  },
+  "menu": {
+    "allItems": "All Items",
+    "fullMenu": "Full Menu",
+    "trendingNow": "Trending Now",
+    "noItemsInCategory": "No items available in this category.",
+    "addToCart": "Add to cart",
+    "currentlyUnavailable": "Currently unavailable",
+    "noReviewsYet": "No reviews yet",
+    "notFoundOrUnavailable": "Restaurant not found or menu is unavailable.",
+    "scanToOrderBanner": "Scan your table's QR code to order here, or choose delivery instead.",
+    "scanWithCamera": "Scan with camera",
+    "scanTableQrTitle": "Scan your table's QR code",
+    "itemsInCart": "{{count}} items",
+    "visitOrContact": "Visit or contact us",
+    "contactUnavailable": "Contact details aren't available yet.",
+    "readOurBlog": "Read our blog",
+    "serviceRating": "service rating",
+    "reviews": "reviews",
+    "previousPage": "Previous page",
+    "nextPage": "Next page",
+    "copyright": "© {{year}} {{name}}. All rights reserved.",
+    "poweredBy": "Powered by"
+  },
+  "product": {
+    "itemNotFound": "Item not found.",
+    "scanToOrderItem": "Scan your table's QR code to order this item.",
+    "reviewsTitle": "Reviews",
+    "noReviewsBeFirst": "No reviews yet — be the first to share your thoughts.",
+    "youMightAlsoLike": "You might also like",
+    "leaveAReview": "Leave a review"
+  },
+  "cart": {
+    "yourOrder": "Your order",
+    "cartEmpty": "Your cart is empty.",
+    "browseMenu": "Browse the menu",
+    "removeItem": "Remove item",
+    "yourDetails": "Your details",
+    "staffOrderNote": "This order will be recorded under your staff account — no customer name or phone needed.",
+    "scanToPlaceOrder": "Scan your table's QR code to place this order.",
+    "addressPlaceholder": "Address",
+    "cityPlaceholder": "City",
+    "deliveryInstructionsPlaceholder": "Delivery instructions (optional)",
+    "kitchenNotesPlaceholder": "Any notes for the kitchen? (allergies, special requests...)",
+    "dineInPaymentNote": "Pay your waiter directly when your order arrives — no online payment needed for dine-in.",
+    "deliveryPaymentNote": "You'll pay online by card — you'll be redirected to a secure checkout.",
+    "missingAddress": "Please enter your delivery address.",
+    "placeOrderFailed": "Could not place your order, please try again.",
+    "checkoutFailed": "Could not start checkout, please try again.",
+    "placeOrder": "Place order · {{amount}}"
+  },
+  "order": {
+    "steps": {
+      "pending": "Order received",
+      "preparing": "Preparing",
+      "ready": "Ready",
+      "completed": "Completed"
+    },
+    "orderNotFound": "Order not found.",
+    "orderNumber": "Order #{{id}}",
+    "autoUpdateNotice": "We'll update this page automatically as your order progresses.",
+    "paymentConfirmed": "Payment confirmed — thanks!",
+    "confirmingPayment": "Confirming your payment…",
+    "cancelledNotice": "This order was cancelled.",
+    "orderSummary": "Order summary",
+    "deliveringTo": "Delivering to"
+  },
+  "halls": {
+    "findYourTable": "Find your table",
+    "legend": "Green = free, red = occupied",
+    "noHalls": "No dining halls are set up yet.",
+    "noTables": "No tables in this hall yet.",
+    "continueToMenu": "Continue to menu"
+  },
+  "blog": {
+    "blogUnavailable": "This blog is not available.",
+    "noPosts": "No posts published yet.",
+    "articleNotFound": "Article not found.",
+    "backToBlog": "Back to the blog"
+  },
+  "review": {
+    "namePlaceholder": "Your name",
+    "commentPlaceholder": "Tell us what you thought (optional)",
+    "submitFailed": "Could not submit your review. Please try again.",
+    "thanks": "Thanks for your feedback!",
+    "leaveAnother": "Leave another",
+    "submit": "Submit",
+    "rateOurService": "Rate our service"
+  },
+  "customerInfo": {
+    "title": "Before you order",
+    "subtitle": "Tell us who you are so the kitchen and your waiter know who this order is for."
+  },
+  "orderType": {
+    "question": "How would you like to order?",
+    "subtitle": "You can browse the menu either way.",
+    "delivery": "Delivery",
+    "dineIn": "Dine-in"
+  },
+  "qrScanner": {
+    "defaultTitle": "Scan QR code",
+    "defaultHint": "Point your camera at the QR code.",
+    "cameraError": "Couldn't access the camera. Check your browser's camera permissions and try again."
+  },
+  "assistant": {
+    "askAboutMenu": "Ask about this menu",
+    "intro": "Ask me anything about the menu, hours, or location — I can't place an order for you, but I can help you decide what to get.",
+    "unreachable": "Could not reach the assistant, please try again.",
+    "askPlaceholder": "Ask a question...",
+    "send": "Send",
+    "toggle": "Toggle menu assistant"
+  },
+  "tags": {
+    "vegetarian": "Vegetarian",
+    "vegan": "Vegan",
+    "gluten_free": "Gluten-Free",
+    "spicy": "Spicy",
+    "halal": "Halal"
+  },
+  "weekdays": {
+    "mon": "Monday",
+    "tue": "Tuesday",
+    "wed": "Wednesday",
+    "thu": "Thursday",
+    "fri": "Friday",
+    "sat": "Saturday",
+    "sun": "Sunday"
+  }
+}

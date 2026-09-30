@@ -1,0 +1,92 @@
+# Local dev / staging parity for the three apps (see restaurant_saas_plan.md).
+#
+# First run:
+#   cp api/.env.example api/.env   # if you don't already have one
+#   docker compose up --build
+#
+# api/.env is bind-mounted as-is (see the `volumes:` entries below), so
+# APP_KEY, STRIPE_*, MAIL_* etc. come from the same file you'd use running
+# the API natively — only the handful of values that must point at container
+# hostnames instead of localhost (DB_HOST, DB_PORT, DB_DATABASE, ...) are
+# overridden per-service below, since a real environment variable always
+# wins over the .env file's value.
+
+services:
+  mysql:
+    image: mysql:8.4
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: restaurantgo
+      MYSQL_USER: restaurantgo
+      MYSQL_PASSWORD: restaurantgo
+      MYSQL_ROOT_PASSWORD: restaurantgo
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  api:
+    build: ./api
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    volumes:
+      - ./api/.env:/var/www/html/.env
+      - api-storage:/var/www/html/storage
+    environment:
+      DB_CONNECTION: mysql
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_DATABASE: restaurantgo
+      DB_USERNAME: restaurantgo
+      DB_PASSWORD: restaurantgo
+    ports:
+      - "8000:80"
+
+  # Notifications (TenantSuspended, PaymentFailed, WelcomeTenant — see
+  # app/Notifications) implement ShouldQueue; nothing sends them without a
+  # worker actually running.
+  queue-worker:
+    build: ./api
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    volumes:
+      - ./api/.env:/var/www/html/.env
+      - api-storage:/var/www/html/storage
+    environment:
+      DB_CONNECTION: mysql
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_DATABASE: restaurantgo
+      DB_USERNAME: restaurantgo
+      DB_PASSWORD: restaurantgo
+    command: php artisan queue:work --sleep=3 --tries=3
+
+  dashboard:
+    build:
+      context: ./dashboard
+      args:
+        VITE_API_URL: http://localhost:8000/api
+    restart: unless-stopped
+    ports:
+      - "5173:80"
+
+  web:
+    build:
+      context: ./web
+      args:
+        VITE_API_URL: http://localhost:8000/api
+        VITE_RESTAURANT_SITE_URL: http://localhost:5173
+    restart: unless-stopped
+    ports:
+      - "5174:80"
+
+volumes:
+  mysql-data:
+  api-storage:

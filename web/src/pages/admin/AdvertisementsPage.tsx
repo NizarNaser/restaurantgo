@@ -1,0 +1,140 @@
+import { useEffect, useState } from 'react';
+import { Plus, Loader2, Trash2 } from 'lucide-react';
+import api from '../../api/axios';
+
+interface Ad {
+  id: number;
+  title: string;
+  advertiser_name: string | null;
+  placement: string;
+  link_url: string | null;
+  is_active: boolean;
+  starts_at: string | null;
+  ends_at: string | null;
+  click_count: number;
+}
+
+const placements = [
+  { value: 'home_hero', label: 'الصفحة الرئيسية — قسم رئيسي' },
+  { value: 'home_sidebar', label: 'الصفحة الرئيسية — جانبي' },
+  { value: 'directory_top', label: 'دليل المطاعم — أعلى' },
+  { value: 'directory_sidebar', label: 'دليل المطاعم — جانبي' },
+];
+
+const emptyForm = { title: '', advertiser_name: '', link_url: '', placement: 'home_hero', starts_at: '', ends_at: '', is_active: true };
+
+export default function AdvertisementsPage() {
+  const [ads, setAds] = useState<Ad[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [form, setForm] = useState(emptyForm);
+
+  const fetchAds = () => {
+    setLoading(true);
+    api.get('/admin/advertisements').then((res) => setAds(res.data)).finally(() => setLoading(false));
+  };
+
+  useEffect(() => { fetchAds(); }, []);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value, type } = e.target;
+    setForm((prev) => ({ ...prev, [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitting(true);
+    try {
+      await api.post('/admin/advertisements', form);
+      setModalOpen(false);
+      setForm(emptyForm);
+      fetchAds();
+    } catch (err: any) {
+      alert(err.response?.data?.message || 'تعذر حفظ الإعلان.');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleDelete = async (id: number) => {
+    if (!confirm('حذف هذا الإعلان؟')) return;
+    await api.delete(`/admin/advertisements/${id}`);
+    fetchAds();
+  };
+
+  if (loading) return <div className="flex justify-center py-20"><Loader2 className="animate-spin text-gray-400" /></div>;
+
+  return (
+    <div>
+      <div className="flex justify-between items-center">
+        <h1 className="text-2xl font-bold text-gray-900">الإعلانات المدفوعة</h1>
+        <button onClick={() => setModalOpen(true)} className="btn btn-primary"><Plus size={18} className="ml-2" /> إضافة إعلان</button>
+      </div>
+
+      <div className="mt-6 card overflow-hidden">
+        <table className="w-full text-right text-sm">
+          <thead className="bg-gray-50 text-gray-500 border-b border-gray-200">
+            <tr>
+              <th className="px-6 py-3">العنوان</th>
+              <th className="px-6 py-3">المعلن</th>
+              <th className="px-6 py-3">المكان</th>
+              <th className="px-6 py-3">النقرات</th>
+              <th className="px-6 py-3">الحالة</th>
+              <th className="px-6 py-3">إجراءات</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-100">
+            {ads.length === 0 ? (
+              <tr><td colSpan={6} className="px-6 py-12 text-center text-gray-400">لا توجد إعلانات بعد.</td></tr>
+            ) : ads.map((ad) => (
+              <tr key={ad.id}>
+                <td className="px-6 py-4 font-medium text-gray-900">{ad.title}</td>
+                <td className="px-6 py-4 text-gray-500">{ad.advertiser_name ?? '-'}</td>
+                <td className="px-6 py-4 text-gray-600">{placements.find((p) => p.value === ad.placement)?.label ?? ad.placement}</td>
+                <td className="px-6 py-4 text-gray-600">{ad.click_count}</td>
+                <td className="px-6 py-4">
+                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${ad.is_active ? 'bg-green-50 text-green-700' : 'bg-gray-100 text-gray-600'}`}>
+                    {ad.is_active ? 'فعّال' : 'متوقف'}
+                  </span>
+                </td>
+                <td className="px-6 py-4">
+                  <button onClick={() => handleDelete(ad.id)} className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg"><Trash2 size={16} /></button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {modalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/50 backdrop-blur-sm" dir="rtl">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden max-h-[90vh] overflow-y-auto">
+            <div className="p-6 border-b border-gray-100 flex justify-between items-center">
+              <h2 className="text-xl font-semibold">إضافة إعلان</h2>
+              <button onClick={() => setModalOpen(false)} className="text-gray-400 hover:text-gray-600 text-xl leading-none">&times;</button>
+            </div>
+            <form onSubmit={handleSubmit} className="p-6 space-y-3">
+              <input name="title" required placeholder="عنوان الإعلان" className="input" value={form.title} onChange={handleChange} />
+              <input name="advertiser_name" placeholder="اسم المعلن (اختياري)" className="input" value={form.advertiser_name} onChange={handleChange} />
+              <input name="link_url" type="url" placeholder="رابط الإعلان" className="input" value={form.link_url} onChange={handleChange} />
+              <select name="placement" className="input bg-white" value={form.placement} onChange={handleChange}>
+                {placements.map((p) => <option key={p.value} value={p.value}>{p.label}</option>)}
+              </select>
+              <div className="grid grid-cols-2 gap-3">
+                <input name="starts_at" type="date" className="input" value={form.starts_at} onChange={handleChange} />
+                <input name="ends_at" type="date" className="input" value={form.ends_at} onChange={handleChange} />
+              </div>
+              <label className="flex items-center gap-2 text-sm text-gray-700">
+                <input type="checkbox" name="is_active" checked={form.is_active} onChange={handleChange} /> فعّال
+              </label>
+              <button type="submit" disabled={submitting} className="btn btn-primary w-full">
+                {submitting ? <Loader2 size={18} className="animate-spin" /> : 'حفظ'}
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

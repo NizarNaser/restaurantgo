@@ -1,0 +1,14 @@
+# OS junk
+.DS_Store
+Thumbs.db
+*.log
+
+# Root env files (docker-compose.prod.yml reads one; never commit real secrets)
+.env
+.env.*
+!.env.example
+
+# Local AI-tooling state — not project source, machine-specific
+.claude/
+.claude-artifacts/
+.sidecar/

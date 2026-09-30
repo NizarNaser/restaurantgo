@@ -1,0 +1,145 @@
+{
+  "common": {
+    "backToMenu": "Zurück zur Speisekarte",
+    "close": "Schließen",
+    "continue": "Weiter",
+    "total": "Gesamt",
+    "yourName": "Ihr Name",
+    "phoneNumber": "Telefonnummer",
+    "decreaseQuantity": "Menge verringern",
+    "increaseQuantity": "Menge erhöhen",
+    "noImage": "Kein Bild",
+    "oops": "Hoppla!",
+    "notFound": "Nicht gefunden",
+    "call": "Anrufen",
+    "whatsapp": "WhatsApp",
+    "logout": "Abmelden"
+  },
+  "menu": {
+    "allItems": "Alle Artikel",
+    "fullMenu": "Vollständige Speisekarte",
+    "trendingNow": "Gerade beliebt",
+    "noItemsInCategory": "In dieser Kategorie sind keine Artikel verfügbar.",
+    "addToCart": "In den Warenkorb",
+    "currentlyUnavailable": "Derzeit nicht verfügbar",
+    "noReviewsYet": "Noch keine Bewertungen",
+    "notFoundOrUnavailable": "Restaurant nicht gefunden oder Speisekarte nicht verfügbar.",
+    "scanToOrderBanner": "Scannen Sie den QR-Code Ihres Tisches, um hier zu bestellen, oder wählen Sie Lieferung.",
+    "scanWithCamera": "Mit Kamera scannen",
+    "scanTableQrTitle": "Scannen Sie den QR-Code Ihres Tisches",
+    "itemsInCart": "{{count}} Artikel",
+    "visitOrContact": "Besuchen oder kontaktieren Sie uns",
+    "contactUnavailable": "Kontaktdaten sind noch nicht verfügbar.",
+    "readOurBlog": "Unseren Blog lesen",
+    "serviceRating": "Servicebewertung",
+    "reviews": "Bewertungen",
+    "previousPage": "Vorherige Seite",
+    "nextPage": "Nächste Seite",
+    "copyright": "© {{year}} {{name}}. Alle Rechte vorbehalten.",
+    "poweredBy": "Bereitgestellt von"
+  },
+  "product": {
+    "itemNotFound": "Artikel nicht gefunden.",
+    "scanToOrderItem": "Scannen Sie den QR-Code Ihres Tisches, um diesen Artikel zu bestellen.",
+    "reviewsTitle": "Bewertungen",
+    "noReviewsBeFirst": "Noch keine Bewertungen — seien Sie der Erste, der seine Meinung teilt.",
+    "youMightAlsoLike": "Das könnte Ihnen auch gefallen",
+    "leaveAReview": "Bewertung abgeben"
+  },
+  "cart": {
+    "yourOrder": "Ihre Bestellung",
+    "cartEmpty": "Ihr Warenkorb ist leer.",
+    "browseMenu": "Speisekarte durchsuchen",
+    "removeItem": "Artikel entfernen",
+    "yourDetails": "Ihre Angaben",
+    "staffOrderNote": "This order will be recorded under your staff account — no customer name or phone needed.",
+    "scanToPlaceOrder": "Scannen Sie den QR-Code Ihres Tisches, um diese Bestellung aufzugeben.",
+    "addressPlaceholder": "Adresse",
+    "cityPlaceholder": "Stadt",
+    "deliveryInstructionsPlaceholder": "Lieferhinweise (optional)",
+    "kitchenNotesPlaceholder": "Anmerkungen für die Küche? (Allergien, besondere Wünsche...)",
+    "dineInPaymentNote": "Bezahlen Sie direkt bei der Bedienung, sobald die Bestellung eintrifft — keine Online-Zahlung für den Verzehr vor Ort nötig.",
+    "deliveryPaymentNote": "Sie zahlen online per Karte — Sie werden zu einer sicheren Kasse weitergeleitet.",
+    "missingAddress": "Bitte geben Sie Ihre Lieferadresse ein.",
+    "placeOrderFailed": "Ihre Bestellung konnte nicht aufgegeben werden, bitte versuchen Sie es erneut.",
+    "checkoutFailed": "Bezahlvorgang konnte nicht gestartet werden, bitte versuchen Sie es erneut.",
+    "placeOrder": "Bestellen · {{amount}}"
+  },
+  "order": {
+    "steps": {
+      "pending": "Bestellung eingegangen",
+      "preparing": "Wird zubereitet",
+      "ready": "Fertig",
+      "completed": "Abgeschlossen"
+    },
+    "orderNotFound": "Bestellung nicht gefunden.",
+    "orderNumber": "Bestellung #{{id}}",
+    "autoUpdateNotice": "Diese Seite wird automatisch aktualisiert, während Ihre Bestellung fortschreitet.",
+    "paymentConfirmed": "Zahlung bestätigt — vielen Dank!",
+    "confirmingPayment": "Zahlung wird bestätigt…",
+    "cancelledNotice": "Diese Bestellung wurde storniert.",
+    "orderSummary": "Bestellübersicht",
+    "deliveringTo": "Lieferung an"
+  },
+  "halls": {
+    "findYourTable": "Finden Sie Ihren Tisch",
+    "legend": "Grün = frei, rot = besetzt",
+    "noHalls": "Es wurden noch keine Speisesäle eingerichtet.",
+    "noTables": "In diesem Saal gibt es noch keine Tische.",
+    "continueToMenu": "Weiter zur Speisekarte"
+  },
+  "blog": {
+    "blogUnavailable": "Dieser Blog ist nicht verfügbar.",
+    "noPosts": "Noch keine Beiträge veröffentlicht.",
+    "articleNotFound": "Artikel nicht gefunden.",
+    "backToBlog": "Zurück zum Blog"
+  },
+  "review": {
+    "namePlaceholder": "Ihr Name",
+    "commentPlaceholder": "Sagen Sie uns Ihre Meinung (optional)",
+    "submitFailed": "Ihre Bewertung konnte nicht gesendet werden. Bitte versuchen Sie es erneut.",
+    "thanks": "Danke für Ihr Feedback!",
+    "leaveAnother": "Weitere Bewertung abgeben",
+    "submit": "Absenden",
+    "rateOurService": "Bewerten Sie unseren Service"
+  },
+  "customerInfo": {
+    "title": "Bevor Sie bestellen",
+    "subtitle": "Sagen Sie uns, wer Sie sind, damit die Küche und Ihre Bedienung wissen, für wen diese Bestellung ist."
+  },
+  "orderType": {
+    "question": "Wie möchten Sie bestellen?",
+    "subtitle": "Sie können die Speisekarte in beiden Fällen durchsuchen.",
+    "delivery": "Lieferung",
+    "dineIn": "Vor Ort"
+  },
+  "qrScanner": {
+    "defaultTitle": "QR-Code scannen",
+    "defaultHint": "Richten Sie Ihre Kamera auf den QR-Code.",
+    "cameraError": "Auf die Kamera konnte nicht zugegriffen werden. Überprüfen Sie die Kameraberechtigungen Ihres Browsers und versuchen Sie es erneut."
+  },
+  "assistant": {
+    "askAboutMenu": "Fragen zur Speisekarte",
+    "intro": "Fragen Sie mich alles über die Speisekarte, Öffnungszeiten oder den Standort — ich kann keine Bestellung für Sie aufgeben, aber ich kann Ihnen bei der Auswahl helfen.",
+    "unreachable": "Der Assistent konnte nicht erreicht werden, bitte versuchen Sie es erneut.",
+    "askPlaceholder": "Stellen Sie eine Frage...",
+    "send": "Senden",
+    "toggle": "Menü-Assistent ein-/ausblenden"
+  },
+  "tags": {
+    "vegetarian": "Vegetarisch",
+    "vegan": "Vegan",
+    "gluten_free": "Glutenfrei",
+    "spicy": "Scharf",
+    "halal": "Halal"
+  },
+  "weekdays": {
+    "mon": "Montag",
+    "tue": "Dienstag",
+    "wed": "Mittwoch",
+    "thu": "Donnerstag",
+    "fri": "Freitag",
+    "sat": "Samstag",
+    "sun": "Sonntag"
+  }
+}

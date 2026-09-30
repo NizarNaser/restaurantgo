@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Allows plain HTTP only to localhost, so the app can reach a local dev
+     API server (e.g. via `adb reverse tcp:8000 tcp:8000`). Android blocks
+     cleartext traffic by default; production builds should point at an
+     HTTPS API instead of relying on this. -->
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="false">localhost</domain>
+        <domain includeSubdomains="false">10.0.2.2</domain>
+    </domain-config>
+</network-security-config>

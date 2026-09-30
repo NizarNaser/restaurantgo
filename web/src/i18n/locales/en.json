@@ -1,0 +1,222 @@
+{
+  "nav": {
+    "home": "Home",
+    "restaurants": "Restaurants",
+    "contact": "Contact us",
+    "registerCta": "Register your restaurant",
+    "menuAriaLabel": "Menu",
+    "languageAriaLabel": "Language"
+  },
+  "footer": {
+    "tagline": "An all-in-one platform to run restaurants digitally — menus, reservations, payroll and reports in one place.",
+    "quickLinks": "Quick links",
+    "browseRestaurants": "Browse restaurants",
+    "rightsReserved": "All rights reserved."
+  },
+  "assistant": {
+    "title": "RestaurantGo Assistant",
+    "greeting": "Hi! Ask me anything about RestaurantGo — features, pricing, or how it works.",
+    "placeholder": "Ask a question...",
+    "error": "Could not reach the assistant, please try again.",
+    "toggleAriaLabel": "Toggle assistant"
+  },
+  "adminNav": {
+    "overview": "Overview",
+    "tenants": "Subscribed restaurants",
+    "payments": "Payments",
+    "plans": "Subscription plans",
+    "coupons": "Coupons",
+    "staff": "Staff",
+    "attendance": "Attendance",
+    "payroll": "Payroll",
+    "advertisements": "Advertisements",
+    "contactMessages": "Contact messages",
+    "auditLogs": "Audit log",
+    "seo": "SEO & Google Search",
+    "panelSubtitle": "Company control panel",
+    "logout": "Log out"
+  },
+  "common": {
+    "citySeparator": ", "
+  },
+  "errorFallback": {
+    "title": "Something went wrong",
+    "message": "The page ran into an unexpected problem. Try reloading — and if it keeps happening, contact us.",
+    "reload": "Reload page"
+  },
+  "pagination": {
+    "nav": "Pagination",
+    "previous": "Previous page",
+    "next": "Next page"
+  },
+  "adSlot": {
+    "sponsored": "Sponsored",
+    "previous": "Previous ad",
+    "next": "Next ad",
+    "goToAd": "Go to ad {{number}}"
+  },
+  "directory": {
+    "title": "Restaurant directory",
+    "subtitle": "Browse our registered restaurants by country and city.",
+    "searchPlaceholder": "Search by restaurant name...",
+    "allCountries": "All countries",
+    "allCities": "All cities",
+    "noResults": "No restaurants match your search."
+  },
+  "contact": {
+    "subtitle": "Have a question or want to ask about paid advertising? Send us a message and we'll get back to you soon.",
+    "success": "Your message was sent successfully!",
+    "error": "Couldn't send your message, please try again.",
+    "social": {
+      "whatsapp": "WhatsApp",
+      "facebook": "Facebook",
+      "instagram": "Instagram",
+      "telegram": "Telegram"
+    },
+    "form": {
+      "name": "Name",
+      "email": "Email address",
+      "subject": "Subject (optional)",
+      "message": "Your message",
+      "submit": "Send"
+    }
+  },
+  "home": {
+    "hero": {
+      "eyebrow": "An all-in-one digital platform",
+      "title": "One platform to run your <hl>restaurant</hl> digitally",
+      "subtitle": "Menus, reservations, payroll, and financial reports — everything your restaurant needs in one place.",
+      "ctaPrimary": "Start for free",
+      "ctaSecondary": "Browse registered restaurants"
+    },
+    "search": {
+      "placeholder": "Search for a restaurant...",
+      "button": "Search"
+    },
+    "stats": {
+      "restaurants": "Registered restaurants",
+      "bookings": "Bookings a month",
+      "rating": "Average rating",
+      "countries": "Countries"
+    },
+    "adFallback": {
+      "title": "Advertise your restaurant here",
+      "desc": "Make your restaurant the first thing visitors see on our homepage — contact us to book this ad space."
+    },
+    "topRated": {
+      "eyebrow": "Top rated",
+      "title": "Our best restaurants"
+    },
+    "viewAll": "View all",
+    "registered": {
+      "eyebrow": "Our directory",
+      "title": "Restaurants registered with us",
+      "viewAll": "View all restaurants"
+    },
+    "services": {
+      "eyebrow": "Our services",
+      "title": "Everything your restaurant needs, in one place",
+      "menu": {
+        "title": "Digital menu",
+        "desc": "Multi-language, multi-currency menus with a QR code for every table."
+      },
+      "reservations": {
+        "title": "Reservations",
+        "desc": "Take table and event bookings directly from your public page."
+      },
+      "financial": {
+        "title": "Financial reports",
+        "desc": "Revenue, expenses, profit and loss at a glance."
+      },
+      "hr": {
+        "title": "Staff management",
+        "desc": "Attendance, time off, and payroll for your restaurant's team."
+      },
+      "delivery": {
+        "title": "Delivery orders",
+        "desc": "Accept and manage delivery orders online, right alongside dine-in — no separate system needed."
+      },
+      "settingsHelp": {
+        "title": "Guided setup",
+        "desc": "A step-by-step setup wizard walks new restaurants through configuring their menu, tables, and settings in minutes."
+      },
+      "invoicePrinting": {
+        "title": "Kitchen & bar printing",
+        "desc": "Invoices print automatically straight to the right department — kitchen, bar, and beyond — the moment an order comes in."
+      },
+      "reservationScreen": {
+        "title": "Live floor screen",
+        "desc": "See every table's status at a glance and manage reservations directly from an interactive floor plan."
+      },
+      "inventory": {
+        "title": "Inventory tracking",
+        "desc": "Track incoming stock, what's sold, and what's left — automatically, as orders go out the door."
+      },
+      "multiLanguage": {
+        "title": "Multi-language menus",
+        "desc": "Offer your menu in the languages your customers actually speak, chosen per restaurant to match its country."
+      },
+      "aiChat": {
+        "title": "AI assistant",
+        "desc": "AI-powered translation plus a customer-facing chat assistant that answers questions about your menu and restaurant info."
+      }
+    },
+    "cta": {
+      "title": "Have a restaurant?",
+      "desc": "Join our registered restaurants and start taking orders and reservations today."
+    }
+  },
+  "register": {
+    "trialBadge": "3-month free trial",
+    "title": "Register your restaurant",
+    "subtitle": "Start your free trial today — no credit card required.",
+    "planStep": {
+      "title": "Choose a plan",
+      "subtitle": "Pick the plan that fits your restaurant today — you can upgrade or switch anytime from Billing.",
+      "loadError": "Couldn't load plans right now. Continuing with the Starter plan — you can change it anytime from Billing.",
+      "monthly": "Monthly",
+      "yearly": "Yearly",
+      "month": "month",
+      "year": "year",
+      "branchesCount": "{{count}} branch(es)",
+      "unlimitedBranches": "Unlimited branches",
+      "menuItemsCount": "{{count}} menu items",
+      "unlimitedMenuItems": "Unlimited menu items",
+      "teamMembersCount": "{{count}} team members",
+      "unlimitedTeamMembers": "Unlimited team members",
+      "customDomain": "Custom domain",
+      "advancedReports": "Advanced reports",
+      "whiteLabel": "White-label",
+      "selected": "Selected",
+      "select": "Select",
+      "continue": "Continue",
+      "changePlan": "Change plan"
+    },
+    "fields": {
+      "restaurantName": "Restaurant name",
+      "subdomain": "Subdomain (e.g. my-restaurant)",
+      "ownerName": "Your full name",
+      "email": "Email address",
+      "password": "Password",
+      "passwordConfirmation": "Confirm password"
+    },
+    "dashboardLanguage": {
+      "label": "Dashboard language"
+    },
+    "restaurantLanguages": {
+      "label": "Restaurant interface languages",
+      "hint": "Choose the languages your restaurant's public menu and site will support.",
+      "required": "Select at least one language."
+    },
+    "genericError": "Something went wrong, please try again.",
+    "back": "Back",
+    "submit": "Create account",
+    "success": {
+      "title": "Your account was created!",
+      "subtitle": "Your 3-month free trial has started. Log in to start setting up your restaurant.",
+      "subtitleFree": "Your account is ready. Log in to start setting up your restaurant.",
+      "siteReadyAt": "Your restaurant's page is live at:",
+      "cta": "Go to dashboard"
+    }
+  }
+}

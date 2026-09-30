@@ -1,0 +1,221 @@
+{
+  "nav": {
+    "home": "Home",
+    "restaurants": "Ristoranti",
+    "contact": "Contattaci",
+    "registerCta": "Registra il tuo ristorante",
+    "menuAriaLabel": "Menu",
+    "languageAriaLabel": "Lingua"
+  },
+  "footer": {
+    "tagline": "Una piattaforma completa per gestire i ristoranti digitalmente — menu, prenotazioni, buste paga e report in un unico posto.",
+    "quickLinks": "Link rapidi",
+    "browseRestaurants": "Sfoglia i ristoranti",
+    "rightsReserved": "Tutti i diritti riservati."
+  },
+  "assistant": {
+    "title": "Assistente RestaurantGo",
+    "greeting": "Ciao! Chiedimi qualsiasi cosa su RestaurantGo — funzionalità, prezzi o come funziona.",
+    "placeholder": "Fai una domanda...",
+    "error": "Impossibile contattare l'assistente, riprova.",
+    "toggleAriaLabel": "Mostra/nascondi assistente"
+  },
+  "adminNav": {
+    "overview": "Panoramica",
+    "tenants": "Ristoranti abbonati",
+    "payments": "Pagamenti",
+    "plans": "Piani di abbonamento",
+    "coupons": "Coupon",
+    "staff": "Personale",
+    "attendance": "Presenze",
+    "payroll": "Buste paga",
+    "advertisements": "Pubblicità",
+    "contactMessages": "Messaggi di contatto",
+    "auditLogs": "Registro di controllo",
+    "panelSubtitle": "Pannello di controllo aziendale",
+    "logout": "Esci"
+  },
+  "common": {
+    "citySeparator": ", "
+  },
+  "errorFallback": {
+    "title": "Si è verificato un errore imprevisto",
+    "message": "La pagina ha riscontrato un problema imprevisto. Prova a ricaricare — e se il problema persiste, contattaci.",
+    "reload": "Ricarica pagina"
+  },
+  "pagination": {
+    "nav": "Paginazione",
+    "previous": "Pagina precedente",
+    "next": "Pagina successiva"
+  },
+  "adSlot": {
+    "sponsored": "Sponsorizzato",
+    "previous": "Annuncio precedente",
+    "next": "Annuncio successivo",
+    "goToAd": "Vai all'annuncio {{number}}"
+  },
+  "directory": {
+    "title": "Elenco ristoranti",
+    "subtitle": "Sfoglia i nostri ristoranti registrati per paese e città.",
+    "searchPlaceholder": "Cerca per nome del ristorante...",
+    "allCountries": "Tutti i paesi",
+    "allCities": "Tutte le città",
+    "noResults": "Nessun ristorante corrisponde alla tua ricerca."
+  },
+  "contact": {
+    "subtitle": "Hai una domanda o vuoi informazioni sulla pubblicità a pagamento? Scrivici e ti risponderemo presto.",
+    "success": "Il tuo messaggio è stato inviato con successo!",
+    "error": "Impossibile inviare il tuo messaggio, riprova.",
+    "social": {
+      "whatsapp": "WhatsApp",
+      "facebook": "Facebook",
+      "instagram": "Instagram",
+      "telegram": "Telegram"
+    },
+    "form": {
+      "name": "Nome",
+      "email": "Indirizzo e-mail",
+      "subject": "Oggetto (facoltativo)",
+      "message": "Il tuo messaggio",
+      "submit": "Invia"
+    }
+  },
+  "home": {
+    "hero": {
+      "eyebrow": "Una piattaforma digitale completa",
+      "title": "Un'unica piattaforma per gestire il tuo <hl>ristorante</hl> digitalmente",
+      "subtitle": "Menu, prenotazioni, buste paga e report finanziari — tutto ciò di cui il tuo ristorante ha bisogno in un unico posto.",
+      "ctaPrimary": "Inizia gratis",
+      "ctaSecondary": "Sfoglia i ristoranti registrati"
+    },
+    "search": {
+      "placeholder": "Cerca un ristorante...",
+      "button": "Cerca"
+    },
+    "stats": {
+      "restaurants": "Ristoranti registrati",
+      "bookings": "Prenotazioni al mese",
+      "rating": "Valutazione media",
+      "countries": "Paesi"
+    },
+    "adFallback": {
+      "title": "Pubblicizza qui il tuo ristorante",
+      "desc": "Fai in modo che il tuo ristorante sia la prima cosa che i visitatori vedono sulla nostra home page — contattaci per prenotare questo spazio pubblicitario."
+    },
+    "topRated": {
+      "eyebrow": "I più votati",
+      "title": "I nostri migliori ristoranti"
+    },
+    "viewAll": "Vedi tutto",
+    "registered": {
+      "eyebrow": "Il nostro elenco",
+      "title": "Ristoranti registrati con noi",
+      "viewAll": "Vedi tutti i ristoranti"
+    },
+    "services": {
+      "eyebrow": "I nostri servizi",
+      "title": "Tutto ciò di cui il tuo ristorante ha bisogno, in un unico posto",
+      "menu": {
+        "title": "Menu digitale",
+        "desc": "Menu multilingue e multivaluta con un codice QR per ogni tavolo."
+      },
+      "reservations": {
+        "title": "Prenotazioni",
+        "desc": "Ricevi prenotazioni di tavoli ed eventi direttamente dalla tua pagina pubblica."
+      },
+      "financial": {
+        "title": "Report finanziari",
+        "desc": "Ricavi, spese, profitti e perdite a colpo d'occhio."
+      },
+      "hr": {
+        "title": "Gestione del personale",
+        "desc": "Presenze, assenze e buste paga per il team del tuo ristorante."
+      },
+      "delivery": {
+        "title": "Ordini a domicilio",
+        "desc": "Accetta e gestisci gli ordini a domicilio online, insieme a quelli in sala — senza bisogno di un sistema separato."
+      },
+      "settingsHelp": {
+        "title": "Configurazione guidata",
+        "desc": "Una procedura guidata passo dopo passo aiuta i nuovi ristoranti a configurare menu, tavoli e impostazioni in pochi minuti."
+      },
+      "invoicePrinting": {
+        "title": "Stampa cucina e bar",
+        "desc": "Le ricevute vengono stampate automaticamente nel reparto giusto — cucina, bar e altro — non appena arriva un ordine."
+      },
+      "reservationScreen": {
+        "title": "Schermata sala in tempo reale",
+        "desc": "Visualizza lo stato di ogni tavolo in un colpo d'occhio e gestisci le prenotazioni direttamente da una piantina interattiva della sala."
+      },
+      "inventory": {
+        "title": "Gestione del magazzino",
+        "desc": "Tieni traccia delle merci in entrata, di ciò che viene venduto e di ciò che resta — automaticamente, a ogni ordine."
+      },
+      "multiLanguage": {
+        "title": "Menu multilingue",
+        "desc": "Offri il tuo menu nelle lingue realmente parlate dai tuoi clienti, scelte per ogni ristorante in base al suo paese."
+      },
+      "aiChat": {
+        "title": "Assistente IA",
+        "desc": "Traduzione basata sull'IA, oltre a un assistente di chat per i clienti che risponde a domande su menu e informazioni del ristorante."
+      }
+    },
+    "cta": {
+      "title": "Hai un ristorante?",
+      "desc": "Unisciti ai nostri ristoranti registrati e inizia a ricevere ordini e prenotazioni oggi stesso."
+    }
+  },
+  "register": {
+    "trialBadge": "Prova gratuita di 3 mesi",
+    "title": "Registra il tuo ristorante",
+    "subtitle": "Inizia oggi la tua prova gratuita — senza carta di credito.",
+    "planStep": {
+      "title": "Choose a plan",
+      "subtitle": "Pick the plan that fits your restaurant today — you can upgrade or switch anytime from Billing.",
+      "loadError": "Couldn't load plans right now. Continuing with the Starter plan — you can change it anytime from Billing.",
+      "monthly": "Monthly",
+      "yearly": "Yearly",
+      "month": "month",
+      "year": "year",
+      "branchesCount": "{{count}} branch(es)",
+      "unlimitedBranches": "Unlimited branches",
+      "menuItemsCount": "{{count}} menu items",
+      "unlimitedMenuItems": "Unlimited menu items",
+      "teamMembersCount": "{{count}} team members",
+      "unlimitedTeamMembers": "Unlimited team members",
+      "customDomain": "Custom domain",
+      "advancedReports": "Advanced reports",
+      "whiteLabel": "White-label",
+      "selected": "Selected",
+      "select": "Select",
+      "continue": "Continue",
+      "changePlan": "Change plan"
+    },
+    "fields": {
+      "restaurantName": "Nome del ristorante",
+      "subdomain": "Sottodominio (es.: my-restaurant)",
+      "ownerName": "Il tuo nome completo",
+      "email": "Indirizzo e-mail",
+      "password": "Password",
+      "passwordConfirmation": "Conferma password"
+    },
+    "dashboardLanguage": {
+      "label": "Lingua del pannello di controllo"
+    },
+    "restaurantLanguages": {
+      "label": "Lingue dell'interfaccia del ristorante",
+      "hint": "Scegli le lingue che il menu e il sito pubblici del tuo ristorante supporteranno.",
+      "required": "Seleziona almeno una lingua."
+    },
+    "genericError": "Si è verificato un errore, riprova.",
+    "back": "Back",
+    "submit": "Crea account",
+    "success": {
+      "title": "Il tuo account è stato creato!",
+      "subtitle": "La tua prova gratuita di 3 mesi è iniziata. Accedi per iniziare a configurare il tuo ristorante.",
+      "subtitleFree": "Your account is ready. Log in to start setting up your restaurant.",
+      "siteReadyAt": "Your restaurant's page is live at:",
+      "cta": "Vai al pannello di controllo"
+    }
+  }
+}

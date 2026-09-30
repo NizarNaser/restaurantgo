@@ -1,0 +1,145 @@
+{
+  "common": {
+    "backToMenu": "Voltar ao menu",
+    "close": "Fechar",
+    "continue": "Continuar",
+    "total": "Total",
+    "yourName": "Seu nome",
+    "phoneNumber": "Número de telefone",
+    "decreaseQuantity": "Diminuir quantidade",
+    "increaseQuantity": "Aumentar quantidade",
+    "noImage": "Sem imagem",
+    "oops": "Ops!",
+    "notFound": "Não encontrado",
+    "call": "Ligar",
+    "whatsapp": "WhatsApp",
+    "logout": "Sair"
+  },
+  "menu": {
+    "allItems": "Todos os itens",
+    "fullMenu": "Menu completo",
+    "trendingNow": "Em alta agora",
+    "noItemsInCategory": "Nenhum item disponível nesta categoria.",
+    "addToCart": "Adicionar ao carrinho",
+    "currentlyUnavailable": "Atualmente indisponível",
+    "noReviewsYet": "Ainda sem avaliações",
+    "notFoundOrUnavailable": "Restaurante não encontrado ou menu indisponível.",
+    "scanToOrderBanner": "Escaneie o QR code da sua mesa para pedir aqui, ou escolha a entrega.",
+    "scanWithCamera": "Escanear com a câmera",
+    "scanTableQrTitle": "Escaneie o QR code da sua mesa",
+    "itemsInCart": "{{count}} itens",
+    "visitOrContact": "Visite-nos ou entre em contato",
+    "contactUnavailable": "Os dados de contato ainda não estão disponíveis.",
+    "readOurBlog": "Leia nosso blog",
+    "serviceRating": "avaliação do serviço",
+    "reviews": "avaliações",
+    "previousPage": "Página anterior",
+    "nextPage": "Próxima página",
+    "copyright": "© {{year}} {{name}}. Todos os direitos reservados.",
+    "poweredBy": "Tecnologia:"
+  },
+  "product": {
+    "itemNotFound": "Item não encontrado.",
+    "scanToOrderItem": "Escaneie o QR code da sua mesa para pedir este item.",
+    "reviewsTitle": "Avaliações",
+    "noReviewsBeFirst": "Ainda sem avaliações — seja o primeiro a compartilhar sua opinião.",
+    "youMightAlsoLike": "Você também pode gostar",
+    "leaveAReview": "Deixar uma avaliação"
+  },
+  "cart": {
+    "yourOrder": "Seu pedido",
+    "cartEmpty": "Seu carrinho está vazio.",
+    "browseMenu": "Ver o menu",
+    "removeItem": "Remover item",
+    "yourDetails": "Seus dados",
+    "staffOrderNote": "This order will be recorded under your staff account — no customer name or phone needed.",
+    "scanToPlaceOrder": "Escaneie o QR code da sua mesa para fazer este pedido.",
+    "addressPlaceholder": "Endereço",
+    "cityPlaceholder": "Cidade",
+    "deliveryInstructionsPlaceholder": "Instruções de entrega (opcional)",
+    "kitchenNotesPlaceholder": "Alguma observação para a cozinha? (alergias, pedidos especiais...)",
+    "dineInPaymentNote": "Pague diretamente ao garçom quando o pedido chegar — nenhum pagamento on-line necessário para consumo no local.",
+    "deliveryPaymentNote": "Você pagará on-line com cartão — será redirecionado para um pagamento seguro.",
+    "missingAddress": "Por favor, informe seu endereço de entrega.",
+    "placeOrderFailed": "Não foi possível fazer o seu pedido, tente novamente.",
+    "checkoutFailed": "Não foi possível iniciar o pagamento, tente novamente.",
+    "placeOrder": "Fazer pedido · {{amount}}"
+  },
+  "order": {
+    "steps": {
+      "pending": "Pedido recebido",
+      "preparing": "Em preparo",
+      "ready": "Pronto",
+      "completed": "Concluído"
+    },
+    "orderNotFound": "Pedido não encontrado.",
+    "orderNumber": "Pedido #{{id}}",
+    "autoUpdateNotice": "Esta página será atualizada automaticamente conforme o seu pedido avança.",
+    "paymentConfirmed": "Pagamento confirmado — obrigado!",
+    "confirmingPayment": "Confirmando seu pagamento…",
+    "cancelledNotice": "Este pedido foi cancelado.",
+    "orderSummary": "Resumo do pedido",
+    "deliveringTo": "Entregando em"
+  },
+  "halls": {
+    "findYourTable": "Encontre sua mesa",
+    "legend": "Verde = livre, vermelho = ocupada",
+    "noHalls": "Nenhum salão foi configurado ainda.",
+    "noTables": "Ainda não há mesas neste salão.",
+    "continueToMenu": "Continuar para o menu"
+  },
+  "blog": {
+    "blogUnavailable": "Este blog não está disponível.",
+    "noPosts": "Nenhum post publicado ainda.",
+    "articleNotFound": "Artigo não encontrado.",
+    "backToBlog": "Voltar ao blog"
+  },
+  "review": {
+    "namePlaceholder": "Seu nome",
+    "commentPlaceholder": "Conte-nos sua opinião (opcional)",
+    "submitFailed": "Não foi possível enviar sua avaliação. Tente novamente.",
+    "thanks": "Obrigado pelo seu feedback!",
+    "leaveAnother": "Deixar outra avaliação",
+    "submit": "Enviar",
+    "rateOurService": "Avalie nosso serviço"
+  },
+  "customerInfo": {
+    "title": "Antes de pedir",
+    "subtitle": "Diga-nos quem você é para que a cozinha e o garçom saibam de quem é este pedido."
+  },
+  "orderType": {
+    "question": "Como você gostaria de pedir?",
+    "subtitle": "Você pode ver o menu de qualquer forma.",
+    "delivery": "Entrega",
+    "dineIn": "Consumir no local"
+  },
+  "qrScanner": {
+    "defaultTitle": "Escanear QR code",
+    "defaultHint": "Aponte sua câmera para o QR code.",
+    "cameraError": "Não foi possível acessar a câmera. Verifique as permissões de câmera do seu navegador e tente novamente."
+  },
+  "assistant": {
+    "askAboutMenu": "Pergunte sobre este menu",
+    "intro": "Pergunte-me qualquer coisa sobre o menu, horários ou localização — não posso fazer um pedido por você, mas posso ajudá-lo a decidir o que pedir.",
+    "unreachable": "Não foi possível contatar o assistente, tente novamente.",
+    "askPlaceholder": "Faça uma pergunta...",
+    "send": "Enviar",
+    "toggle": "Mostrar/ocultar o assistente do menu"
+  },
+  "tags": {
+    "vegetarian": "Vegetariano",
+    "vegan": "Vegano",
+    "gluten_free": "Sem glúten",
+    "spicy": "Picante",
+    "halal": "Halal"
+  },
+  "weekdays": {
+    "mon": "Segunda-feira",
+    "tue": "Terça-feira",
+    "wed": "Quarta-feira",
+    "thu": "Quinta-feira",
+    "fri": "Sexta-feira",
+    "sat": "Sábado",
+    "sun": "Domingo"
+  }
+}

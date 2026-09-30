@@ -1,0 +1,145 @@
+{
+  "common": {
+    "backToMenu": "返回菜单",
+    "close": "关闭",
+    "continue": "继续",
+    "total": "总计",
+    "yourName": "您的姓名",
+    "phoneNumber": "电话号码",
+    "decreaseQuantity": "减少数量",
+    "increaseQuantity": "增加数量",
+    "noImage": "无图片",
+    "oops": "出错了！",
+    "notFound": "未找到",
+    "call": "拨打电话",
+    "whatsapp": "WhatsApp",
+    "logout": "退出登录"
+  },
+  "menu": {
+    "allItems": "全部菜品",
+    "fullMenu": "完整菜单",
+    "trendingNow": "热门推荐",
+    "noItemsInCategory": "该分类下暂无可用菜品。",
+    "addToCart": "加入购物车",
+    "currentlyUnavailable": "暂时缺货",
+    "noReviewsYet": "暂无评价",
+    "notFoundOrUnavailable": "未找到餐厅或菜单不可用。",
+    "scanToOrderBanner": "扫描桌上的二维码即可在此点餐，或选择外送。",
+    "scanWithCamera": "使用相机扫描",
+    "scanTableQrTitle": "扫描您桌上的二维码",
+    "itemsInCart": "{{count}} 件商品",
+    "visitOrContact": "光临或联系我们",
+    "contactUnavailable": "联系方式暂未提供。",
+    "readOurBlog": "阅读我们的博客",
+    "serviceRating": "服务评分",
+    "reviews": "条评价",
+    "previousPage": "上一页",
+    "nextPage": "下一页",
+    "copyright": "© {{year}} {{name}}. 保留所有权利。",
+    "poweredBy": "技术支持:"
+  },
+  "product": {
+    "itemNotFound": "未找到该菜品。",
+    "scanToOrderItem": "扫描桌上的二维码以点此菜品。",
+    "reviewsTitle": "评价",
+    "noReviewsBeFirst": "暂无评价——成为第一个分享看法的人。",
+    "youMightAlsoLike": "您可能还喜欢",
+    "leaveAReview": "发表评价"
+  },
+  "cart": {
+    "yourOrder": "您的订单",
+    "cartEmpty": "购物车是空的。",
+    "browseMenu": "浏览菜单",
+    "removeItem": "移除商品",
+    "yourDetails": "您的信息",
+    "staffOrderNote": "This order will be recorded under your staff account — no customer name or phone needed.",
+    "scanToPlaceOrder": "扫描桌上的二维码以提交此订单。",
+    "addressPlaceholder": "地址",
+    "cityPlaceholder": "城市",
+    "deliveryInstructionsPlaceholder": "配送说明（可选）",
+    "kitchenNotesPlaceholder": "给厨房的备注？（过敏、特殊要求等）",
+    "dineInPaymentNote": "餐点送达后请直接向服务员付款——堂食无需在线支付。",
+    "deliveryPaymentNote": "您将通过银行卡在线支付——将跳转至安全支付页面。",
+    "missingAddress": "请输入您的配送地址。",
+    "placeOrderFailed": "无法提交您的订单，请重试。",
+    "checkoutFailed": "无法开始结账，请重试。",
+    "placeOrder": "下单 · {{amount}}"
+  },
+  "order": {
+    "steps": {
+      "pending": "订单已接收",
+      "preparing": "制作中",
+      "ready": "已完成",
+      "completed": "已完结"
+    },
+    "orderNotFound": "未找到该订单。",
+    "orderNumber": "订单 #{{id}}",
+    "autoUpdateNotice": "本页面将随订单进度自动更新。",
+    "paymentConfirmed": "付款已确认——谢谢！",
+    "confirmingPayment": "正在确认付款…",
+    "cancelledNotice": "此订单已取消。",
+    "orderSummary": "订单摘要",
+    "deliveringTo": "送达地址"
+  },
+  "halls": {
+    "findYourTable": "查找您的桌位",
+    "legend": "绿色 = 空闲，红色 = 已占用",
+    "noHalls": "尚未设置任何就餐区。",
+    "noTables": "该区域暂无桌位。",
+    "continueToMenu": "继续前往菜单"
+  },
+  "blog": {
+    "blogUnavailable": "该博客当前不可用。",
+    "noPosts": "暂无已发布的文章。",
+    "articleNotFound": "未找到该文章。",
+    "backToBlog": "返回博客"
+  },
+  "review": {
+    "namePlaceholder": "您的姓名",
+    "commentPlaceholder": "告诉我们您的想法（可选）",
+    "submitFailed": "无法提交您的评价，请重试。",
+    "thanks": "感谢您的反馈！",
+    "leaveAnother": "再发表一条评价",
+    "submit": "提交",
+    "rateOurService": "为我们的服务评分"
+  },
+  "customerInfo": {
+    "title": "下单前",
+    "subtitle": "请告诉我们您的信息，以便厨房和服务员知道这是谁的订单。"
+  },
+  "orderType": {
+    "question": "您希望如何点餐？",
+    "subtitle": "无论选择哪种方式，您都可以浏览菜单。",
+    "delivery": "外送",
+    "dineIn": "堂食"
+  },
+  "qrScanner": {
+    "defaultTitle": "扫描二维码",
+    "defaultHint": "将相机对准二维码。",
+    "cameraError": "无法访问相机。请检查浏览器的相机权限后重试。"
+  },
+  "assistant": {
+    "askAboutMenu": "咨询菜单相关问题",
+    "intro": "您可以问我关于菜单、营业时间或位置的任何问题——我无法替您下单，但可以帮您做出选择。",
+    "unreachable": "无法连接助手，请重试。",
+    "askPlaceholder": "输入您的问题...",
+    "send": "发送",
+    "toggle": "显示/隐藏菜单助手"
+  },
+  "tags": {
+    "vegetarian": "素食",
+    "vegan": "纯素",
+    "gluten_free": "无麸质",
+    "spicy": "辛辣",
+    "halal": "清真"
+  },
+  "weekdays": {
+    "mon": "星期一",
+    "tue": "星期二",
+    "wed": "星期三",
+    "thu": "星期四",
+    "fri": "星期五",
+    "sat": "星期六",
+    "sun": "星期日"
+  }
+}

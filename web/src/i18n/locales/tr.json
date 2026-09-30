@@ -1,0 +1,221 @@
+{
+  "nav": {
+    "home": "Ana Sayfa",
+    "restaurants": "Restoranlar",
+    "contact": "Bize Ulaşın",
+    "registerCta": "Restoranınızı Kaydedin",
+    "menuAriaLabel": "Menü",
+    "languageAriaLabel": "Dil"
+  },
+  "footer": {
+    "tagline": "Restoranları dijital olarak yönetmek için hepsi bir arada platform — menüler, rezervasyonlar, bordro ve raporlar tek bir yerde.",
+    "quickLinks": "Hızlı bağlantılar",
+    "browseRestaurants": "Restoranlara göz atın",
+    "rightsReserved": "Tüm hakları saklıdır."
+  },
+  "assistant": {
+    "title": "RestaurantGo Asistanı",
+    "greeting": "Merhaba! RestaurantGo hakkında her şeyi sorabilirsin — özellikler, fiyatlar veya nasıl çalıştığı.",
+    "placeholder": "Bir soru sorun...",
+    "error": "Asistana ulaşılamadı, lütfen tekrar deneyin.",
+    "toggleAriaLabel": "Asistanı aç/kapat"
+  },
+  "adminNav": {
+    "overview": "Genel bakış",
+    "tenants": "Abone restoranlar",
+    "payments": "Ödemeler",
+    "plans": "Abonelik planları",
+    "coupons": "Kuponlar",
+    "staff": "Personel",
+    "attendance": "Devam durumu",
+    "payroll": "Bordro",
+    "advertisements": "Reklamlar",
+    "contactMessages": "İletişim mesajları",
+    "auditLogs": "Denetim günlüğü",
+    "panelSubtitle": "Şirket kontrol paneli",
+    "logout": "Çıkış yap"
+  },
+  "common": {
+    "citySeparator": ", "
+  },
+  "errorFallback": {
+    "title": "Beklenmeyen bir hata oluştu",
+    "message": "Sayfada beklenmeyen bir sorun oluştu. Yeniden yüklemeyi deneyin — sorun devam ederse bizimle iletişime geçin.",
+    "reload": "Sayfayı yeniden yükle"
+  },
+  "pagination": {
+    "nav": "Sayfalama",
+    "previous": "Önceki sayfa",
+    "next": "Sonraki sayfa"
+  },
+  "adSlot": {
+    "sponsored": "Reklam",
+    "previous": "Önceki reklam",
+    "next": "Sonraki reklam",
+    "goToAd": "{{number}} numaralı reklama git"
+  },
+  "directory": {
+    "title": "Restoran rehberi",
+    "subtitle": "Kayıtlı restoranlarımıza ülke ve şehre göre göz atın.",
+    "searchPlaceholder": "Restoran adına göre ara...",
+    "allCountries": "Tüm ülkeler",
+    "allCities": "Tüm şehirler",
+    "noResults": "Aramanızla eşleşen restoran bulunamadı."
+  },
+  "contact": {
+    "subtitle": "Bir sorunuz mu var ya da ücretli reklam hakkında bilgi mi almak istiyorsunuz? Bize mesaj gönderin, kısa süre içinde size döneceğiz.",
+    "success": "Mesajınız başarıyla gönderildi!",
+    "error": "Mesajınız gönderilemedi, lütfen tekrar deneyin.",
+    "social": {
+      "whatsapp": "WhatsApp",
+      "facebook": "Facebook",
+      "instagram": "Instagram",
+      "telegram": "Telegram"
+    },
+    "form": {
+      "name": "Ad",
+      "email": "E-posta adresi",
+      "subject": "Konu (isteğe bağlı)",
+      "message": "Mesajınız",
+      "submit": "Gönder"
+    }
+  },
+  "home": {
+    "hero": {
+      "eyebrow": "Hepsi bir arada dijital platform",
+      "title": "<hl>Restoranınızı</hl> dijital olarak yönetmek için tek bir platform",
+      "subtitle": "Menüler, rezervasyonlar, bordro ve mali raporlar — restoranınızın ihtiyaç duyduğu her şey tek bir yerde.",
+      "ctaPrimary": "Ücretsiz başlayın",
+      "ctaSecondary": "Kayıtlı restoranlara göz atın"
+    },
+    "search": {
+      "placeholder": "Bir restoran arayın...",
+      "button": "Ara"
+    },
+    "stats": {
+      "restaurants": "Kayıtlı restoran",
+      "bookings": "Aylık rezervasyon",
+      "rating": "Ortalama puan",
+      "countries": "Ülke"
+    },
+    "adFallback": {
+      "title": "Restoranınızı burada tanıtın",
+      "desc": "Restoranınızı ana sayfamızda ziyaretçilerin gördüğü ilk şey yapın — bu reklam alanını ayırtmak için bizimle iletişime geçin."
+    },
+    "topRated": {
+      "eyebrow": "En yüksek puanlılar",
+      "title": "En iyi restoranlarımız"
+    },
+    "viewAll": "Tümünü gör",
+    "registered": {
+      "eyebrow": "Rehberimiz",
+      "title": "Bizimle kayıtlı restoranlar",
+      "viewAll": "Tüm restoranları gör"
+    },
+    "services": {
+      "eyebrow": "Hizmetlerimiz",
+      "title": "Restoranınızın ihtiyaç duyduğu her şey, tek bir yerde",
+      "menu": {
+        "title": "Dijital menü",
+        "desc": "Her masa için QR kodlu, çok dilli ve çok para birimli menüler."
+      },
+      "reservations": {
+        "title": "Rezervasyonlar",
+        "desc": "Masa ve etkinlik rezervasyonlarını doğrudan genel sayfanızdan alın."
+      },
+      "financial": {
+        "title": "Mali raporlar",
+        "desc": "Gelirler, giderler, kâr ve zarar tek bakışta."
+      },
+      "hr": {
+        "title": "Personel yönetimi",
+        "desc": "Restoranınızın ekibi için devam durumu, izinler ve bordro."
+      },
+      "delivery": {
+        "title": "Teslimat siparişleri",
+        "desc": "Teslimat siparişlerini masa siparişleriyle birlikte, ayrı bir sisteme gerek kalmadan çevrimiçi kabul edin ve yönetin."
+      },
+      "settingsHelp": {
+        "title": "Rehberli kurulum",
+        "desc": "Adım adım kurulum sihirbazı, yeni restoranların menü, masa ve ayarlarını dakikalar içinde yapılandırmasına yardımcı olur."
+      },
+      "invoicePrinting": {
+        "title": "Mutfak ve bar yazdırma",
+        "desc": "Fişler, sipariş geldiği anda otomatik olarak doğru bölüme — mutfak, bar ve diğerlerine — yazdırılır."
+      },
+      "reservationScreen": {
+        "title": "Canlı salon ekranı",
+        "desc": "Her masanın durumunu tek bakışta görün ve rezervasyonları etkileşimli bir salon planından doğrudan yönetin."
+      },
+      "inventory": {
+        "title": "Stok takibi",
+        "desc": "Gelen malzemeyi, satılanı ve kalanı — siparişler çıktıkça otomatik olarak takip edin."
+      },
+      "multiLanguage": {
+        "title": "Çok dilli menüler",
+        "desc": "Menünüzü müşterilerinizin gerçekten konuştuğu dillerde sunun — her restoran için ülkesine göre seçilir."
+      },
+      "aiChat": {
+        "title": "Yapay zeka asistanı",
+        "desc": "Yapay zeka destekli çeviri ve menünüz ile restoran bilgileriniz hakkındaki soruları yanıtlayan bir müşteri sohbet asistanı."
+      }
+    },
+    "cta": {
+      "title": "Bir restoranınız mı var?",
+      "desc": "Kayıtlı restoranlarımıza katılın ve bugün sipariş ve rezervasyon almaya başlayın."
+    }
+  },
+  "register": {
+    "trialBadge": "3 aylık ücretsiz deneme",
+    "title": "Restoranınızı kaydedin",
+    "subtitle": "Ücretsiz denemenize bugün başlayın — kredi kartı gerekmez.",
+    "planStep": {
+      "title": "Choose a plan",
+      "subtitle": "Pick the plan that fits your restaurant today — you can upgrade or switch anytime from Billing.",
+      "loadError": "Couldn't load plans right now. Continuing with the Starter plan — you can change it anytime from Billing.",
+      "monthly": "Monthly",
+      "yearly": "Yearly",
+      "month": "month",
+      "year": "year",
+      "branchesCount": "{{count}} branch(es)",
+      "unlimitedBranches": "Unlimited branches",
+      "menuItemsCount": "{{count}} menu items",
+      "unlimitedMenuItems": "Unlimited menu items",
+      "teamMembersCount": "{{count}} team members",
+      "unlimitedTeamMembers": "Unlimited team members",
+      "customDomain": "Custom domain",
+      "advancedReports": "Advanced reports",
+      "whiteLabel": "White-label",
+      "selected": "Selected",
+      "select": "Select",
+      "continue": "Continue",
+      "changePlan": "Change plan"
+    },
+    "fields": {
+      "restaurantName": "Restoran adı",
+      "subdomain": "Alt alan adı (örn.: my-restaurant)",
+      "ownerName": "Ad soyad",
+      "email": "E-posta adresi",
+      "password": "Şifre",
+      "passwordConfirmation": "Şifreyi onayla"
+    },
+    "dashboardLanguage": {
+      "label": "Kontrol paneli dili"
+    },
+    "restaurantLanguages": {
+      "label": "Restoran arayüz dilleri",
+      "hint": "Restoranınızın genel menüsünün ve sitesinin destekleyeceği dilleri seçin.",
+      "required": "En az bir dil seçin."
+    },
+    "genericError": "Bir hata oluştu, lütfen tekrar deneyin.",
+    "back": "Back",
+    "submit": "Hesap oluştur",
+    "success": {
+      "title": "Hesabınız oluşturuldu!",
+      "subtitle": "3 aylık ücretsiz deneme süreniz başladı. Restoranınızı kurmaya başlamak için giriş yapın.",
+      "subtitleFree": "Your account is ready. Log in to start setting up your restaurant.",
+      "siteReadyAt": "Your restaurant's page is live at:",
+      "cta": "Kontrol paneline git"
+    }
+  }
+}

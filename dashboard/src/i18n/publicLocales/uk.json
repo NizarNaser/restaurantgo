@@ -1,0 +1,145 @@
+{
+  "common": {
+    "backToMenu": "Назад до меню",
+    "close": "Закрити",
+    "continue": "Продовжити",
+    "total": "Разом",
+    "yourName": "Ваше ім'я",
+    "phoneNumber": "Номер телефону",
+    "decreaseQuantity": "Зменшити кількість",
+    "increaseQuantity": "Збільшити кількість",
+    "noImage": "Немає зображення",
+    "oops": "Ой!",
+    "notFound": "Не знайдено",
+    "call": "Зателефонувати",
+    "whatsapp": "WhatsApp",
+    "logout": "Вийти"
+  },
+  "menu": {
+    "allItems": "Усі страви",
+    "fullMenu": "Повне меню",
+    "trendingNow": "Популярне зараз",
+    "noItemsInCategory": "У цій категорії немає доступних страв.",
+    "addToCart": "Додати в кошик",
+    "currentlyUnavailable": "Зараз недоступно",
+    "noReviewsYet": "Поки що немає відгуків",
+    "notFoundOrUnavailable": "Ресторан не знайдено або меню недоступне.",
+    "scanToOrderBanner": "Скануйте QR-код вашого столика, щоб замовити тут, або оберіть доставку.",
+    "scanWithCamera": "Сканувати камерою",
+    "scanTableQrTitle": "Скануйте QR-код вашого столика",
+    "itemsInCart": "{{count}} товарів",
+    "visitOrContact": "Відвідайте нас або зв'яжіться з нами",
+    "contactUnavailable": "Контактні дані поки що недоступні.",
+    "readOurBlog": "Читайте наш блог",
+    "serviceRating": "оцінка обслуговування",
+    "reviews": "відгуків",
+    "previousPage": "Попередня сторінка",
+    "nextPage": "Наступна сторінка",
+    "copyright": "© {{year}} {{name}}. Усі права захищено.",
+    "poweredBy": "Працює на"
+  },
+  "product": {
+    "itemNotFound": "Страву не знайдено.",
+    "scanToOrderItem": "Скануйте QR-код вашого столика, щоб замовити цю страву.",
+    "reviewsTitle": "Відгуки",
+    "noReviewsBeFirst": "Поки що немає відгуків — будьте першим, хто поділиться думкою.",
+    "youMightAlsoLike": "Вам також може сподобатися",
+    "leaveAReview": "Залишити відгук"
+  },
+  "cart": {
+    "yourOrder": "Ваше замовлення",
+    "cartEmpty": "Ваш кошик порожній.",
+    "browseMenu": "Переглянути меню",
+    "removeItem": "Видалити товар",
+    "yourDetails": "Ваші дані",
+    "staffOrderNote": "This order will be recorded under your staff account — no customer name or phone needed.",
+    "scanToPlaceOrder": "Скануйте QR-код вашого столика, щоб оформити це замовлення.",
+    "addressPlaceholder": "Адреса",
+    "cityPlaceholder": "Місто",
+    "deliveryInstructionsPlaceholder": "Інструкції з доставки (необов'язково)",
+    "kitchenNotesPlaceholder": "Побажання для кухні? (алергії, особливі прохання...)",
+    "dineInPaymentNote": "Оплатіть офіціанту напряму, коли замовлення прибуде — онлайн-оплата не потрібна при відвідуванні закладу.",
+    "deliveryPaymentNote": "Ви оплатите онлайн карткою — вас перенаправлять на безпечну сторінку оплати.",
+    "missingAddress": "Будь ласка, вкажіть адресу доставки.",
+    "placeOrderFailed": "Не вдалося оформити замовлення, спробуйте ще раз.",
+    "checkoutFailed": "Не вдалося розпочати оплату, спробуйте ще раз.",
+    "placeOrder": "Оформити замовлення · {{amount}}"
+  },
+  "order": {
+    "steps": {
+      "pending": "Замовлення отримано",
+      "preparing": "Готується",
+      "ready": "Готово",
+      "completed": "Завершено"
+    },
+    "orderNotFound": "Замовлення не знайдено.",
+    "orderNumber": "Замовлення №{{id}}",
+    "autoUpdateNotice": "Ця сторінка автоматично оновлюватиметься в міру виконання вашого замовлення.",
+    "paymentConfirmed": "Оплату підтверджено — дякуємо!",
+    "confirmingPayment": "Підтвердження оплати…",
+    "cancelledNotice": "Це замовлення було скасовано.",
+    "orderSummary": "Підсумок замовлення",
+    "deliveringTo": "Доставка за адресою"
+  },
+  "halls": {
+    "findYourTable": "Знайдіть свій столик",
+    "legend": "Зелений = вільно, червоний = зайнято",
+    "noHalls": "Зали ще не налаштовано.",
+    "noTables": "У цій залі поки немає столиків.",
+    "continueToMenu": "Перейти до меню"
+  },
+  "blog": {
+    "blogUnavailable": "Цей блог недоступний.",
+    "noPosts": "Поки що немає опублікованих статей.",
+    "articleNotFound": "Статтю не знайдено.",
+    "backToBlog": "Назад до блогу"
+  },
+  "review": {
+    "namePlaceholder": "Ваше ім'я",
+    "commentPlaceholder": "Розкажіть, що ви думаєте (необов'язково)",
+    "submitFailed": "Не вдалося надіслати ваш відгук. Спробуйте ще раз.",
+    "thanks": "Дякуємо за ваш відгук!",
+    "leaveAnother": "Залишити ще один відгук",
+    "submit": "Надіслати",
+    "rateOurService": "Оцініть наш сервіс"
+  },
+  "customerInfo": {
+    "title": "Перш ніж замовити",
+    "subtitle": "Скажіть нам, хто ви, щоб кухня та офіціант знали, для кого це замовлення."
+  },
+  "orderType": {
+    "question": "Як би ви хотіли замовити?",
+    "subtitle": "Ви можете переглянути меню в будь-якому випадку.",
+    "delivery": "Доставка",
+    "dineIn": "У закладі"
+  },
+  "qrScanner": {
+    "defaultTitle": "Сканувати QR-код",
+    "defaultHint": "Наведіть камеру на QR-код.",
+    "cameraError": "Не вдалося отримати доступ до камери. Перевірте дозволи камери у браузері та спробуйте ще раз."
+  },
+  "assistant": {
+    "askAboutMenu": "Запитати про це меню",
+    "intro": "Запитуйте мене про меню, години роботи чи розташування — я не можу оформити замовлення за вас, але можу допомогти визначитися.",
+    "unreachable": "Не вдалося зв'язатися з помічником, спробуйте ще раз.",
+    "askPlaceholder": "Поставте запитання...",
+    "send": "Надіслати",
+    "toggle": "Показати/сховати помічника меню"
+  },
+  "tags": {
+    "vegetarian": "Вегетаріанське",
+    "vegan": "Веганське",
+    "gluten_free": "Без глютену",
+    "spicy": "Гостре",
+    "halal": "Халяль"
+  },
+  "weekdays": {
+    "mon": "Понеділок",
+    "tue": "Вівторок",
+    "wed": "Середа",
+    "thu": "Четвер",
+    "fri": "П'ятниця",
+    "sat": "Субота",
+    "sun": "Неділя"
+  }
+}

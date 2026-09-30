@@ -1,0 +1,145 @@
+{
+  "common": {
+    "backToMenu": "Menüye dön",
+    "close": "Kapat",
+    "continue": "Devam et",
+    "total": "Toplam",
+    "yourName": "Adınız",
+    "phoneNumber": "Telefon numarası",
+    "decreaseQuantity": "Miktarı azalt",
+    "increaseQuantity": "Miktarı artır",
+    "noImage": "Görsel yok",
+    "oops": "Hata!",
+    "notFound": "Bulunamadı",
+    "call": "Ara",
+    "whatsapp": "WhatsApp",
+    "logout": "Çıkış yap"
+  },
+  "menu": {
+    "allItems": "Tüm ürünler",
+    "fullMenu": "Tam menü",
+    "trendingNow": "Şu anda popüler",
+    "noItemsInCategory": "Bu kategoride ürün bulunmuyor.",
+    "addToCart": "Sepete ekle",
+    "currentlyUnavailable": "Şu anda mevcut değil",
+    "noReviewsYet": "Henüz yorum yok",
+    "notFoundOrUnavailable": "Restoran bulunamadı veya menü mevcut değil.",
+    "scanToOrderBanner": "Buradan sipariş vermek için masanızın QR kodunu okutun veya teslimatı seçin.",
+    "scanWithCamera": "Kamerayla tarat",
+    "scanTableQrTitle": "Masanızın QR kodunu okutun",
+    "itemsInCart": "{{count}} ürün",
+    "visitOrContact": "Bizi ziyaret edin veya iletişime geçin",
+    "contactUnavailable": "İletişim bilgileri henüz mevcut değil.",
+    "readOurBlog": "Blogumuzu okuyun",
+    "serviceRating": "hizmet puanı",
+    "reviews": "değerlendirme",
+    "previousPage": "Önceki sayfa",
+    "nextPage": "Sonraki sayfa",
+    "copyright": "© {{year}} {{name}}. Tüm hakları saklıdır.",
+    "poweredBy": "Destekleyen:"
+  },
+  "product": {
+    "itemNotFound": "Ürün bulunamadı.",
+    "scanToOrderItem": "Bu ürünü sipariş etmek için masanızın QR kodunu okutun.",
+    "reviewsTitle": "Değerlendirmeler",
+    "noReviewsBeFirst": "Henüz yorum yok — görüşünü paylaşan ilk kişi ol.",
+    "youMightAlsoLike": "Şunlar da hoşunuza gidebilir",
+    "leaveAReview": "Yorum yap"
+  },
+  "cart": {
+    "yourOrder": "Siparişiniz",
+    "cartEmpty": "Sepetiniz boş.",
+    "browseMenu": "Menüye göz atın",
+    "removeItem": "Ürünü kaldır",
+    "yourDetails": "Bilgileriniz",
+    "staffOrderNote": "This order will be recorded under your staff account — no customer name or phone needed.",
+    "scanToPlaceOrder": "Bu siparişi vermek için masanızın QR kodunu okutun.",
+    "addressPlaceholder": "Adres",
+    "cityPlaceholder": "Şehir",
+    "deliveryInstructionsPlaceholder": "Teslimat talimatları (isteğe bağlı)",
+    "kitchenNotesPlaceholder": "Mutfak için not var mı? (alerjiler, özel istekler...)",
+    "dineInPaymentNote": "Siparişiniz geldiğinde garsona doğrudan ödeme yapın — masada yemek için çevrimiçi ödeme gerekmez.",
+    "deliveryPaymentNote": "Kartla çevrimiçi ödeme yapacaksınız — güvenli bir ödeme sayfasına yönlendirileceksiniz.",
+    "missingAddress": "Lütfen teslimat adresinizi girin.",
+    "placeOrderFailed": "Siparişiniz verilemedi, lütfen tekrar deneyin.",
+    "checkoutFailed": "Ödeme başlatılamadı, lütfen tekrar deneyin.",
+    "placeOrder": "Sipariş ver · {{amount}}"
+  },
+  "order": {
+    "steps": {
+      "pending": "Sipariş alındı",
+      "preparing": "Hazırlanıyor",
+      "ready": "Hazır",
+      "completed": "Tamamlandı"
+    },
+    "orderNotFound": "Sipariş bulunamadı.",
+    "orderNumber": "Sipariş #{{id}}",
+    "autoUpdateNotice": "Siparişiniz ilerledikçe bu sayfa otomatik olarak güncellenecektir.",
+    "paymentConfirmed": "Ödeme onaylandı — teşekkürler!",
+    "confirmingPayment": "Ödemeniz onaylanıyor…",
+    "cancelledNotice": "Bu sipariş iptal edildi.",
+    "orderSummary": "Sipariş özeti",
+    "deliveringTo": "Teslimat adresi"
+  },
+  "halls": {
+    "findYourTable": "Masanızı bulun",
+    "legend": "Yeşil = boş, kırmızı = dolu",
+    "noHalls": "Henüz salon oluşturulmadı.",
+    "noTables": "Bu salonda henüz masa yok.",
+    "continueToMenu": "Menüye devam et"
+  },
+  "blog": {
+    "blogUnavailable": "Bu blog mevcut değil.",
+    "noPosts": "Henüz yayınlanmış yazı yok.",
+    "articleNotFound": "Makale bulunamadı.",
+    "backToBlog": "Bloga dön"
+  },
+  "review": {
+    "namePlaceholder": "Adınız",
+    "commentPlaceholder": "Düşüncelerinizi bizimle paylaşın (isteğe bağlı)",
+    "submitFailed": "Yorumunuz gönderilemedi. Lütfen tekrar deneyin.",
+    "thanks": "Geri bildiriminiz için teşekkürler!",
+    "leaveAnother": "Başka bir yorum yap",
+    "submit": "Gönder",
+    "rateOurService": "Hizmetimizi değerlendirin"
+  },
+  "customerInfo": {
+    "title": "Sipariş vermeden önce",
+    "subtitle": "Mutfağın ve garsonunuzun bu siparişin kime ait olduğunu bilmesi için bize kim olduğunuzu söyleyin."
+  },
+  "orderType": {
+    "question": "Nasıl sipariş vermek istersiniz?",
+    "subtitle": "Menüye her iki durumda da göz atabilirsiniz.",
+    "delivery": "Teslimat",
+    "dineIn": "Masada"
+  },
+  "qrScanner": {
+    "defaultTitle": "QR kodu tarat",
+    "defaultHint": "Kameranızı QR koda doğrultun.",
+    "cameraError": "Kameraya erişilemedi. Tarayıcınızın kamera izinlerini kontrol edip tekrar deneyin."
+  },
+  "assistant": {
+    "askAboutMenu": "Bu menü hakkında sorun",
+    "intro": "Menü, çalışma saatleri veya konum hakkında bana her şeyi sorabilirsiniz — sizin adınıza sipariş veremem, ancak ne seçeceğinize karar vermenize yardımcı olabilirim.",
+    "unreachable": "Asistana ulaşılamadı, lütfen tekrar deneyin.",
+    "askPlaceholder": "Bir soru sorun...",
+    "send": "Gönder",
+    "toggle": "Menü asistanını göster/gizle"
+  },
+  "tags": {
+    "vegetarian": "Vejetaryen",
+    "vegan": "Vegan",
+    "gluten_free": "Glutensiz",
+    "spicy": "Acılı",
+    "halal": "Helal"
+  },
+  "weekdays": {
+    "mon": "Pazartesi",
+    "tue": "Salı",
+    "wed": "Çarşamba",
+    "thu": "Perşembe",
+    "fri": "Cuma",
+    "sat": "Cumartesi",
+    "sun": "Pazar"
+  }
+}
