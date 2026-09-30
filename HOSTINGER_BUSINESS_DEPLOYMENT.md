@@ -174,9 +174,8 @@ cd ../dashboard && npm ci && npm run build   # ينتج dashboard/dist
      - **إن ظهرت صفحة خطأ من Hostinger (404/"Domain not found")** → الاستضافة المشتركة لا توجّه subdomain غير منشأ يدويًا، وسيتوجّب عليك إما إنشاء subdomain يدويًا في hPanel لكل مطعم جديد يسجّل (خطوة تشغيلية متكررة، غير تلقائية)، أو البقاء على المسار الافتراضي `/p/{slug}`، أو الانتقال لخطة VPS (`HOSTINGER_DEPLOYMENT.md`) حيث التوجيه التلقائي مضمون 100%.
 
 2. **تفعيل الوضع فعليًا (فقط إن نجحت الخطوة 1):**
-   - `api/.env`: عدّل `APP_BASE_DOMAIN=restaurantgo.org` (كان فارغًا).
-   - `dashboard/.env.production` و`web/.env.production`: عدّل `VITE_BASE_DOMAIN=restaurantgo.org` (كان فارغًا).
-   - أعد بناء `web` و`dashboard` (`npm run build`) وارفع `dist/` من جديد فوق الموجود.
+   - الواجهتان (`web`/`dashboard`) تُبنَيان وتُنشَران تلقائيًا عبر `.github/workflows/deploy-branches.yml` عند أي push إلى `main` (وليس ببناء محلي يدوي كما في نسخة سابقة من هذا الدليل) — `VITE_BASE_DOMAIN=restaurantgo.org` مضبوط فيه بالفعل.
+   - `api/.env.hostinger` (القالب المستخدم فقط عند إعداد سيرفر جديد من الصفر) مضبوط بالفعل على `APP_BASE_DOMAIN=restaurantgo.org`. **لكن** على سيرفر منشور مسبقًا، `hostinger-cron.sh` لا يلمس `.env` الموجود فعليًا (ينسخ القالب مرة واحدة فقط عند غيابه) — لذا عدّل `APP_BASE_DOMAIN=restaurantgo.org` **يدويًا** في `api/.env` الحيّ على السيرفر (عبر hPanel File Manager أو SSH)، ثم شغّل `php artisan config:clear`.
    - سجّل مطعمًا تجريبيًا وتأكد أن `https://{slug}.restaurantgo.org` يفتح صفحته مباشرة.
    - `/p/{slug}` يبقى يعمل دائمًا كخيار احتياطي (`SeoService::tenantBaseUrl()` يفضّل الـ subdomain إن كان مضبوطًا، لكن المسار القديم لا يُحذف من الكود).
 
