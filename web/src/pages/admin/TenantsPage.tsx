@@ -1,6 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Loader2, Ban, CheckCircle2, LogIn } from 'lucide-react';
+import { Loader2, Ban, CheckCircle2, LogIn, Plus, RefreshCw } from 'lucide-react';
 import api from '../../api/axios';
+
+interface Plan {
+  id: number;
+  name: string;
+  is_active: boolean;
+}
 
 interface Tenant {
   id: number;
@@ -9,23 +15,46 @@ interface Tenant {
   subdomain: string;
   status: string;
   trial_ends_at: string | null;
-  plan?: { name: string };
+  plan?: { id: number; name: string };
 }
 
 const RESTAURANT_SITE_URL = import.meta.env.VITE_RESTAURANT_SITE_URL || 'http://localhost:5173';
 
+const emptyCreateForm = {
+  restaurant_name: '',
+  subdomain: '',
+  plan_id: '',
+  owner_name: '',
+  owner_email: '',
+  owner_password: '',
+  owner_password_confirmation: '',
+};
+
 export default function TenantsPage() {
   const [tenants, setTenants] = useState<Tenant[]>([]);
+  const [plans, setPlans] = useState<Plan[]>([]);
   const [loading, setLoading] = useState(true);
   const [busyId, setBusyId] = useState<number | null>(null);
   const [impersonatingId, setImpersonatingId] = useState<number | null>(null);
+
+  const [createOpen, setCreateOpen] = useState(false);
+  const [createForm, setCreateForm] = useState(emptyCreateForm);
+  const [creating, setCreating] = useState(false);
+  const [createError, setCreateError] = useState<string | null>(null);
+
+  const [planChangeTenant, setPlanChangeTenant] = useState<Tenant | null>(null);
+  const [planChangeValue, setPlanChangeValue] = useState('');
+  const [changingPlan, setChangingPlan] = useState(false);
 
   const fetchTenants = () => {
     setLoading(true);
     api.get('/admin/tenants').then((res) => setTenants(res.data.data)).finally(() => setLoading(false));
   };
 
-  useEffect(() => { fetchTenants(); }, []);
+  useEffect(() => {
+    fetchTenants();
+    api.get('/admin/plans').then((res) => setPlans(res.data.filter((p: Plan) => p.is_active)));
+  }, []);
 
   const toggleStatus = async (tenant: Tenant) => {
     setBusyId(tenant.id);
@@ -51,11 +80,57 @@ export default function TenantsPage() {
     }
   };
 
+  const handleCreateChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setCreateForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleCreateSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setCreating(true);
+    setCreateError(null);
+    try {
+      await api.post('/admin/tenants', createForm);
+      setCreateOpen(false);
+      setCreateForm(emptyCreateForm);
+      fetchTenants();
+    } catch (err: any) {
+      setCreateError(err.response?.data?.message || 'تعذر إنشاء المطعم.');
+    } finally {
+      setCreating(false);
+    }
+  };
+
+  const openPlanChange = (tenant: Tenant) => {
+    setPlanChangeTenant(tenant);
+    setPlanChangeValue(String(tenant.plan?.id ?? ''));
+  };
+
+  const handlePlanChangeSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!planChangeTenant || !planChangeValue) return;
+    setChangingPlan(true);
+    try {
+      await api.put(`/admin/tenants/${planChangeTenant.id}/plan`, { plan_id: Number(planChangeValue) });
+      setPlanChangeTenant(null);
+      fetchTenants();
+    } catch (err: any) {
+      alert(err.response?.data?.message || 'تعذر تغيير خطة هذا المطعم.');
+    } finally {
+      setChangingPlan(false);
+    }
+  };
+
   if (loading) return <div className="flex justify-center py-20"><Loader2 className="animate-spin text-gray-400" /></div>;
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-gray-900">المطاعم المشتركة</h1>
+      <div className="flex justify-between items-center">
+        <h1 className="text-2xl font-bold text-gray-900">المطاعم المشتركة</h1>
+        <button onClick={() => setCreateOpen(true)} className="btn btn-primary">
+          <Plus size={18} className="ml-2" /> إضافة مطعم
+        </button>
+      </div>
 
       <div className="mt-6 card overflow-hidden">
         <table className="w-full text-right text-sm">
@@ -94,6 +169,14 @@ export default function TenantsPage() {
                     الدخول للوحة التحكم
                   </button>
                   <button
+                    onClick={() => openPlanChange(t)}
+                    className="btn btn-outline"
+                    title="تبديل خطة هذا المطعم"
+                  >
+                    <RefreshCw size={16} className="ml-2" />
+                    تبديل الخطة
+                  </button>
+                  <button
                     onClick={() => toggleStatus(t)}
                     disabled={busyId === t.id}
                     className={`btn ${t.status === 'suspended' ? 'btn-outline' : 'btn-outline text-red-600'}`}
@@ -108,6 +191,56 @@ export default function TenantsPage() {
           </tbody>
         </table>
       </div>
+
+      {createOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/50 backdrop-blur-sm" dir="rtl">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg overflow-hidden max-h-[90vh] overflow-y-auto">
+            <div className="p-6 border-b border-gray-100 flex justify-between items-center">
+              <h2 className="text-xl font-semibold">إضافة مطعم</h2>
+              <button onClick={() => setCreateOpen(false)} className="text-gray-400 hover:text-gray-600 text-xl leading-none">&times;</button>
+            </div>
+            <form onSubmit={handleCreateSubmit} className="p-6 space-y-3">
+              {createError && <p className="text-sm text-red-600">{createError}</p>}
+              <input name="restaurant_name" required placeholder="اسم المطعم" className="input" value={createForm.restaurant_name} onChange={handleCreateChange} />
+              <input name="subdomain" required placeholder="النطاق الفرعي (subdomain)" className="input" value={createForm.subdomain} onChange={handleCreateChange} />
+              <select name="plan_id" required className="input" value={createForm.plan_id} onChange={handleCreateChange}>
+                <option value="" disabled>اختر الخطة</option>
+                {plans.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
+              </select>
+              <hr className="border-gray-100" />
+              <input name="owner_name" required placeholder="اسم صاحب المطعم" className="input" value={createForm.owner_name} onChange={handleCreateChange} />
+              <input name="owner_email" type="email" required placeholder="البريد الإلكتروني" className="input" value={createForm.owner_email} onChange={handleCreateChange} />
+              <input name="owner_password" type="password" required placeholder="كلمة المرور" className="input" value={createForm.owner_password} onChange={handleCreateChange} />
+              <input name="owner_password_confirmation" type="password" required placeholder="تأكيد كلمة المرور" className="input" value={createForm.owner_password_confirmation} onChange={handleCreateChange} />
+              <p className="text-xs text-gray-400">سيبدأ المطعم مفعّلاً مباشرة على الخطة المختارة دون الحاجة لعملية دفع.</p>
+              <button type="submit" disabled={creating} className="btn btn-primary w-full">
+                {creating ? <Loader2 size={18} className="animate-spin" /> : 'إنشاء المطعم'}
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {planChangeTenant && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/50 backdrop-blur-sm" dir="rtl">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm overflow-hidden">
+            <div className="p-6 border-b border-gray-100 flex justify-between items-center">
+              <h2 className="text-xl font-semibold">تبديل خطة {planChangeTenant.name}</h2>
+              <button onClick={() => setPlanChangeTenant(null)} className="text-gray-400 hover:text-gray-600 text-xl leading-none">&times;</button>
+            </div>
+            <form onSubmit={handlePlanChangeSubmit} className="p-6 space-y-3">
+              <select required className="input" value={planChangeValue} onChange={(e) => setPlanChangeValue(e.target.value)}>
+                <option value="" disabled>اختر الخطة الجديدة</option>
+                {plans.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
+              </select>
+              <p className="text-xs text-gray-400">سيتم تفعيل الخطة الجديدة فوراً دون الحاجة لعملية دفع.</p>
+              <button type="submit" disabled={changingPlan} className="btn btn-primary w-full">
+                {changingPlan ? <Loader2 size={18} className="animate-spin" /> : 'تأكيد التبديل'}
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
