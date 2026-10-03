@@ -1,1 +1,0 @@
-import{n as e}from"./TableOrderPage-C8xp6DIF.js";var t=class extends e{async print(e){throw Error(`Direct printing needs the RestaurantGo POS Android app — use "Print bill" for the browser print dialog instead.`)}};export{t as PosPrinterWeb};

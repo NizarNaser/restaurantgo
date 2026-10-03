@@ -6,9 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Jobs\GenerateGdprExport;
 use App\Models\Employee;
 use App\Models\Review;
+use App\Models\Subscription;
 use App\Models\Tenant;
 use App\Models\User;
 use App\Services\AuditService;
+use App\Services\StripeService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -26,8 +28,10 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
  */
 class GdprController extends Controller
 {
-    public function __construct(private readonly AuditService $audit)
-    {
+    public function __construct(
+        private readonly AuditService $audit,
+        private readonly StripeService $stripe,
+    ) {
     }
 
     /**
@@ -79,6 +83,14 @@ class GdprController extends Controller
         $this->audit->log('tenant.gdpr_erasure_requested', $tenant, [
             'new' => ['requested_by' => $request->user()->id, 'requested_at' => now()->toIso8601String()],
         ]);
+
+        // A live Stripe subscription would otherwise keep billing the owner
+        // for a restaurant that no longer exists, same safeguard as
+        // SubscriptionController::switchToFree and the admin-side delete.
+        $existing = $tenant->subscription;
+        if ($existing && $existing->stripe_subscription_id && $existing->status !== Subscription::STATUS_CANCELED) {
+            $this->stripe->cancel($existing, false);
+        }
 
         DB::transaction(function () use ($tenant) {
             $tenant->users()->get()->each(function (User $user) use ($tenant) {
