@@ -1,0 +1,66 @@
+name: Deploy to VPS
+
+# Production moved from Hostinger Business shared hosting to a Hostinger VPS
+# (srv2027061.hstgr.cloud) on 2026-10-01. That box runs nginx + PHP-FPM +
+# MySQL natively (no Docker, despite docker-compose.prod.yml existing in the
+# repo) and also hosts unrelated projects (linguatalk, flexjob, ai_talker, a
+# WordPress site) — every command below is scoped to /var/www/restaurantgo
+# and to the two PM2 processes this app owns (rgo-queue, rgo-scheduler) so it
+# never touches the others.
+#
+# This SSHes in and does a real deploy: git pull, composer install, run
+# migrations, rebuild the Laravel caches, build both Vite frontends, restart
+# the queue worker/scheduler. See deploy-branches.yml for the now-unused
+# Hostinger Business path (hPanel Git Deployment) this replaces.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-vps
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/id_deploy
+          chmod 600 ~/.ssh/id_deploy
+          echo "${{ secrets.VPS_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+
+      - name: Deploy over SSH
+        run: |
+          ssh -i ~/.ssh/id_deploy -o UserKnownHostsFile=~/.ssh/known_hosts \
+            "${{ secrets.VPS_SSH_USER }}@${{ secrets.VPS_SSH_HOST }}" bash -s <<'REMOTE'
+          set -euo pipefail
+          cd /var/www/restaurantgo
+
+          git fetch origin
+          git pull --ff-only origin main
+
+          cd api
+          composer install --no-dev --optimize-autoloader --no-interaction
+          php artisan migrate --force
+          [ -L public/storage ] || php artisan storage:link
+          php artisan optimize:clear
+          php artisan config:cache
+          php artisan route:cache
+          php artisan view:cache
+          chown -R www-data:www-data storage bootstrap/cache
+
+          cd ../dashboard
+          npm ci
+          VITE_API_URL=https://api.restaurantgo.org/api VITE_BASE_DOMAIN=restaurantgo.org npm run build
+
+          cd ../web
+          npm ci
+          VITE_API_URL=https://api.restaurantgo.org/api VITE_RESTAURANT_SITE_URL=https://app.restaurantgo.org VITE_BASE_DOMAIN=restaurantgo.org npm run build
+
+          pm2 restart rgo-queue rgo-scheduler
+          echo "DEPLOY_OK"
+          REMOTE

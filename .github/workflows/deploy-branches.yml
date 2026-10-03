@@ -12,10 +12,13 @@ name: Build Hostinger deploy branches
 # parking page, not this app) — see §9. Restaurants are served at
 # app.restaurantgo.org/p/{slug} instead. Do not re-enable without first
 # re-testing §9 step 1 on an upgraded/VPS plan.
+#
+# Production moved off this Hostinger Business account to a VPS on
+# 2026-10-01 (see deploy-vps.yml) — this workflow no longer deploys anywhere
+# live. Kept as manual-only (not on push) so a "succeeded" run here can't be
+# mistaken for a real production deploy again.
 
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 
 permissions:
