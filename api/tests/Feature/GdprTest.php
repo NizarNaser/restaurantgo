@@ -3,9 +3,11 @@
 use App\Jobs\GenerateGdprExport;
 use App\Models\AuditLog;
 use App\Models\Employee;
+use App\Models\Subscription;
 use App\Models\Tenant;
 use App\Models\User;
 use App\Notifications\GdprExportReady;
+use App\Services\StripeService;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
@@ -121,4 +123,26 @@ it('anonymizes personal data and deactivates the tenant on a confirmed erasure r
     expect(Tenant::withTrashed()->find($tenant->id)->status)->toBe('cancelled');
     expect(Tenant::find($tenant->id))->toBeNull(); // soft-deleted, excluded from default queries
     expect(AuditLog::where('action', 'tenant.gdpr_erasure_requested')->count())->toBe(1);
+});
+
+it('cancels a live Stripe subscription before erasing the tenant', function () {
+    Sanctum::actingAs($this->owner, ['*']);
+    $tenant = Tenant::find($this->owner->tenant_id);
+
+    $subscription = Subscription::create([
+        'tenant_id'              => $tenant->id,
+        'plan_id'                => $tenant->plan_id,
+        'stripe_subscription_id' => 'sub_test123',
+        'status'                 => Subscription::STATUS_ACTIVE,
+        'billing_interval'       => 'monthly',
+        'current_period_start'   => now(),
+    ]);
+
+    $this->mock(StripeService::class, function ($mock) use ($subscription) {
+        $mock->shouldReceive('cancel')
+            ->once()
+            ->withArgs(fn (Subscription $s, bool $atPeriodEnd) => $s->is($subscription) && $atPeriodEnd === false);
+    });
+
+    $this->postJson('/api/gdpr/erasure-request', ['confirm_slug' => $tenant->slug])->assertOk();
 });

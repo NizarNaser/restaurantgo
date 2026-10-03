@@ -175,6 +175,35 @@ class TenantController extends Controller
         return response()->json(['message' => 'Tenant suspended.', 'tenant' => $tenant]);
     }
 
+    /**
+     * Platform staff removing a restaurant outright: cancels any live Stripe
+     * subscription first (an untouched one would keep billing a tenant that
+     * no longer exists), then soft-deletes the tenant — the same mechanism
+     * GdprController::requestErasure uses for an owner-initiated deletion —
+     * so it immediately disappears from the admin list and can no longer
+     * resolve through IdentifyTenant.
+     */
+    public function destroy(Request $request, Tenant $tenant): JsonResponse
+    {
+        $request->validate([
+            'confirm_subdomain' => ['required', 'string'],
+        ]);
+
+        abort_if($request->input('confirm_subdomain') !== $tenant->subdomain, 422, 'Confirmation text does not match the tenant subdomain.');
+
+        $existing = $tenant->subscription;
+        if ($existing && $existing->stripe_subscription_id && $existing->status !== Subscription::STATUS_CANCELED) {
+            $this->stripe->cancel($existing, false);
+        }
+
+        $tenant->update(['status' => 'cancelled']);
+        $tenant->delete();
+
+        $this->audit->log('tenant.deleted', $tenant);
+
+        return response()->json(['message' => 'Tenant deleted.']);
+    }
+
     public function activate(Tenant $tenant): JsonResponse
     {
         $tenant->update(['status' => 'active']);

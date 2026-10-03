@@ -743,7 +743,13 @@
     "openPublicMenu": "فتح القائمة العامة",
     "printQrCode": "طباعة رمز QR",
     "noSlugConfigured": "لا يوجد رابط مُعدّ.",
-    "translateNewLanguageConfirm": "هل تريد ترجمة المنيو والمقالات الحالية إلى {{language}} الآن؟ يعمل هذا في الخلفية وقد يستغرق بضع دقائق."
+    "translateNewLanguageConfirm": "هل تريد ترجمة المنيو والمقالات الحالية إلى {{language}} الآن؟ يعمل هذا في الخلفية وقد يستغرق بضع دقائق.",
+    "dangerZone": "منطقة الخطر",
+    "deleteRestaurant": "حذف المطعم",
+    "deleteRestaurantDesc": "سيؤدي هذا إلى إيقاف مطعمك نهائيًا وإخفاء هوية جميع بيانات الموظفين والعملاء الشخصية. تُحفظ السجلات المالية بدون معرّفات شخصية للامتثال المحاسبي. لا يمكن التراجع عن هذا الإجراء.",
+    "deleteRestaurantConfirmLabel": "اكتب \"{{slug}}\" للتأكيد",
+    "deleteRestaurantButton": "حذف مطعمي",
+    "deleteRestaurantFailed": "تعذر حذف المطعم."
   },
   "articles": {
     "title": "المقالات",

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Loader2, Ban, CheckCircle2, LogIn, Plus, RefreshCw } from 'lucide-react';
+import { Loader2, Ban, CheckCircle2, LogIn, Plus, RefreshCw, Trash2 } from 'lucide-react';
 import api from '../../api/axios';
 
 interface Plan {
@@ -45,6 +45,11 @@ export default function TenantsPage() {
   const [planChangeTenant, setPlanChangeTenant] = useState<Tenant | null>(null);
   const [planChangeValue, setPlanChangeValue] = useState('');
   const [changingPlan, setChangingPlan] = useState(false);
+
+  const [deleteTenant, setDeleteTenant] = useState<Tenant | null>(null);
+  const [deleteConfirmText, setDeleteConfirmText] = useState('');
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
 
   const fetchTenants = () => {
     setLoading(true);
@@ -98,6 +103,28 @@ export default function TenantsPage() {
       setCreateError(err.response?.data?.message || 'تعذر إنشاء المطعم.');
     } finally {
       setCreating(false);
+    }
+  };
+
+  const openDelete = (tenant: Tenant) => {
+    setDeleteTenant(tenant);
+    setDeleteConfirmText('');
+    setDeleteError(null);
+  };
+
+  const handleDeleteSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!deleteTenant) return;
+    setDeleting(true);
+    setDeleteError(null);
+    try {
+      await api.delete(`/admin/tenants/${deleteTenant.id}`, { data: { confirm_subdomain: deleteConfirmText } });
+      setDeleteTenant(null);
+      fetchTenants();
+    } catch (err: any) {
+      setDeleteError(err.response?.data?.message || 'تعذر حذف هذا المطعم.');
+    } finally {
+      setDeleting(false);
     }
   };
 
@@ -185,6 +212,13 @@ export default function TenantsPage() {
                       ? <><CheckCircle2 size={16} className="ml-2" /> تفعيل</>
                       : <><Ban size={16} className="ml-2" /> تعليق</>}
                   </button>
+                  <button
+                    onClick={() => openDelete(t)}
+                    className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg"
+                    title="حذف هذا المطعم نهائياً"
+                  >
+                    <Trash2 size={16} />
+                  </button>
                 </td>
               </tr>
             ))}
@@ -236,6 +270,40 @@ export default function TenantsPage() {
               <p className="text-xs text-gray-400">سيتم تفعيل الخطة الجديدة فوراً دون الحاجة لعملية دفع.</p>
               <button type="submit" disabled={changingPlan} className="btn btn-primary w-full">
                 {changingPlan ? <Loader2 size={18} className="animate-spin" /> : 'تأكيد التبديل'}
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {deleteTenant && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/50 backdrop-blur-sm" dir="rtl">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm overflow-hidden">
+            <div className="p-6 border-b border-gray-100 flex justify-between items-center">
+              <h2 className="text-xl font-semibold text-red-600">حذف {deleteTenant.name}</h2>
+              <button onClick={() => setDeleteTenant(null)} className="text-gray-400 hover:text-gray-600 text-xl leading-none">&times;</button>
+            </div>
+            <form onSubmit={handleDeleteSubmit} className="p-6 space-y-3">
+              <p className="text-sm text-gray-600">
+                هذا إجراء نهائي لا يمكن التراجع عنه. سيتم إلغاء اشتراك الدفع الفعلي (إن وجد) وإلغاء تفعيل المطعم بالكامل.
+              </p>
+              <label className="block text-xs font-medium text-gray-700">
+                اكتب <span className="font-mono">{deleteTenant.subdomain}</span> للتأكيد
+              </label>
+              <input
+                type="text"
+                required
+                className="input"
+                value={deleteConfirmText}
+                onChange={(e) => setDeleteConfirmText(e.target.value)}
+              />
+              {deleteError && <p className="text-sm text-red-600">{deleteError}</p>}
+              <button
+                type="submit"
+                disabled={deleting || deleteConfirmText !== deleteTenant.subdomain}
+                className="btn w-full justify-center text-red-600 border border-red-200 hover:bg-red-50 disabled:opacity-50"
+              >
+                {deleting ? <Loader2 size={18} className="animate-spin" /> : 'حذف المطعم نهائياً'}
               </button>
             </form>
           </div>

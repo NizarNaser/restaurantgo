@@ -743,7 +743,13 @@
     "openPublicMenu": "Open Public Menu",
     "printQrCode": "Print QR Code",
     "noSlugConfigured": "No slug configured.",
-    "translateNewLanguageConfirm": "Translate your existing menu and blog posts into {{language}} now? This runs in the background and can take a few minutes."
+    "translateNewLanguageConfirm": "Translate your existing menu and blog posts into {{language}} now? This runs in the background and can take a few minutes.",
+    "dangerZone": "Danger Zone",
+    "deleteRestaurant": "Delete Restaurant",
+    "deleteRestaurantDesc": "This permanently deactivates your restaurant and anonymizes all staff and customer personal data. Financial records are kept without personal identifiers for accounting compliance. This cannot be undone.",
+    "deleteRestaurantConfirmLabel": "Type \"{{slug}}\" to confirm",
+    "deleteRestaurantButton": "Delete My Restaurant",
+    "deleteRestaurantFailed": "Could not delete the restaurant."
   },
   "articles": {
     "title": "Articles",

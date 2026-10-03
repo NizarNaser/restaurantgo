@@ -4,6 +4,7 @@ use App\Models\Plan;
 use App\Models\Subscription;
 use App\Models\Tenant;
 use App\Models\User;
+use App\Services\StripeService;
 use Laravel\Sanctum\Sanctum;
 
 beforeEach(function () {
@@ -71,4 +72,46 @@ it('lets platform staff switch a tenant onto another plan without payment', func
     $subscription = Subscription::where('tenant_id', $tenant->id)->firstOrFail();
     expect($subscription->plan_id)->toBe($newPlan->id);
     expect($subscription->status)->toBe(Subscription::STATUS_ACTIVE);
+});
+
+it('requires the matching subdomain before deleting a tenant', function () {
+    $tenant = Tenant::where('slug', 'demo-restaurant')->firstOrFail();
+
+    $this->deleteJson("/api/admin/tenants/{$tenant->id}", ['confirm_subdomain' => 'wrong'])
+        ->assertStatus(422);
+
+    expect(Tenant::find($tenant->id))->not->toBeNull();
+});
+
+it('lets platform staff delete a tenant', function () {
+    $tenant = Tenant::where('slug', 'demo-restaurant')->firstOrFail();
+
+    $this->deleteJson("/api/admin/tenants/{$tenant->id}", ['confirm_subdomain' => $tenant->subdomain])
+        ->assertOk();
+
+    expect(Tenant::find($tenant->id))->toBeNull();
+    expect(Tenant::withTrashed()->find($tenant->id)->status)->toBe('cancelled');
+});
+
+it('cancels a live Stripe subscription when platform staff delete a tenant', function () {
+    $tenant = Tenant::where('slug', 'demo-restaurant')->firstOrFail();
+
+    $subscription = Subscription::updateOrCreate(['tenant_id' => $tenant->id], [
+        'plan_id'                => $tenant->plan_id,
+        'stripe_subscription_id' => 'sub_test456',
+        'status'                 => Subscription::STATUS_ACTIVE,
+        'billing_interval'       => 'monthly',
+        'current_period_start'   => now(),
+    ]);
+
+    $this->mock(StripeService::class, function ($mock) use ($subscription) {
+        $mock->shouldReceive('cancel')
+            ->once()
+            ->withArgs(fn (Subscription $s, bool $atPeriodEnd) => $s->is($subscription) && $atPeriodEnd === false);
+    });
+
+    $this->deleteJson("/api/admin/tenants/{$tenant->id}", ['confirm_subdomain' => $tenant->subdomain])
+        ->assertOk();
+
+    expect(Tenant::find($tenant->id))->toBeNull();
 });
