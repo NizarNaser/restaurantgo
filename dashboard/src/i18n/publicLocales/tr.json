@@ -17,6 +17,8 @@
   },
   "menu": {
     "allItems": "Tüm ürünler",
+    "scrollCategoriesLeft": "Kategorileri sola kaydır",
+    "scrollCategoriesRight": "Kategorileri sağa kaydır",
     "fullMenu": "Tam menü",
     "trendingNow": "Şu anda popüler",
     "noItemsInCategory": "Bu kategoride ürün bulunmuyor.",

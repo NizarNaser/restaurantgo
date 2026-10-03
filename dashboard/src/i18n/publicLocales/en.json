@@ -17,6 +17,8 @@
   },
   "menu": {
     "allItems": "All Items",
+    "scrollCategoriesLeft": "Scroll categories left",
+    "scrollCategoriesRight": "Scroll categories right",
     "fullMenu": "Full Menu",
     "trendingNow": "Trending Now",
     "noItemsInCategory": "No items available in this category.",

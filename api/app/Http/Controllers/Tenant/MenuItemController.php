@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Tenant;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MenuItemRequest;
 use App\Http\Resources\MenuItemResource;
+use App\Jobs\TranslateTenantContentJob;
 use App\Models\Ingredient;
 use App\Models\MenuItem;
 use App\Models\RecipeLine;
@@ -81,6 +82,8 @@ class MenuItemController extends Controller
             }
         }
 
+        TranslateTenantContentJob::dispatchForMissingLocales($tenant, $item->load('translations'));
+
         $this->audit->log('menu_item.created', $item);
 
         return response()->json(new MenuItemResource($item->load('translations', 'prices', 'media')), 201);
@@ -111,6 +114,8 @@ class MenuItemController extends Controller
                 ['price' => $price['price']]
             );
         }
+
+        TranslateTenantContentJob::dispatchForMissingLocales(app('tenant'), $item->load('translations'));
 
         $this->audit->log('menu_item.updated', $item);
 
@@ -154,6 +159,8 @@ class MenuItemController extends Controller
                 $translation
             );
         }
+
+        TranslateTenantContentJob::dispatchForMissingLocales(app('tenant'), $menuItem->load('translations'));
 
         $this->audit->log('menu_item.translations_updated', $menuItem);
 

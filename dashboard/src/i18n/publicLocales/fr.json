@@ -17,6 +17,8 @@
   },
   "menu": {
     "allItems": "Tous les articles",
+    "scrollCategoriesLeft": "Faire défiler les catégories vers la gauche",
+    "scrollCategoriesRight": "Faire défiler les catégories vers la droite",
     "fullMenu": "Menu complet",
     "trendingNow": "Tendance en ce moment",
     "noItemsInCategory": "Aucun article disponible dans cette catégorie.",

@@ -17,6 +17,8 @@
   },
   "menu": {
     "allItems": "Усі страви",
+    "scrollCategoriesLeft": "Прокрутити категорії ліворуч",
+    "scrollCategoriesRight": "Прокрутити категорії праворуч",
     "fullMenu": "Повне меню",
     "trendingNow": "Популярне зараз",
     "noItemsInCategory": "У цій категорії немає доступних страв.",

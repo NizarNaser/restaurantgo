@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Models\Article;
 use App\Models\MenuCategory;
 use App\Models\MenuItem;
+use App\Models\Tenant;
 use App\Services\OpenAiService;
 use App\Services\SeoService;
 use Illuminate\Bus\Queueable;
@@ -46,6 +47,25 @@ class TranslateTenantContentJob implements ShouldQueue
         public readonly int $tenantId,
         public readonly string $targetLocale,
     ) {}
+
+    /**
+     * Dispatch one job per locale the tenant supports that this menu item or
+     * category doesn't have a translation row for yet — called right after
+     * it's created or its translations are edited, so a restaurant's menu
+     * ends up in every language it's configured for without the owner
+     * having to separately visit Settings or translate each item by hand.
+     *
+     * @param  \App\Models\MenuItem|\App\Models\MenuCategory  $model  must already have a fresh (non-stale) `translations` relation loaded
+     */
+    public static function dispatchForMissingLocales(Tenant $tenant, $model): void
+    {
+        $have    = $model->translations->pluck('locale')->all();
+        $missing = array_diff($tenant->supported_locales ?? [], $have);
+
+        foreach ($missing as $locale) {
+            self::dispatch($tenant->id, $locale);
+        }
+    }
 
     public function handle(OpenAiService $openai, SeoService $seo): void
     {

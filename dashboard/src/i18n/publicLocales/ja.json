@@ -17,6 +17,8 @@
   },
   "menu": {
     "allItems": "すべての商品",
+    "scrollCategoriesLeft": "カテゴリーを左にスクロール",
+    "scrollCategoriesRight": "カテゴリーを右にスクロール",
     "fullMenu": "フルメニュー",
     "trendingNow": "今人気の商品",
     "noItemsInCategory": "このカテゴリーには利用可能な商品がありません。",

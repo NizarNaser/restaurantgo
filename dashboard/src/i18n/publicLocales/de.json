@@ -17,6 +17,8 @@
   },
   "menu": {
     "allItems": "Alle Artikel",
+    "scrollCategoriesLeft": "Kategorien nach links scrollen",
+    "scrollCategoriesRight": "Kategorien nach rechts scrollen",
     "fullMenu": "Vollständige Speisekarte",
     "trendingNow": "Gerade beliebt",
     "noItemsInCategory": "In dieser Kategorie sind keine Artikel verfügbar.",
