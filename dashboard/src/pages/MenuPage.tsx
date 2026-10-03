@@ -127,17 +127,36 @@ export default function MenuPage() {
     }).catch(() => {});
   }, []);
 
+  // /menu/items is paginated (20 per page by default) — this page is the
+  // one place that needs every item at once (the category sidebar's counts
+  // are unpaginated totals, so a single page here used to silently truncate
+  // the table for any tenant with more than ~20 menu items). Loop through
+  // every page rather than guessing a "large enough" per_page.
+  const fetchAllMenuItems = async (): Promise<MenuItem[]> => {
+    const perPage = 100;
+    let page = 1;
+    let all: MenuItem[] = [];
+    while (true) {
+      const res = await api.get('/menu/items', { params: { per_page: perPage, page } });
+      all = all.concat(res.data.data || []);
+      const lastPage = res.data.meta?.last_page ?? 1;
+      if (page >= lastPage) break;
+      page += 1;
+    }
+    return all;
+  };
+
   const fetchData = async () => {
     setLoading(true);
     setFetchError(null);
     try {
-      const [catRes, itemsRes, statsRes] = await Promise.all([
+      const [catRes, allItems, statsRes] = await Promise.all([
         api.get('/menu/categories'),
-        api.get('/menu/items'),
+        fetchAllMenuItems(),
         api.get('/dashboard/stats'),
       ]);
       setCategories(catRes.data.data || []);
-      setItems(itemsRes.data.data || []);
+      setItems(allItems);
       if (statsRes.data.tenant_slug) {
         setTenantSlug(statsRes.data.tenant_slug);
         setPublicUrl(statsRes.data.public_url ?? '');
