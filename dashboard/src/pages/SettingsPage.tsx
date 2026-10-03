@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Save, Loader2, Globe, Clock, DollarSign, Languages, QrCode, ExternalLink, BarChart3, Image as ImageIcon, Upload, Palette, KeyRound, Mail, Share2, MapPin, Phone } from 'lucide-react';
+import { Save, Loader2, Globe, Clock, DollarSign, Languages, QrCode, ExternalLink, BarChart3, Image as ImageIcon, Upload, Palette, KeyRound, Mail, Share2, MapPin, Phone, AlertTriangle } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import api from '../api/axios';
 import { useAuthStore } from '../store/authStore';
 
@@ -265,6 +266,62 @@ function AccountSecurityCard() {
           {passwordSaving ? <Loader2 size={16} className="animate-spin" /> : passwordSaved ? t('settings.updated') : t('settings.updatePassword')}
         </button>
       </form>
+    </div>
+  );
+}
+
+function DangerZoneCard({ slug }: { slug: string }) {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+  const hasRole = useAuthStore((s) => s.hasRole);
+  const logout = useAuthStore((s) => s.logout);
+
+  const [confirmText, setConfirmText] = useState('');
+  const [deleting, setDeleting] = useState(false);
+  const [error, setError] = useState('');
+
+  if (!hasRole('owner')) return null;
+
+  const handleDelete = async () => {
+    setError('');
+    setDeleting(true);
+    try {
+      await api.post('/gdpr/erasure-request', { confirm_slug: confirmText });
+      await logout();
+      navigate('/login');
+    } catch (err: any) {
+      setError(err.response?.data?.message || t('settings.deleteRestaurantFailed'));
+      setDeleting(false);
+    }
+  };
+
+  return (
+    <div className="bg-white rounded-xl border border-red-200 shadow-sm p-6 space-y-4">
+      <h2 className="text-base font-semibold text-red-600 flex items-center gap-2">
+        <AlertTriangle size={18} /> {t('settings.dangerZone')}
+      </h2>
+      <div>
+        <p className="text-sm font-medium text-gray-800">{t('settings.deleteRestaurant')}</p>
+        <p className="text-xs text-gray-500 mt-1">{t('settings.deleteRestaurantDesc')}</p>
+      </div>
+      <label className="block text-xs font-medium text-gray-700">
+        {t('settings.deleteRestaurantConfirmLabel', { slug })}
+      </label>
+      <input
+        type="text"
+        className="input w-full"
+        value={confirmText}
+        onChange={(e) => setConfirmText(e.target.value)}
+      />
+      {error && <p className="text-xs text-red-500">{error}</p>}
+      <button
+        type="button"
+        disabled={deleting || confirmText !== slug}
+        onClick={handleDelete}
+        className="btn w-full justify-center text-red-600 border border-red-200 hover:bg-red-50 disabled:opacity-50"
+      >
+        {deleting ? <Loader2 size={16} className="animate-spin" /> : t('settings.deleteRestaurantButton')}
+      </button>
     </div>
   );
 }
@@ -1093,6 +1150,7 @@ export default function SettingsPage() {
         {/* QR Code Panel */}
         <div className="space-y-4">
           <AccountSecurityCard />
+          {settings?.slug && <DangerZoneCard slug={settings.slug} />}
 
           <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 flex flex-col items-center gap-4 text-center">
             <h2 className="text-base font-semibold text-gray-800 flex items-center gap-2">

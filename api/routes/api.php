@@ -340,6 +340,7 @@ Route::middleware(['auth:sanctum', 'platform.staff'])->prefix('/admin')->group(f
         Route::put('/tenants/{tenant}/activate',[AdminTenantController::class, 'activate']);
         Route::put('/tenants/{tenant}/plan',    [AdminTenantController::class, 'updatePlan']);
         Route::post('/tenants/{tenant}/impersonate', [AdminTenantController::class, 'impersonate']);
+        Route::delete('/tenants/{tenant}',      [AdminTenantController::class, 'destroy']);
     });
 
     Route::middleware('permission:manage payments')->group(function () {
