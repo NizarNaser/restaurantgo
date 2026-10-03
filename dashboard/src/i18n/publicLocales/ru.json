@@ -17,6 +17,8 @@
   },
   "menu": {
     "allItems": "Все блюда",
+    "scrollCategoriesLeft": "Прокрутить категории влево",
+    "scrollCategoriesRight": "Прокрутить категории вправо",
     "fullMenu": "Полное меню",
     "trendingNow": "Популярно сейчас",
     "noItemsInCategory": "В этой категории нет доступных блюд.",

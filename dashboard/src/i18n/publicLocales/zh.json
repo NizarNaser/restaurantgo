@@ -17,6 +17,8 @@
   },
   "menu": {
     "allItems": "全部菜品",
+    "scrollCategoriesLeft": "向左滚动分类",
+    "scrollCategoriesRight": "向右滚动分类",
     "fullMenu": "完整菜单",
     "trendingNow": "热门推荐",
     "noItemsInCategory": "该分类下暂无可用菜品。",

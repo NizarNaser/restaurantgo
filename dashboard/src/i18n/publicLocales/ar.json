@@ -17,6 +17,8 @@
   },
   "menu": {
     "allItems": "كل الأصناف",
+    "scrollCategoriesLeft": "تمرير التصنيفات لليسار",
+    "scrollCategoriesRight": "تمرير التصنيفات لليمين",
     "fullMenu": "القائمة الكاملة",
     "trendingNow": "الأكثر رواجًا",
     "noItemsInCategory": "لا توجد أصناف متاحة في هذا التصنيف.",

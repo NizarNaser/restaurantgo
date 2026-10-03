@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Tenant;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\TranslateTenantContentJob;
 use App\Models\MenuCategory;
 use App\Services\OpenAiService;
 use Illuminate\Http\JsonResponse;
@@ -63,14 +64,21 @@ class MenuCategoryController extends Controller
         
         $category = MenuCategory::create($validated);
         
+        // Not app()->getLocale(): that's derived from the raw Accept-Language
+        // header the admin's browser happens to send (e.g. "en-US"), which
+        // almost never matches one of this tenant's plain supported_locales
+        // codes ("en") — silently stranding every new category's only
+        // translation under a locale nothing ever looks up.
         $category->translations()->create([
-            'locale' => app()->getLocale(),
+            'locale' => $tenant->default_locale ?? 'en',
             'name' => $request->name,
             'description' => $request->description,
         ]);
-        
+
+        TranslateTenantContentJob::dispatchForMissingLocales($tenant, $category->load('translations'));
+
         $category->name = $request->name;
-        
+
         return response()->json(['data' => $category], 201);
     }
 
@@ -97,14 +105,16 @@ class MenuCategoryController extends Controller
         
         if ($request->has('name') || $request->has('description')) {
             $category->translations()->updateOrCreate(
-                ['locale' => app()->getLocale()],
+                ['locale' => app('tenant')->default_locale ?? 'en'],
                 [
                     'name' => $request->name ?? $category->translation()->name,
                     'description' => $request->description ?? $category->translation()->description,
                 ]
             );
         }
-        
+
+        TranslateTenantContentJob::dispatchForMissingLocales(app('tenant'), $category->load('translations'));
+
         $category->name = $category->translation()->name ?? 'Unnamed';
         
         return response()->json(['data' => $category]);

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
@@ -24,6 +24,9 @@ import type { PublicCategory, PublicDepartment, PublicMenuItem, RestaurantInfo }
 
 const PUBLIC_API = `${import.meta.env.VITE_API_URL || 'http://localhost:8000/api'}/v1/public`;
 const ITEMS_PER_PAGE = 14;
+// Below this many unique trending items, the marquee's fill-and-loop
+// animation would just show the same 1-3 cards sliding by on endless repeat.
+const MIN_ITEMS_FOR_MARQUEE = 4;
 
 function money(price: number | string, currency: string) {
   return `${parseFloat(String(price)).toFixed(2)} ${currency}`;
@@ -133,6 +136,42 @@ export default function PublicMenuPage() {
   const [page, setPage] = useState(1);
   const [seo, setSeo] = useState<SeoPayload | null>(null);
   const [jsonLd, setJsonLd] = useState<unknown[] | null>(null);
+
+  const categoryScrollRef = useRef<HTMLDivElement>(null);
+  const [canScrollCategoriesLeft, setCanScrollCategoriesLeft] = useState(false);
+  const [canScrollCategoriesRight, setCanScrollCategoriesRight] = useState(false);
+
+  const updateCategoryScrollState = useCallback(() => {
+    const el = categoryScrollRef.current;
+    if (!el) return;
+    const maxScroll = el.scrollWidth - el.clientWidth;
+    if (maxScroll <= 1) {
+      setCanScrollCategoriesLeft(false);
+      setCanScrollCategoriesRight(false);
+      return;
+    }
+    // Browsers report scrollLeft for an RTL container as 0 at the right edge
+    // going down to -maxScroll at the left edge — the mirror image of LTR's
+    // 0-at-left-edge convention — so which physical side still has hidden
+    // content flips which comparison applies.
+    if (isRtl) {
+      setCanScrollCategoriesLeft(el.scrollLeft > 1 - maxScroll);
+      setCanScrollCategoriesRight(el.scrollLeft < -1);
+    } else {
+      setCanScrollCategoriesLeft(el.scrollLeft > 1);
+      setCanScrollCategoriesRight(el.scrollLeft < maxScroll - 1);
+    }
+  }, [isRtl]);
+
+  const scrollCategories = (direction: 'left' | 'right') => {
+    categoryScrollRef.current?.scrollBy({ left: direction === 'left' ? -220 : 220, behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    updateCategoryScrollState();
+    window.addEventListener('resize', updateCategoryScrollState);
+    return () => window.removeEventListener('resize', updateCategoryScrollState);
+  }, [categories, activeDepartment, updateCategoryScrollState]);
 
   useSeoHead(seo, jsonLd);
   useAnalytics(info?.analytics);
@@ -322,8 +361,12 @@ export default function PublicMenuPage() {
 
       {/* Category nav — overlaps hero, sticky on scroll */}
       <div className="sticky top-0 z-20 -mt-8 sm:-mt-10">
-        <div className="max-w-5xl mx-auto px-4">
-          <div className="bg-white rounded-2xl shadow-lg border border-gray-100 px-3 py-3 overflow-x-auto hide-scrollbar flex gap-2 whitespace-nowrap">
+        <div className="max-w-5xl mx-auto px-4 relative">
+          <div
+            ref={categoryScrollRef}
+            onScroll={updateCategoryScrollState}
+            className="bg-white rounded-2xl shadow-lg border border-gray-100 px-3 py-3 overflow-x-auto hide-scrollbar flex gap-2 whitespace-nowrap"
+          >
             <button
               onClick={() => selectCategory(null)}
               className={`px-4 py-2 rounded-full text-sm font-medium transition-colors shrink-0 ${
@@ -344,6 +387,26 @@ export default function PublicMenuPage() {
               </button>
             ))}
           </div>
+          {canScrollCategoriesLeft && (
+            <button
+              type="button"
+              onClick={() => scrollCategories('left')}
+              aria-label={t('menu.scrollCategoriesLeft')}
+              className="absolute top-1/2 -translate-y-1/2 -left-2 w-8 h-8 rounded-full bg-white shadow-md border border-gray-100 flex items-center justify-center text-gray-600 hover:text-gray-900"
+            >
+              <ChevronLeft size={16} />
+            </button>
+          )}
+          {canScrollCategoriesRight && (
+            <button
+              type="button"
+              onClick={() => scrollCategories('right')}
+              aria-label={t('menu.scrollCategoriesRight')}
+              className="absolute top-1/2 -translate-y-1/2 -right-2 w-8 h-8 rounded-full bg-white shadow-md border border-gray-100 flex items-center justify-center text-gray-600 hover:text-gray-900"
+            >
+              <ChevronRight size={16} />
+            </button>
+          )}
         </div>
       </div>
 
@@ -370,56 +433,74 @@ export default function PublicMenuPage() {
             <h2 className="text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
               🔥 {t('menu.trendingNow')}
             </h2>
-            {/* dir="ltr" here too, not just on the track below: this box's
-                overflow:hidden clips relative to its OWN direction — in rtl
-                it anchors its (wider) child to the right and clips overflow
-                on the left instead of the right, which shifts which slice of
-                the track is actually visible and breaks the transform math
-                below. Pinning both to ltr keeps the visible window anchored
-                the same way regardless of language. */}
-            <div dir="ltr" className="overflow-hidden -mx-4 px-4 sm:mx-0 sm:px-0">
-              {/* The track is two identical halves back-to-back, animated by
-                  exactly one half's width so the loop is seamless (see
-                  .marquee-track) — but with very few trending items, one
-                  natural-width half can be narrower than the viewport,
-                  which breaks that assumption and shows as a visible jump.
-                  Padding each half out to a minimum of ~16 item-slots (by
-                  repeating the list) guarantees it's always wide enough,
-                  comfortably past any realistic viewport width even with
-                  just one or two trending items.
-                  Spacing is a fixed margin per item rather than a flex gap
-                  so a half's rendered width is an exact multiple of one
-                  item's slot width — a shared gap would leave the halves
-                  half-a-gap short of the true repeat point and jump too. */}
-              {(() => {
-                const half = Array.from(
-                  { length: Math.max(1, Math.ceil(16 / trending.length)) },
-                  () => trending,
-                ).flat();
-                return (
-                  // Forced dir="ltr" here: this is a flex row, and flex's
-                  // main axis follows the container's OWN direction — left
-                  // unset, the page's dir="rtl" in Arabic would reverse the
-                  // physical item order and throw off the 50%-width seam
-                  // math above. Only the animation (marquee-rtl class) should
-                  // change with language, not the underlying layout, so it's
-                  // pinned to ltr here; each card still gets its own dir
-                  // below so Arabic names/descriptions still read correctly.
-                  <div dir="ltr" className={`flex w-max pb-2 marquee-track ${isRtl ? 'marquee-rtl' : ''}`}>
-                    {[...half, ...half].map((item, i) => (
-                      <div key={`${item.id}-${i}`} dir={isRtl ? 'rtl' : 'ltr'} className="w-56 mr-4 shrink-0">
-                        <ItemCard
-                          item={item}
-                          onClick={() => navigate(buildPath(`/item/${item.id}`))}
-                          onAdd={(quantity) => handleAddToCart(item, quantity)}
-                          canOrder={canOrder}
-                        />
-                      </div>
-                    ))}
+            {trending.length < MIN_ITEMS_FOR_MARQUEE ? (
+              // Too few unique items to loop — repeating them enough to fill
+              // the marquee track would just show the same 1-3 cards sliding
+              // by on endless repeat, which reads as broken, not trending.
+              // A plain static row is honest about having little to show.
+              <div className="flex gap-4 overflow-x-auto hide-scrollbar pb-2">
+                {trending.map((item) => (
+                  <div key={item.id} dir={isRtl ? 'rtl' : 'ltr'} className="w-56 shrink-0">
+                    <ItemCard
+                      item={item}
+                      onClick={() => navigate(buildPath(`/item/${item.id}`))}
+                      onAdd={(quantity) => handleAddToCart(item, quantity)}
+                      canOrder={canOrder}
+                    />
                   </div>
-                );
-              })()}
-            </div>
+                ))}
+              </div>
+            ) : (
+              /* dir="ltr" here too, not just on the track below: this box's
+                 overflow:hidden clips relative to its OWN direction — in rtl
+                 it anchors its (wider) child to the right and clips overflow
+                 on the left instead of the right, which shifts which slice of
+                 the track is actually visible and breaks the transform math
+                 below. Pinning both to ltr keeps the visible window anchored
+                 the same way regardless of language. */
+              <div dir="ltr" className="overflow-hidden -mx-4 px-4 sm:mx-0 sm:px-0">
+                {/* The track is two identical halves back-to-back, animated by
+                    exactly one half's width so the loop is seamless (see
+                    .marquee-track) — but with few trending items, one
+                    natural-width half can be narrower than the viewport,
+                    which breaks that assumption and shows as a visible jump.
+                    Padding each half out to a minimum of ~16 item-slots (by
+                    repeating the list) guarantees it's always wide enough,
+                    comfortably past any realistic viewport width.
+                    Spacing is a fixed margin per item rather than a flex gap
+                    so a half's rendered width is an exact multiple of one
+                    item's slot width — a shared gap would leave the halves
+                    half-a-gap short of the true repeat point and jump too. */}
+                {(() => {
+                  const half = Array.from(
+                    { length: Math.max(1, Math.ceil(16 / trending.length)) },
+                    () => trending,
+                  ).flat();
+                  return (
+                    // Forced dir="ltr" here: this is a flex row, and flex's
+                    // main axis follows the container's OWN direction — left
+                    // unset, the page's dir="rtl" in Arabic would reverse the
+                    // physical item order and throw off the 50%-width seam
+                    // math above. Only the animation (marquee-rtl class) should
+                    // change with language, not the underlying layout, so it's
+                    // pinned to ltr here; each card still gets its own dir
+                    // below so Arabic names/descriptions still read correctly.
+                    <div dir="ltr" className={`flex w-max pb-2 marquee-track ${isRtl ? 'marquee-rtl' : ''}`}>
+                      {[...half, ...half].map((item, i) => (
+                        <div key={`${item.id}-${i}`} dir={isRtl ? 'rtl' : 'ltr'} className="w-56 mr-4 shrink-0">
+                          <ItemCard
+                            item={item}
+                            onClick={() => navigate(buildPath(`/item/${item.id}`))}
+                            onAdd={(quantity) => handleAddToCart(item, quantity)}
+                            canOrder={canOrder}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  );
+                })()}
+              </div>
+            )}
           </section>
         )}
 
