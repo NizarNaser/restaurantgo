@@ -334,9 +334,11 @@ Route::middleware(['auth:sanctum', 'platform.staff'])->prefix('/admin')->group(f
 
     Route::middleware('permission:manage tenants')->group(function () {
         Route::get('/tenants',                  [AdminTenantController::class, 'index']);
+        Route::post('/tenants',                 [AdminTenantController::class, 'store']);
         Route::get('/tenants/{tenant}',         [AdminTenantController::class, 'show']);
         Route::put('/tenants/{tenant}/suspend', [AdminTenantController::class, 'suspend']);
         Route::put('/tenants/{tenant}/activate',[AdminTenantController::class, 'activate']);
+        Route::put('/tenants/{tenant}/plan',    [AdminTenantController::class, 'updatePlan']);
         Route::post('/tenants/{tenant}/impersonate', [AdminTenantController::class, 'impersonate']);
     });
 
