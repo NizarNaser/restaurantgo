@@ -13,7 +13,8 @@
     "notFound": "見つかりません",
     "call": "電話する",
     "whatsapp": "WhatsApp",
-    "logout": "ログアウト"
+    "logout": "ログアウト",
+    "language": "言語"
   },
   "menu": {
     "allItems": "すべての商品",
@@ -38,7 +39,9 @@
     "previousPage": "前のページ",
     "nextPage": "次のページ",
     "copyright": "© {{year}} {{name}}. 無断複写・転載を禁じます。",
-    "poweredBy": "提供:"
+    "poweredBy": "提供:",
+    "paginationNav": "ページネーション",
+    "pageOfPages": "{{total}} ページ中 {{current}} ページ目"
   },
   "product": {
     "itemNotFound": "商品が見つかりません。",
@@ -143,5 +146,12 @@
     "fri": "金曜日",
     "sat": "土曜日",
     "sun": "日曜日"
+  },
+  "pwa": {
+    "installTitle": "{{name}} をインストール",
+    "installBody": "ホーム画面に追加すると、次回すぐにアクセスできます。",
+    "installButton": "インストール",
+    "iosInstructions": "「共有」をタップし、「ホーム画面に追加」を選択してください。",
+    "dismiss": "閉じる"
   }
 }

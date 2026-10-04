@@ -22,7 +22,7 @@ export default function PublicLanguageSwitcher({
   languages: string[];
   className?: string;
 }) {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   if (languages.length <= 1) return null;
 
@@ -35,7 +35,7 @@ export default function PublicLanguageSwitcher({
           i18n.changeLanguage(e.target.value);
           setStoredPublicLocale(slug, e.target.value);
         }}
-        aria-label="Language"
+        aria-label={t('common.language')}
         className="bg-transparent border-0 text-sm focus:outline-none cursor-pointer"
       >
         {languages.map((code) => (

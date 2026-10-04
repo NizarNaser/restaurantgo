@@ -7,6 +7,7 @@ import { useSeoHead } from '../hooks/useSeoHead';
 import { useAnalytics } from '../hooks/useAnalytics';
 import type { SeoPayload } from '../hooks/useSeoHead';
 import ReviewForm from '../components/public/ReviewForm';
+import InstallAppPrompt from '../components/public/InstallAppPrompt';
 import MenuAssistantWidget from '../components/public/MenuAssistantWidget';
 import PublicLanguageSwitcher from '../components/public/PublicLanguageSwitcher';
 import SocialLinks from '../components/public/SocialLinks';
@@ -30,6 +31,23 @@ const MIN_ITEMS_FOR_MARQUEE = 4;
 
 function money(price: number | string, currency: string) {
   return `${parseFloat(String(price)).toFixed(2)} ${currency}`;
+}
+
+// Caps how many page-number buttons render at once (with "…" for the rest)
+// so a menu with many pages can't force this row wider than a phone screen —
+// unlike web's horizontally-scrolling directory list, this nav sits inside a
+// fixed-width content column, so it has to fit, not scroll.
+function getPageList(current: number, last: number): (number | '...')[] {
+  const delta = 1;
+  const list: (number | '...')[] = [];
+  for (let i = 1; i <= last; i++) {
+    if (i === 1 || i === last || (i >= current - delta && i <= current + delta)) {
+      list.push(i);
+    } else if (list[list.length - 1] !== '...') {
+      list.push('...');
+    }
+  }
+  return list;
 }
 
 function ItemCard({ item, onClick, onAdd, canOrder }: { item: PublicMenuItem; onClick: () => void; onAdd: (quantity: number) => void; canOrder: boolean }) {
@@ -299,6 +317,8 @@ export default function PublicMenuPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 pb-16">
+      <InstallAppPrompt restaurantName={info.name} />
+
       {/* Hero */}
       <header className="relative overflow-hidden bg-gradient-to-br from-[#ff4757] to-[#ff6b81] pb-16 sm:pb-20">
         {info.supported_locales?.length > 1 && (
@@ -542,38 +562,82 @@ export default function PublicMenuPage() {
           </div>
 
           {pageCount > 1 && (
-            <div className="flex items-center justify-center gap-2 mt-8">
-              <button
-                type="button"
-                onClick={() => goToPage(page - 1)}
-                disabled={page === 1}
-                aria-label={t('menu.previousPage')}
-                className="p-2 rounded-full border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 disabled:opacity-40 disabled:pointer-events-none"
+            <>
+              {/* Compact "page X of Y" pager below `sm` — even the ellipsis-
+                  windowed numbered row below can run to 9 buttons (prev,
+                  first, …, 3 around current, …, last, next), which no longer
+                  fits a narrow phone's width. Two arrows and a page count
+                  can't overflow at any screen size or page count. */}
+              <nav
+                className="flex sm:hidden items-center justify-center gap-4 mt-8"
+                aria-label={t('menu.paginationNav')}
               >
-                <ChevronLeft size={16} />
-              </button>
-              {Array.from({ length: pageCount }, (_, i) => i + 1).map((p) => (
                 <button
-                  key={p}
                   type="button"
-                  onClick={() => goToPage(p)}
-                  className={`w-9 h-9 rounded-full text-sm font-medium transition-colors ${
-                    p === page ? 'bg-gray-900 text-white' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'
-                  }`}
+                  onClick={() => goToPage(page - 1)}
+                  disabled={page === 1}
+                  aria-label={t('menu.previousPage')}
+                  className="p-2 rounded-full border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 disabled:opacity-40 disabled:pointer-events-none"
                 >
-                  {p}
+                  <ChevronLeft size={16} />
                 </button>
-              ))}
-              <button
-                type="button"
-                onClick={() => goToPage(page + 1)}
-                disabled={page === pageCount}
-                aria-label={t('menu.nextPage')}
-                className="p-2 rounded-full border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 disabled:opacity-40 disabled:pointer-events-none"
+                <span className="text-sm font-medium text-gray-600">
+                  {t('menu.pageOfPages', { current: page, total: pageCount })}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => goToPage(page + 1)}
+                  disabled={page === pageCount}
+                  aria-label={t('menu.nextPage')}
+                  className="p-2 rounded-full border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 disabled:opacity-40 disabled:pointer-events-none"
+                >
+                  <ChevronRight size={16} />
+                </button>
+              </nav>
+
+              <nav
+                className="hidden sm:flex items-center justify-center gap-2 mt-8"
+                aria-label={t('menu.paginationNav')}
               >
-                <ChevronRight size={16} />
-              </button>
-            </div>
+                <button
+                  type="button"
+                  onClick={() => goToPage(page - 1)}
+                  disabled={page === 1}
+                  aria-label={t('menu.previousPage')}
+                  className="p-2 rounded-full border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 disabled:opacity-40 disabled:pointer-events-none"
+                >
+                  <ChevronLeft size={16} />
+                </button>
+                {getPageList(page, pageCount).map((p, i) =>
+                  p === '...' ? (
+                    <span key={`dots-${i}`} className="px-1 text-gray-400 select-none">
+                      …
+                    </span>
+                  ) : (
+                    <button
+                      key={p}
+                      type="button"
+                      onClick={() => goToPage(p)}
+                      aria-current={p === page ? 'page' : undefined}
+                      className={`w-9 h-9 rounded-full text-sm font-medium transition-colors ${
+                        p === page ? 'bg-gray-900 text-white' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'
+                      }`}
+                    >
+                      {p}
+                    </button>
+                  )
+                )}
+                <button
+                  type="button"
+                  onClick={() => goToPage(page + 1)}
+                  disabled={page === pageCount}
+                  aria-label={t('menu.nextPage')}
+                  className="p-2 rounded-full border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 disabled:opacity-40 disabled:pointer-events-none"
+                >
+                  <ChevronRight size={16} />
+                </button>
+              </nav>
+            </>
           )}
         </section>
 
@@ -586,8 +650,7 @@ export default function PublicMenuPage() {
                 <div className="flex items-start gap-3 text-gray-600">
                   <MapPin size={18} className="text-[#ff4757] shrink-0 mt-0.5" />
                   <span>
-                    {info.contact.address}
-                    {info.contact.city ? `, ${info.contact.city}` : ''}
+                    {[info.contact.address, info.contact.city, info.contact.country].filter(Boolean).join(', ')}
                   </span>
                 </div>
               )}

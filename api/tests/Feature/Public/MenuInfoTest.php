@@ -49,3 +49,26 @@ it('hides the service charge message when the owner has not enabled showing it',
 
     $response->assertJsonPath('data.service_charge_message', null);
 });
+
+it('serves a per-tenant web app manifest so Add to Home Screen uses the restaurant\'s own name', function () {
+    $tenant = Tenant::where('slug', 'demo-restaurant')->firstOrFail();
+
+    $response = $this->getJson('/api/v1/public/demo-restaurant/manifest.webmanifest')->assertOk();
+
+    $response->assertHeader('Content-Type', 'application/manifest+json');
+    $response->assertJsonPath('name', $tenant->name);
+    $response->assertJsonPath('display', 'standalone');
+    expect($response->json('start_url'))->toStartWith($response->json('id'));
+    expect($response->json('scope'))->toStartWith($response->json('id'));
+});
+
+it('falls back to the bundled app icons when the tenant has no logo or favicon', function () {
+    $tenant = Tenant::where('slug', 'demo-restaurant')->firstOrFail();
+    $tenant->update(['logo_path' => null, 'favicon_path' => null]);
+
+    $response = $this->getJson('/api/v1/public/demo-restaurant/manifest.webmanifest')->assertOk();
+
+    $icons = $response->json('icons');
+    expect($icons)->toHaveCount(2);
+    expect(collect($icons)->pluck('src')->all())->toBe(['/icons/icon-192.png', '/icons/icon-512.png']);
+});

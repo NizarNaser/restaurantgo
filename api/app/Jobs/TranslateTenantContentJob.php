@@ -76,6 +76,14 @@ class TranslateTenantContentJob implements ShouldQueue
     public function handle(OpenAiService $openai, SeoService $seo): void
     {
         if (! $openai->isConfigured()) {
+            // Otherwise this job just vanishes with nothing to show for it —
+            // the tenant's menu/blog silently stays untranslated into
+            // $targetLocale with no error anywhere a human would see it.
+            Log::warning('TranslateTenantContentJob: skipped, AI assistant is not configured', [
+                'tenant_id' => $this->tenantId,
+                'locale'    => $this->targetLocale,
+            ]);
+
             return;
         }
 

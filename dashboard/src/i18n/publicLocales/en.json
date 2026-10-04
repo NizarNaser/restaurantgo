@@ -13,7 +13,8 @@
     "notFound": "Not found",
     "call": "Call",
     "whatsapp": "WhatsApp",
-    "logout": "Logout"
+    "logout": "Logout",
+    "language": "Language"
   },
   "menu": {
     "allItems": "All Items",
@@ -38,7 +39,9 @@
     "previousPage": "Previous page",
     "nextPage": "Next page",
     "copyright": "© {{year}} {{name}}. All rights reserved.",
-    "poweredBy": "Powered by"
+    "poweredBy": "Powered by",
+    "paginationNav": "Pagination",
+    "pageOfPages": "Page {{current}} of {{total}}"
   },
   "product": {
     "itemNotFound": "Item not found.",
@@ -143,5 +146,12 @@
     "fri": "Friday",
     "sat": "Saturday",
     "sun": "Sunday"
+  },
+  "pwa": {
+    "installTitle": "Install {{name}}",
+    "installBody": "Add it to your home screen for quick access next time.",
+    "installButton": "Install",
+    "iosInstructions": "Tap Share, then \"Add to Home Screen\".",
+    "dismiss": "Dismiss"
   }
 }
