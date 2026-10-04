@@ -145,7 +145,7 @@ export default function CartPage() {
                 <div key={item.menu_item_id} className="p-4 flex items-center gap-3">
                   <div className="flex-1 min-w-0">
                     <p className="font-medium text-gray-900 truncate">{item.name}</p>
-                    <p className="text-sm text-gray-500">{money(item.unit_price, item.currency)}</p>
+                    <p dir="ltr" className="text-sm text-gray-500">{money(item.unit_price, item.currency)}</p>
                   </div>
                   <div className="flex items-center border border-gray-200 rounded-lg shrink-0">
                     <button type="button" onClick={() => updateQuantity(item.menu_item_id, item.quantity - 1)} className="p-1.5 text-gray-500 hover:text-gray-800" aria-label={t('common.decreaseQuantity')}>
@@ -156,7 +156,7 @@ export default function CartPage() {
                       <Plus size={14} />
                     </button>
                   </div>
-                  <p className="w-20 text-right font-semibold text-gray-900 shrink-0">
+                  <p dir="ltr" className="w-20 text-right font-semibold text-gray-900 shrink-0">
                     {money(item.unit_price * item.quantity, item.currency)}
                   </p>
                   <button type="button" onClick={() => removeItem(item.menu_item_id)} className="p-1.5 text-gray-400 hover:text-red-500 shrink-0" aria-label={t('cart.removeItem')}>
@@ -166,7 +166,7 @@ export default function CartPage() {
               ))}
               <div className="p-4 flex items-center justify-between font-bold text-gray-900">
                 <span>{t('common.total')}</span>
-                <span>{money(subtotal, currency)}</span>
+                <span dir="ltr">{money(subtotal, currency)}</span>
               </div>
             </div>
 

@@ -142,7 +142,7 @@ export default function ProductDetailPage() {
               </div>
 
               <div className="mt-2 flex items-center gap-3">
-                <span className="text-2xl font-bold text-gray-900">{money(item.price, item.currency)}</span>
+                <span dir="ltr" className="text-2xl font-bold text-gray-900">{money(item.price, item.currency)}</span>
                 {item.avg_rating && <StarRating value={item.avg_rating} count={item.reviews_count} showValue />}
               </div>
 
@@ -254,7 +254,7 @@ export default function ProductDetailPage() {
                   </div>
                   <div className="p-3">
                     <p className="text-sm font-medium text-gray-900 truncate">{r.name}</p>
-                    <p className="text-sm font-bold text-gray-900 mt-0.5">{money(r.price, r.currency)}</p>
+                    <p dir="ltr" className="text-sm font-bold text-gray-900 mt-0.5">{money(r.price, r.currency)}</p>
                   </div>
                 </button>
               ))}
