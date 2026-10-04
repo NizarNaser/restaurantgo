@@ -153,5 +153,59 @@
     "installButton": "Install",
     "iosInstructions": "Tap Share, then \"Add to Home Screen\".",
     "dismiss": "Dismiss"
+  },
+  "footer": {
+    "explore": "Explore",
+    "menu": "Menu",
+    "findTable": "Find Your Table",
+    "legal": "Legal"
+  },
+  "legal": {
+    "disclaimer": "This page provides standard information for {{name}} — it is not a substitute for legal advice tailored to this restaurant's specific situation.",
+    "privacy": {
+      "title": "Privacy Policy",
+      "introTitle": "Introduction",
+      "introBody": "{{name}} respects your privacy. This policy explains what information we collect when you browse our menu, place an order, or make a reservation, and how we use it.",
+      "dataCollectedTitle": "Information We Collect",
+      "dataCollectedBody": "When you place an order or reservation, we collect your name, phone number, and, if provided, your email and delivery address. We also collect basic usage data, such as your browser type and the pages you visit, to keep the site working correctly.",
+      "dataUseTitle": "How We Use Your Information",
+      "dataUseBody": "We use your information to process orders and reservations, contact you about them, and improve our menu and service. We do not sell your personal data to third parties.",
+      "dataSharingTitle": "Sharing Your Information",
+      "dataSharingBody": "We share your information only with the service providers that help us run our site and process payments, and only to the extent needed for that purpose.",
+      "cookiesTitle": "Cookies",
+      "cookiesBody": "Our site uses essential cookies and local storage to remember your language preference and shopping cart. These do not track you across other websites.",
+      "rightsTitle": "Your Rights",
+      "rightsBody": "Under the EU General Data Protection Regulation (GDPR), you have the right to access, correct, or delete your personal data, and to object to or restrict its processing. To exercise these rights, contact us using the details below.",
+      "contactTitle": "Contact Us",
+      "contactBody": "For any privacy questions or requests, please contact {{name}} directly using the phone number or address listed on our contact page."
+    },
+    "terms": {
+      "title": "Terms & Copyright Notice",
+      "introTitle": "Introduction",
+      "introBody": "These terms govern your use of {{name}}'s website and ordering service. By using our site, you agree to these terms.",
+      "intellectualPropertyTitle": "Intellectual Property",
+      "intellectualPropertyBody": "All text, images, logos, and recipes presented on this site are the property of {{name}} or its licensors, unless otherwise noted, and may not be copied or reused without permission.",
+      "useOfServiceTitle": "Use of This Service",
+      "useOfServiceBody": "This site is provided for browsing our menu and placing orders or reservations. You agree not to misuse the site, interfere with its operation, or attempt to access it in unauthorized ways.",
+      "menuAccuracyTitle": "Menu & Pricing",
+      "menuAccuracyBody": "Menu items, prices, and availability may change without notice. We make reasonable efforts to keep this information accurate but cannot guarantee it is error-free at every moment.",
+      "liabilityTitle": "Limitation of Liability",
+      "liabilityBody": "{{name}} is not liable for indirect or incidental damages arising from your use of this site, to the extent permitted by applicable law.",
+      "contactTitle": "Contact Us",
+      "contactBody": "Questions about these terms can be directed to {{name}} using the contact details on our site."
+    },
+    "accessibility": {
+      "title": "Accessibility Statement",
+      "introTitle": "Our Commitment",
+      "introBody": "{{name}} is committed to making our website usable by everyone, including people with disabilities.",
+      "standardsTitle": "Standards We Follow",
+      "standardsBody": "We aim to meet the Web Content Accessibility Guidelines (WCAG) 2.1 Level AA and the requirements of the European Accessibility Act.",
+      "featuresTitle": "Accessibility Features",
+      "featuresBody": "Our site supports keyboard navigation, screen readers, right-to-left languages, and adjustable text sizing through your browser's own settings.",
+      "feedbackTitle": "Feedback",
+      "feedbackBody": "If you encounter any accessibility barriers on our site, please let us know so we can address them.",
+      "contactTitle": "Contact Us",
+      "contactBody": "You can reach {{name}} using the phone number or address on our contact page to report accessibility issues or request assistance."
+    }
   }
 }

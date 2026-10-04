@@ -153,5 +153,59 @@
     "installButton": "安装",
     "iosInstructions": "点击“分享”,然后选择“添加到主屏幕”。",
     "dismiss": "关闭"
+  },
+  "footer": {
+    "explore": "浏览",
+    "menu": "菜单",
+    "findTable": "查找您的桌位",
+    "legal": "法律信息"
+  },
+  "legal": {
+    "disclaimer": "本页面为 {{name}} 提供标准化信息——并不能替代针对本餐厅具体情况量身定制的法律意见。",
+    "privacy": {
+      "title": "隐私政策",
+      "introTitle": "简介",
+      "introBody": "{{name}} 尊重您的隐私。本政策说明了当您浏览我们的菜单、下单或预订时我们会收集哪些信息，以及我们如何使用这些信息。",
+      "dataCollectedTitle": "我们收集的信息",
+      "dataCollectedBody": "当您下单或预订时，我们会收集您的姓名、电话号码，以及（如您提供）电子邮箱和送餐地址。我们还会收集基本的使用数据，例如浏览器类型和您访问的页面，以确保网站正常运行。",
+      "dataUseTitle": "我们如何使用您的信息",
+      "dataUseBody": "我们使用您的信息来处理订单和预订、就相关事宜与您联系，并改进我们的菜单和服务。我们不会将您的个人数据出售给第三方。",
+      "dataSharingTitle": "信息共享",
+      "dataSharingBody": "我们仅与协助我们运营网站及处理付款的服务提供商共享您的信息，且仅限于该目的所需的范围。",
+      "cookiesTitle": "Cookie",
+      "cookiesBody": "我们的网站使用必要的 Cookie 和本地存储来记住您的语言偏好和购物车内容。这些不会在其他网站上追踪您。",
+      "rightsTitle": "您的权利",
+      "rightsBody": "根据欧盟《通用数据保护条例》（GDPR），您有权访问、更正或删除您的个人数据，并有权反对或限制其处理。如需行使这些权利，请通过以下联系方式与我们联系。",
+      "contactTitle": "联系我们",
+      "contactBody": "如有任何隐私相关问题或请求，请通过我们联系页面上列出的电话号码或地址直接联系 {{name}}。"
+    },
+    "terms": {
+      "title": "条款与版权声明",
+      "introTitle": "简介",
+      "introBody": "本条款规范您对 {{name}} 网站及点餐服务的使用。使用我们的网站即表示您同意这些条款。",
+      "intellectualPropertyTitle": "知识产权",
+      "intellectualPropertyBody": "本网站上展示的所有文字、图片、标志和菜谱，除另有说明外，均为 {{name}} 或其授权方的财产，未经许可不得复制或再利用。",
+      "useOfServiceTitle": "服务的使用",
+      "useOfServiceBody": "本网站用于浏览菜单及下单或预订。您同意不滥用本网站、不干扰其运行，也不以未经授权的方式尝试访问。",
+      "menuAccuracyTitle": "菜单与价格",
+      "menuAccuracyBody": "菜品、价格及供应情况可能随时变动，恕不另行通知。我们会尽合理努力保持信息准确，但不能保证其在任何时刻均无误差。",
+      "liabilityTitle": "责任限制",
+      "liabilityBody": "在适用法律允许的范围内，{{name}} 不对因您使用本网站而产生的间接或附带损失承担责任。",
+      "contactTitle": "联系我们",
+      "contactBody": "如对本条款有任何疑问，请通过我们网站上的联系方式与 {{name}} 联系。"
+    },
+    "accessibility": {
+      "title": "无障碍声明",
+      "introTitle": "我们的承诺",
+      "introBody": "{{name}} 致力于让我们的网站人人可用，包括残障人士。",
+      "standardsTitle": "我们遵循的标准",
+      "standardsBody": "我们力求符合《网页内容无障碍指南》（WCAG）2.1 AA 级标准以及《欧洲无障碍法案》的要求。",
+      "featuresTitle": "无障碍功能",
+      "featuresBody": "我们的网站支持键盘导航、屏幕阅读器、从右到左书写的语言，并可通过您浏览器自身的设置调整文字大小。",
+      "feedbackTitle": "反馈",
+      "feedbackBody": "如果您在我们的网站上遇到任何无障碍方面的问题，请告知我们，以便我们加以解决。",
+      "contactTitle": "联系我们",
+      "contactBody": "如需报告无障碍问题或请求协助，您可通过我们联系页面上的电话号码或地址联系 {{name}}。"
+    }
   }
 }

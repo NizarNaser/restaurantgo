@@ -153,5 +153,59 @@
     "installButton": "Installer",
     "iosInstructions": "Appuyez sur Partager, puis « Sur l'écran d'accueil ».",
     "dismiss": "Fermer"
+  },
+  "footer": {
+    "explore": "Explorer",
+    "menu": "Menu",
+    "findTable": "Trouver votre table",
+    "legal": "Mentions légales"
+  },
+  "legal": {
+    "disclaimer": "Cette page fournit des informations standard pour {{name}} — elle ne remplace pas un conseil juridique adapté à la situation spécifique de ce restaurant.",
+    "privacy": {
+      "title": "Politique de Confidentialité",
+      "introTitle": "Introduction",
+      "introBody": "{{name}} respecte votre vie privée. Cette politique explique quelles informations nous collectons lorsque vous consultez notre menu, passez une commande ou effectuez une réservation, et comment nous les utilisons.",
+      "dataCollectedTitle": "Informations que nous collectons",
+      "dataCollectedBody": "Lors d'une commande ou d'une réservation, nous collectons votre nom, votre numéro de téléphone et, si vous les fournissez, votre e-mail et votre adresse de livraison. Nous collectons aussi des données d'utilisation de base, comme le type de navigateur et les pages visitées, pour que le site fonctionne correctement.",
+      "dataUseTitle": "Comment nous utilisons vos informations",
+      "dataUseBody": "Nous utilisons vos informations pour traiter les commandes et réservations, vous contacter à leur sujet, et améliorer notre menu et notre service. Nous ne vendons pas vos données personnelles à des tiers.",
+      "dataSharingTitle": "Partage de vos informations",
+      "dataSharingBody": "Nous ne partageons vos informations qu'avec les prestataires qui nous aident à faire fonctionner le site et à traiter les paiements, et uniquement dans la mesure nécessaire à cet effet.",
+      "cookiesTitle": "Cookies",
+      "cookiesBody": "Notre site utilise des cookies essentiels et le stockage local pour mémoriser votre préférence de langue et votre panier. Ceux-ci ne vous suivent pas sur d'autres sites.",
+      "rightsTitle": "Vos droits",
+      "rightsBody": "En vertu du Règlement général sur la protection des données (RGPD) de l'UE, vous avez le droit d'accéder à vos données personnelles, de les corriger ou de les supprimer, et de vous opposer à leur traitement ou de le limiter. Pour exercer ces droits, contactez-nous via les coordonnées ci-dessous.",
+      "contactTitle": "Nous contacter",
+      "contactBody": "Pour toute question ou demande relative à la confidentialité, veuillez contacter directement {{name}} via le numéro de téléphone ou l'adresse indiqués sur notre page de contact."
+    },
+    "terms": {
+      "title": "Conditions Générales & Mentions de Droits d'Auteur",
+      "introTitle": "Introduction",
+      "introBody": "Ces conditions régissent votre utilisation du site web et du service de commande de {{name}}. En utilisant notre site, vous acceptez ces conditions.",
+      "intellectualPropertyTitle": "Propriété Intellectuelle",
+      "intellectualPropertyBody": "Tous les textes, images, logos et recettes présentés sur ce site sont la propriété de {{name}} ou de ses concédants, sauf indication contraire, et ne peuvent être copiés ou réutilisés sans autorisation.",
+      "useOfServiceTitle": "Utilisation de ce Service",
+      "useOfServiceBody": "Ce site est destiné à consulter notre menu et à passer des commandes ou réservations. Vous acceptez de ne pas abuser du site, de ne pas en perturber le fonctionnement et de ne pas tenter d'y accéder de manière non autorisée.",
+      "menuAccuracyTitle": "Menu et Tarifs",
+      "menuAccuracyBody": "Les plats, prix et disponibilités peuvent changer sans préavis. Nous faisons des efforts raisonnables pour que ces informations soient exactes, sans pouvoir garantir l'absence totale d'erreur à tout moment.",
+      "liabilityTitle": "Limitation de Responsabilité",
+      "liabilityBody": "{{name}} n'est pas responsable des dommages indirects ou accessoires résultant de l'utilisation de ce site, dans la mesure permise par la loi applicable.",
+      "contactTitle": "Nous Contacter",
+      "contactBody": "Les questions relatives à ces conditions peuvent être adressées à {{name}} via les coordonnées figurant sur notre site."
+    },
+    "accessibility": {
+      "title": "Déclaration d'Accessibilité",
+      "introTitle": "Notre Engagement",
+      "introBody": "{{name}} s'engage à rendre son site web utilisable par tous, y compris les personnes en situation de handicap.",
+      "standardsTitle": "Normes que Nous Suivons",
+      "standardsBody": "Nous visons à respecter les Règles pour l'Accessibilité des Contenus Web (WCAG) 2.1 niveau AA ainsi que les exigences de l'Acte Européen sur l'Accessibilité.",
+      "featuresTitle": "Fonctionnalités d'Accessibilité",
+      "featuresBody": "Notre site prend en charge la navigation au clavier, les lecteurs d'écran, les langues de droite à gauche, et l'ajustement de la taille du texte via les paramètres de votre navigateur.",
+      "feedbackTitle": "Retours",
+      "feedbackBody": "Si vous rencontrez des obstacles d'accessibilité sur notre site, merci de nous le signaler afin que nous puissions y remédier.",
+      "contactTitle": "Nous Contacter",
+      "contactBody": "Vous pouvez joindre {{name}} via le numéro de téléphone ou l'adresse figurant sur notre page de contact pour signaler un problème d'accessibilité ou demander de l'aide."
+    }
   }
 }

@@ -153,5 +153,59 @@
     "installButton": "Yükle",
     "iosInstructions": "Paylaş'a, ardından \"Ana Ekrana Ekle\"ye dokun.",
     "dismiss": "Kapat"
+  },
+  "footer": {
+    "explore": "Keşfet",
+    "menu": "Menü",
+    "findTable": "Masanı Bul",
+    "legal": "Yasal"
+  },
+  "legal": {
+    "disclaimer": "Bu sayfa {{name}} için standart bilgiler sunar — bu restoranın özel durumuna göre hazırlanmış bir hukuki danışmanlığın yerini tutmaz.",
+    "privacy": {
+      "title": "Gizlilik Politikası",
+      "introTitle": "Giriş",
+      "introBody": "{{name}} gizliliğinize saygı duyar. Bu politika, menümüze göz atarken, sipariş verirken veya rezervasyon yaparken hangi bilgileri topladığımızı ve bunları nasıl kullandığımızı açıklar.",
+      "dataCollectedTitle": "Topladığımız Bilgiler",
+      "dataCollectedBody": "Sipariş veya rezervasyon yaptığınızda adınızı, telefon numaranızı ve belirttiyseniz e-posta ile teslimat adresinizi topluyoruz. Ayrıca sitenin düzgün çalışmasını sağlamak için tarayıcı türü ve ziyaret ettiğiniz sayfalar gibi temel kullanım verilerini topluyoruz.",
+      "dataUseTitle": "Bilgilerinizi Nasıl Kullanıyoruz",
+      "dataUseBody": "Bilgilerinizi siparişleri ve rezervasyonları işleme almak, bu konularda sizinle iletişime geçmek ve menümüzü ile hizmetimizi geliştirmek için kullanıyoruz. Kişisel verilerinizi üçüncü taraflara satmıyoruz.",
+      "dataSharingTitle": "Bilgilerinizin Paylaşılması",
+      "dataSharingBody": "Bilgilerinizi yalnızca sitemizi işletmemize ve ödemeleri işlememize yardımcı olan hizmet sağlayıcılarla ve yalnızca bu amaç için gerekli ölçüde paylaşıyoruz.",
+      "cookiesTitle": "Çerezler",
+      "cookiesBody": "Sitemiz, dil tercihinizi ve sepetinizi hatırlamak için temel çerezler ve yerel depolama kullanır. Bunlar sizi başka web sitelerinde izlemez.",
+      "rightsTitle": "Haklarınız",
+      "rightsBody": "AB Genel Veri Koruma Yönetmeliği (GDPR) kapsamında, kişisel verilerinize erişme, düzeltme veya silme ve işlenmesine itiraz etme veya kısıtlama hakkına sahipsiniz. Bu haklarınızı kullanmak için aşağıdaki iletişim bilgilerinden bize ulaşın.",
+      "contactTitle": "Bize Ulaşın",
+      "contactBody": "Gizlilikle ilgili sorularınız veya talepleriniz için lütfen iletişim sayfamızda yer alan telefon numarası veya adres üzerinden doğrudan {{name}} ile iletişime geçin."
+    },
+    "terms": {
+      "title": "Kullanım Koşulları ve Telif Hakkı Bildirimi",
+      "introTitle": "Giriş",
+      "introBody": "Bu koşullar, {{name}} web sitesini ve sipariş hizmetini kullanımınızı düzenler. Sitemizi kullanarak bu koşulları kabul etmiş olursunuz.",
+      "intellectualPropertyTitle": "Fikri Mülkiyet",
+      "intellectualPropertyBody": "Bu sitede sunulan tüm metin, görsel, logo ve tarifler, aksi belirtilmedikçe {{name}} veya lisans verenlerinin mülkiyetindedir ve izinsiz kopyalanamaz veya yeniden kullanılamaz.",
+      "useOfServiceTitle": "Bu Hizmetin Kullanımı",
+      "useOfServiceBody": "Bu site, menümüze göz atmak ve sipariş veya rezervasyon yapmak için sunulmaktadır. Siteyi kötüye kullanmamayı, işleyişine müdahale etmemeyi ve yetkisiz erişim denemelerinde bulunmamayı kabul edersiniz.",
+      "menuAccuracyTitle": "Menü ve Fiyatlandırma",
+      "menuAccuracyBody": "Menü öğeleri, fiyatlar ve stok durumu önceden haber verilmeksizin değişebilir. Bu bilgilerin doğruluğunu korumak için makul çaba gösteriyoruz ancak her an hatasız olacağını garanti edemeyiz.",
+      "liabilityTitle": "Sorumluluğun Sınırlandırılması",
+      "liabilityBody": "{{name}}, yürürlükteki hukukun izin verdiği ölçüde, bu sitenin kullanımından kaynaklanan dolaylı veya arızi zararlardan sorumlu değildir.",
+      "contactTitle": "Bize Ulaşın",
+      "contactBody": "Bu koşullarla ilgili sorularınızı sitemizdeki iletişim bilgilerini kullanarak {{name}}'e iletebilirsiniz."
+    },
+    "accessibility": {
+      "title": "Erişilebilirlik Beyanı",
+      "introTitle": "Taahhüdümüz",
+      "introBody": "{{name}}, web sitesini engelli bireyler dahil herkes için kullanılabilir hale getirmeyi taahhüt eder.",
+      "standardsTitle": "Uyduğumuz Standartlar",
+      "standardsBody": "Web İçeriği Erişilebilirlik Yönergeleri (WCAG) 2.1 AA Seviyesi ile Avrupa Erişilebilirlik Yasası gerekliliklerini karşılamayı hedefliyoruz.",
+      "featuresTitle": "Erişilebilirlik Özellikleri",
+      "featuresBody": "Sitemiz klavye ile gezinmeyi, ekran okuyucuları, sağdan sola yazılan dilleri ve tarayıcınızın kendi ayarları aracılığıyla metin boyutu ayarlamasını destekler.",
+      "feedbackTitle": "Geri Bildirim",
+      "feedbackBody": "Sitemizde herhangi bir erişilebilirlik engeliyle karşılaşırsanız, çözebilmemiz için lütfen bize bildirin.",
+      "contactTitle": "Bize Ulaşın",
+      "contactBody": "Erişilebilirlik sorunlarını bildirmek veya yardım talep etmek için iletişim sayfamızdaki telefon numarası veya adres üzerinden {{name}}'e ulaşabilirsiniz."
+    }
   }
 }

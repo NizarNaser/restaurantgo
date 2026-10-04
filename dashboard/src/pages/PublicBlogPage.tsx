@@ -7,8 +7,24 @@ import { useSeoHead } from '../hooks/useSeoHead';
 import type { SeoPayload } from '../hooks/useSeoHead';
 import { getStoredPublicLocale } from '../lib/publicLocale';
 import { usePublicSlug } from '../hooks/usePublicSlug';
+import PublicPageHeader from '../components/public/PublicPageHeader';
+import PublicFooter from '../components/public/PublicFooter';
+import type { RestaurantInfo } from '../types/public';
 
 const PUBLIC_API = `${import.meta.env.VITE_API_URL || 'http://localhost:8000/api'}/v1/public`;
+
+/** Shared by both pages below — just enough for the branded header/footer. */
+function useRestaurantInfo(slug: string | undefined) {
+  const [info, setInfo] = useState<RestaurantInfo | null>(null);
+  useEffect(() => {
+    if (!slug) return;
+    axios
+      .get(`${PUBLIC_API}/${slug}/info`, { params: { lang: getStoredPublicLocale(slug) ?? undefined } })
+      .then((res) => setInfo(res.data.data))
+      .catch(() => {});
+  }, [slug]);
+  return info;
+}
 
 interface ArticleSummary {
   id: number;
@@ -40,6 +56,7 @@ function formatDate(value: string | null, locale: string) {
 export function PublicBlogPage() {
   const { t } = useTranslation();
   const { slug, buildPath } = usePublicSlug();
+  const info = useRestaurantInfo(slug);
   const [articles, setArticles] = useState<ArticleSummary[]>([]);
   const [seo, setSeo] = useState<SeoPayload | null>(null);
   const [jsonLd, setJsonLd] = useState<unknown[] | null>(null);
@@ -60,7 +77,7 @@ export function PublicBlogPage() {
       .finally(() => setLoading(false));
   }, [slug]);
 
-  if (loading) {
+  if (loading || !info) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-50">
         <Loader2 className="animate-spin text-red-500" size={48} />
@@ -78,22 +95,16 @@ export function PublicBlogPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-16">
-      <header className="bg-white border-b border-gray-100">
-        <div className="max-w-3xl mx-auto px-4 py-8">
-          <Link
-            to={buildPath('')}
-            className="btn btn-primary rounded-full text-sm shadow-sm gap-1.5"
-          >
-            <ArrowLeft size={16} />
-            {t('common.backToMenu')}
-          </Link>
-          <h1 className="text-3xl font-bold text-gray-900 mt-3">{seo?.title}</h1>
-          {seo?.description && <p className="text-gray-500 mt-2">{seo.description}</p>}
-        </div>
-      </header>
+    <div className="min-h-screen bg-gray-50 flex flex-col">
+      <PublicPageHeader
+        info={info}
+        slug={slug}
+        buildPath={buildPath}
+        title={seo?.title}
+        subtitle={seo?.description ?? undefined}
+      />
 
-      <div className="max-w-3xl mx-auto px-4 mt-8 space-y-5">
+      <div className="max-w-3xl mx-auto px-4 mt-8 space-y-5 flex-1 w-full">
         {articles.length === 0 && (
           <p className="text-center text-gray-500 py-12">{t('blog.noPosts')}</p>
         )}
@@ -119,6 +130,8 @@ export function PublicBlogPage() {
           </Link>
         ))}
       </div>
+
+      <PublicFooter info={info} buildPath={buildPath} />
     </div>
   );
 }
@@ -128,6 +141,7 @@ export function PublicArticlePage() {
   const { t } = useTranslation();
   const { articleSlug } = useParams<{ articleSlug: string }>();
   const { slug, buildPath } = usePublicSlug();
+  const info = useRestaurantInfo(slug);
   const [article, setArticle] = useState<ArticleDetail | null>(null);
   const [seo, setSeo] = useState<SeoPayload | null>(null);
   const [jsonLd, setJsonLd] = useState<unknown[] | null>(null);
@@ -149,7 +163,7 @@ export function PublicArticlePage() {
       .finally(() => setLoading(false));
   }, [slug, articleSlug]);
 
-  if (loading) {
+  if (loading || !info) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-50">
         <Loader2 className="animate-spin text-red-500" size={48} />
@@ -172,50 +186,56 @@ export function PublicArticlePage() {
   const rtl = isRtl(article.locale);
 
   return (
-    <article className="min-h-screen bg-white pb-20" dir={rtl ? 'rtl' : 'ltr'} lang={article.locale}>
-      <div className="max-w-2xl mx-auto px-4 pt-10">
-        <Link
-          to={buildPath('/blog')}
-          className="btn btn-primary rounded-full text-sm shadow-sm gap-1.5"
-        >
-          <ArrowLeft size={16} className={rtl ? 'rotate-180' : ''} />
-          {t('blog.backToBlog')}
-        </Link>
+    <div className="min-h-screen bg-white flex flex-col">
+      <PublicPageHeader info={info} slug={slug} buildPath={buildPath} />
 
-        <h1 className="text-4xl font-bold text-gray-900 mt-4 leading-tight">{article.title}</h1>
-        <p className="text-sm text-gray-400 mt-2">
-          {formatDate(article.published_at, article.locale)}
-          {article.author ? ` · ${article.author}` : ''}
-        </p>
+      <article className="flex-1" dir={rtl ? 'rtl' : 'ltr'} lang={article.locale}>
+        <div className="max-w-2xl mx-auto px-4 pt-10 pb-20">
+          <Link
+            to={buildPath('/blog')}
+            className="btn btn-primary rounded-full text-sm shadow-sm gap-1.5"
+          >
+            <ArrowLeft size={16} className={rtl ? 'rotate-180' : ''} />
+            {t('blog.backToBlog')}
+          </Link>
 
-        {/* Other languages this post exists in. */}
-        {article.translations.length > 1 && (
-          <div className="flex gap-2 mt-4">
-            {article.translations
-              .filter((t) => t.hreflang !== article.locale)
-              .map((t) => (
-                <a
-                  key={t.hreflang}
-                  href={t.href}
-                  hrefLang={t.hreflang}
-                  className="px-2 py-1 text-xs uppercase rounded bg-gray-100 text-gray-600 hover:bg-gray-200"
-                >
-                  {t.hreflang}
-                </a>
-              ))}
-          </div>
-        )}
+          <h1 className="text-4xl font-bold text-gray-900 mt-4 leading-tight">{article.title}</h1>
+          <p className="text-sm text-gray-400 mt-2">
+            {formatDate(article.published_at, article.locale)}
+            {article.author ? ` · ${article.author}` : ''}
+          </p>
 
-        {article.featured_image && (
-          <img src={article.featured_image} alt="" className="w-full rounded-xl mt-6 object-cover" />
-        )}
+          {/* Other languages this post exists in. */}
+          {article.translations.length > 1 && (
+            <div className="flex gap-2 mt-4">
+              {article.translations
+                .filter((t) => t.hreflang !== article.locale)
+                .map((t) => (
+                  <a
+                    key={t.hreflang}
+                    href={t.href}
+                    hrefLang={t.hreflang}
+                    className="px-2 py-1 text-xs uppercase rounded bg-gray-100 text-gray-600 hover:bg-gray-200"
+                  >
+                    {t.hreflang}
+                  </a>
+                ))}
+            </div>
+          )}
 
-        <div
-          className="prose prose-gray max-w-none mt-8 text-gray-800 leading-relaxed"
-          // Content is authored by the restaurant's own staff in the dashboard.
-          dangerouslySetInnerHTML={{ __html: article.content }}
-        />
-      </div>
-    </article>
+          {article.featured_image && (
+            <img src={article.featured_image} alt="" className="w-full rounded-xl mt-6 object-cover" />
+          )}
+
+          <div
+            className="prose prose-gray max-w-none mt-8 text-gray-800 leading-relaxed"
+            // Content is authored by the restaurant's own staff in the dashboard.
+            dangerouslySetInnerHTML={{ __html: article.content }}
+          />
+        </div>
+      </article>
+
+      <PublicFooter info={info} buildPath={buildPath} />
+    </div>
   );
 }

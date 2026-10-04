@@ -153,5 +153,59 @@
     "installButton": "Installieren",
     "iosInstructions": "Tippe auf Teilen und dann auf „Zum Home-Bildschirm“.",
     "dismiss": "Schließen"
+  },
+  "footer": {
+    "explore": "Entdecken",
+    "menu": "Speisekarte",
+    "findTable": "Tisch finden",
+    "legal": "Rechtliches"
+  },
+  "legal": {
+    "disclaimer": "Diese Seite enthält allgemeine Standardinformationen für {{name}} — sie ersetzt keine Rechtsberatung, die auf die konkrete Situation dieses Restaurants zugeschnitten ist.",
+    "privacy": {
+      "title": "Datenschutzerklärung",
+      "introTitle": "Einleitung",
+      "introBody": "{{name}} respektiert Ihre Privatsphäre. Diese Erklärung beschreibt, welche Informationen wir erfassen, wenn Sie unsere Speisekarte durchsehen, eine Bestellung aufgeben oder eine Reservierung vornehmen, und wie wir sie verwenden.",
+      "dataCollectedTitle": "Welche Daten wir erfassen",
+      "dataCollectedBody": "Bei einer Bestellung oder Reservierung erfassen wir Ihren Namen, Ihre Telefonnummer sowie, falls angegeben, Ihre E-Mail-Adresse und Lieferadresse. Außerdem erfassen wir grundlegende Nutzungsdaten wie Browsertyp und besuchte Seiten, damit die Website korrekt funktioniert.",
+      "dataUseTitle": "Wie wir Ihre Daten verwenden",
+      "dataUseBody": "Wir verwenden Ihre Daten, um Bestellungen und Reservierungen zu bearbeiten, Sie diesbezüglich zu kontaktieren und unsere Speisekarte und unseren Service zu verbessern. Wir verkaufen Ihre personenbezogenen Daten nicht an Dritte.",
+      "dataSharingTitle": "Weitergabe Ihrer Daten",
+      "dataSharingBody": "Wir geben Ihre Daten nur an Dienstleister weiter, die uns beim Betrieb unserer Website und der Zahlungsabwicklung unterstützen, und nur im dafür erforderlichen Umfang.",
+      "cookiesTitle": "Cookies",
+      "cookiesBody": "Unsere Website verwendet essenzielle Cookies und lokalen Speicher, um Ihre Sprachpräferenz und Ihren Warenkorb zu speichern. Diese verfolgen Sie nicht auf anderen Websites.",
+      "rightsTitle": "Ihre Rechte",
+      "rightsBody": "Gemäß der EU-Datenschutz-Grundverordnung (DSGVO) haben Sie das Recht, auf Ihre personenbezogenen Daten zuzugreifen, sie zu berichtigen oder zu löschen sowie der Verarbeitung zu widersprechen oder sie einzuschränken. Nutzen Sie dazu die untenstehenden Kontaktdaten.",
+      "contactTitle": "Kontakt",
+      "contactBody": "Bei Fragen oder Anliegen zum Datenschutz wenden Sie sich bitte direkt an {{name}} über die Telefonnummer oder Adresse auf unserer Kontaktseite."
+    },
+    "terms": {
+      "title": "AGB & Urheberrechtshinweis",
+      "introTitle": "Einleitung",
+      "introBody": "Diese Bedingungen regeln Ihre Nutzung der Website und des Bestellservice von {{name}}. Durch die Nutzung unserer Website stimmen Sie diesen Bedingungen zu.",
+      "intellectualPropertyTitle": "Geistiges Eigentum",
+      "intellectualPropertyBody": "Alle Texte, Bilder, Logos und Rezepte auf dieser Website sind, sofern nicht anders angegeben, Eigentum von {{name}} oder seinen Lizenzgebern und dürfen ohne Genehmigung weder kopiert noch weiterverwendet werden.",
+      "useOfServiceTitle": "Nutzung dieses Dienstes",
+      "useOfServiceBody": "Diese Website dient dem Durchsehen unserer Speisekarte sowie der Aufgabe von Bestellungen oder Reservierungen. Sie verpflichten sich, die Website nicht missbräuchlich zu nutzen, ihren Betrieb nicht zu stören und nicht unbefugt auf sie zuzugreifen.",
+      "menuAccuracyTitle": "Speisekarte & Preise",
+      "menuAccuracyBody": "Gerichte, Preise und Verfügbarkeit können sich ohne Vorankündigung ändern. Wir bemühen uns um Genauigkeit dieser Angaben, können jedoch keine jederzeitige Fehlerfreiheit garantieren.",
+      "liabilityTitle": "Haftungsbeschränkung",
+      "liabilityBody": "{{name}} haftet, soweit gesetzlich zulässig, nicht für indirekte oder zufällige Schäden, die aus der Nutzung dieser Website entstehen.",
+      "contactTitle": "Kontakt",
+      "contactBody": "Fragen zu diesen Bedingungen richten Sie bitte über die Kontaktangaben auf unserer Website an {{name}}."
+    },
+    "accessibility": {
+      "title": "Erklärung zur Barrierefreiheit",
+      "introTitle": "Unser Engagement",
+      "introBody": "{{name}} setzt sich dafür ein, unsere Website für alle Menschen nutzbar zu machen, einschließlich Menschen mit Behinderungen.",
+      "standardsTitle": "Standards, denen wir folgen",
+      "standardsBody": "Wir streben die Einhaltung der Web Content Accessibility Guidelines (WCAG) 2.1 Stufe AA sowie der Anforderungen des European Accessibility Act an.",
+      "featuresTitle": "Funktionen zur Barrierefreiheit",
+      "featuresBody": "Unsere Website unterstützt Tastaturnavigation, Screenreader, Sprachen mit Rechts-nach-links-Schrift sowie anpassbare Textgrößen über die Einstellungen Ihres Browsers.",
+      "feedbackTitle": "Rückmeldung",
+      "feedbackBody": "Sollten Sie auf Barrieren auf unserer Website stoßen, lassen Sie es uns bitte wissen, damit wir sie beheben können.",
+      "contactTitle": "Kontakt",
+      "contactBody": "Sie erreichen {{name}} über die Telefonnummer oder Adresse auf unserer Kontaktseite, um Probleme mit der Barrierefreiheit zu melden oder Unterstützung anzufordern."
+    }
   }
 }

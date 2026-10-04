@@ -153,5 +153,59 @@
     "installButton": "Instalar",
     "iosInstructions": "Toca Compartir y luego \"Añadir a pantalla de inicio\".",
     "dismiss": "Cerrar"
+  },
+  "footer": {
+    "explore": "Explorar",
+    "menu": "Menú",
+    "findTable": "Encuentra tu mesa",
+    "legal": "Legal"
+  },
+  "legal": {
+    "disclaimer": "Esta página ofrece información estándar para {{name}} — no sustituye el asesoramiento legal adaptado a la situación específica de este restaurante.",
+    "privacy": {
+      "title": "Política de Privacidad",
+      "introTitle": "Introducción",
+      "introBody": "{{name}} respeta tu privacidad. Esta política explica qué información recopilamos cuando consultas nuestro menú, realizas un pedido o haces una reserva, y cómo la utilizamos.",
+      "dataCollectedTitle": "Información que recopilamos",
+      "dataCollectedBody": "Al realizar un pedido o reserva, recopilamos tu nombre, número de teléfono y, si lo proporcionas, tu correo electrónico y dirección de entrega. También recopilamos datos de uso básicos, como el tipo de navegador y las páginas que visitas, para que el sitio funcione correctamente.",
+      "dataUseTitle": "Cómo usamos tu información",
+      "dataUseBody": "Usamos tu información para procesar pedidos y reservas, contactarte al respecto y mejorar nuestro menú y servicio. No vendemos tus datos personales a terceros.",
+      "dataSharingTitle": "Compartir tu información",
+      "dataSharingBody": "Compartimos tu información solo con los proveedores que nos ayudan a operar el sitio y procesar pagos, y únicamente en la medida necesaria para ese fin.",
+      "cookiesTitle": "Cookies",
+      "cookiesBody": "Nuestro sitio usa cookies esenciales y almacenamiento local para recordar tu idioma preferido y tu carrito de compra. Estas no te rastrean en otros sitios web.",
+      "rightsTitle": "Tus derechos",
+      "rightsBody": "De acuerdo con el Reglamento General de Protección de Datos de la UE (RGPD), tienes derecho a acceder, corregir o eliminar tus datos personales, y a oponerte o restringir su tratamiento. Para ejercer estos derechos, contáctanos con los datos a continuación.",
+      "contactTitle": "Contáctanos",
+      "contactBody": "Para cualquier consulta o solicitud sobre privacidad, contacta directamente a {{name}} usando el teléfono o la dirección indicados en nuestra página de contacto."
+    },
+    "terms": {
+      "title": "Términos y Aviso de Derechos de Autor",
+      "introTitle": "Introducción",
+      "introBody": "Estos términos rigen el uso del sitio web y del servicio de pedidos de {{name}}. Al usar nuestro sitio, aceptas estos términos.",
+      "intellectualPropertyTitle": "Propiedad Intelectual",
+      "intellectualPropertyBody": "Todos los textos, imágenes, logotipos y recetas presentados en este sitio son propiedad de {{name}} o sus licenciantes, salvo que se indique lo contrario, y no pueden copiarse ni reutilizarse sin permiso.",
+      "useOfServiceTitle": "Uso de este Servicio",
+      "useOfServiceBody": "Este sitio se ofrece para consultar nuestro menú y realizar pedidos o reservas. Aceptas no hacer un uso indebido del sitio, no interferir en su funcionamiento ni intentar acceder a él de forma no autorizada.",
+      "menuAccuracyTitle": "Menú y Precios",
+      "menuAccuracyBody": "Los platos, precios y disponibilidad pueden cambiar sin previo aviso. Hacemos esfuerzos razonables para mantener esta información precisa, pero no podemos garantizar que esté libre de errores en todo momento.",
+      "liabilityTitle": "Limitación de Responsabilidad",
+      "liabilityBody": "{{name}} no es responsable de daños indirectos o incidentales derivados del uso de este sitio, en la medida permitida por la ley aplicable.",
+      "contactTitle": "Contáctanos",
+      "contactBody": "Las preguntas sobre estos términos pueden dirigirse a {{name}} utilizando los datos de contacto de nuestro sitio."
+    },
+    "accessibility": {
+      "title": "Declaración de Accesibilidad",
+      "introTitle": "Nuestro Compromiso",
+      "introBody": "{{name}} se compromete a que su sitio web sea utilizable por todas las personas, incluidas las personas con discapacidad.",
+      "standardsTitle": "Normas que Seguimos",
+      "standardsBody": "Nuestro objetivo es cumplir con las Pautas de Accesibilidad para el Contenido Web (WCAG) 2.1 nivel AA y los requisitos de la Ley Europea de Accesibilidad.",
+      "featuresTitle": "Características de Accesibilidad",
+      "featuresBody": "Nuestro sitio admite navegación por teclado, lectores de pantalla, idiomas de derecha a izquierda y ajuste del tamaño del texto mediante la configuración de tu navegador.",
+      "feedbackTitle": "Comentarios",
+      "feedbackBody": "Si encuentras alguna barrera de accesibilidad en nuestro sitio, por favor avísanos para que podamos solucionarla.",
+      "contactTitle": "Contáctanos",
+      "contactBody": "Puedes contactar a {{name}} usando el teléfono o la dirección de nuestra página de contacto para reportar problemas de accesibilidad o solicitar ayuda."
+    }
   }
 }
