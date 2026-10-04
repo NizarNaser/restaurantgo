@@ -41,7 +41,8 @@ export default function PublicLegalPage({ kind }: { kind: LegalPageKind }) {
       .get(`${PUBLIC_API}/${slug}/info`, { params: { lang: getStoredPublicLocale(slug) ?? undefined } })
       .then((res) => setInfo(res.data.data))
       .finally(() => setLoading(false));
-  }, [slug]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [slug, i18n.language]);
 
   const title = t(`legal.${kind}.title`);
 
