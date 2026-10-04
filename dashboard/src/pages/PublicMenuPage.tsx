@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
-import { Loader2, Phone, MapPin, Clock, MessageCircle, Star, ChevronRight, ChevronLeft, ShoppingCart, Plus, Minus, QrCode, Newspaper, ChefHat } from 'lucide-react';
+import { Loader2, Phone, MapPin, Clock, MessageCircle, Star, ChevronRight, ChevronLeft, ShoppingCart, Plus, Minus, QrCode, Newspaper } from 'lucide-react';
 import { useSeoHead } from '../hooks/useSeoHead';
 import { useAnalytics } from '../hooks/useAnalytics';
 import type { SeoPayload } from '../hooks/useSeoHead';
