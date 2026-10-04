@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Tenant;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\TranslateTenantContentJob;
 use App\Models\Tenant;
 use App\Services\AuditService;
 use App\Services\SeoService;
@@ -145,6 +146,12 @@ class SettingsController extends Controller
 
         $tenant->update($validated);
         $this->audit->log('tenant.settings_updated', $tenant);
+
+        // So the homepage hero/meta copy a customer sees matches whatever
+        // language they're browsing in instead of silently falling back to
+        // whichever locale this was typed in first — same as menu items,
+        // categories, departments, and blog posts already auto-translate.
+        TranslateTenantContentJob::dispatchForMissingTenantSeoLocales($tenant);
 
         // Tenant name / SEO copy appear in the sitemap and its cached output.
         cache()->forget("sitemap:tenant:{$tenant->id}");
