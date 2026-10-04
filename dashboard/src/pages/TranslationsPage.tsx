@@ -20,6 +20,7 @@ interface NeedsReviewRow {
 
 interface LocaleSummary {
   locale: string;
+  is_default: boolean;
   menu_items: LocaleStats;
   menu_categories: LocaleStats;
   departments: LocaleStats;
@@ -118,7 +119,14 @@ export default function TranslationsPage() {
         {summary.map((row) => (
           <div key={row.locale} className="bg-white rounded-xl border border-gray-200 p-5 space-y-4">
             <div className="flex items-center justify-between">
-              <h2 className="font-semibold text-gray-900">{LANGUAGE_NAMES[row.locale] ?? row.locale}</h2>
+              <h2 className="font-semibold text-gray-900 flex items-center gap-2">
+                {LANGUAGE_NAMES[row.locale] ?? row.locale}
+                {row.is_default && (
+                  <span className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full">
+                    {t('translations.defaultLanguage')}
+                  </span>
+                )}
+              </h2>
               <button
                 onClick={() => handleBulkTranslate(row.locale)}
                 disabled={translatingLocale === row.locale}
