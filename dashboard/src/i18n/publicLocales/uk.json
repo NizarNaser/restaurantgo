@@ -13,7 +13,8 @@
     "notFound": "Не знайдено",
     "call": "Зателефонувати",
     "whatsapp": "WhatsApp",
-    "logout": "Вийти"
+    "logout": "Вийти",
+    "language": "Мова"
   },
   "menu": {
     "allItems": "Усі страви",
@@ -38,7 +39,9 @@
     "previousPage": "Попередня сторінка",
     "nextPage": "Наступна сторінка",
     "copyright": "© {{year}} {{name}}. Усі права захищено.",
-    "poweredBy": "Працює на"
+    "poweredBy": "Працює на",
+    "paginationNav": "Постраничне навігування",
+    "pageOfPages": "Сторінка {{current}} з {{total}}"
   },
   "product": {
     "itemNotFound": "Страву не знайдено.",
@@ -143,5 +146,12 @@
     "fri": "П'ятниця",
     "sat": "Субота",
     "sun": "Неділя"
+  },
+  "pwa": {
+    "installTitle": "Встановити {{name}}",
+    "installBody": "Додайте на головний екран для швидкого доступу наступного разу.",
+    "installButton": "Встановити",
+    "iosInstructions": "Натисніть «Поділитися», потім «На початковий екран».",
+    "dismiss": "Закрити"
   }
 }

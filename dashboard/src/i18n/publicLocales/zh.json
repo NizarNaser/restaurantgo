@@ -13,7 +13,8 @@
     "notFound": "未找到",
     "call": "拨打电话",
     "whatsapp": "WhatsApp",
-    "logout": "退出登录"
+    "logout": "退出登录",
+    "language": "语言"
   },
   "menu": {
     "allItems": "全部菜品",
@@ -38,7 +39,9 @@
     "previousPage": "上一页",
     "nextPage": "下一页",
     "copyright": "© {{year}} {{name}}. 保留所有权利。",
-    "poweredBy": "技术支持:"
+    "poweredBy": "技术支持:",
+    "paginationNav": "分页",
+    "pageOfPages": "第 {{current}} 页,共 {{total}} 页"
   },
   "product": {
     "itemNotFound": "未找到该菜品。",
@@ -143,5 +146,12 @@
     "fri": "星期五",
     "sat": "星期六",
     "sun": "星期日"
+  },
+  "pwa": {
+    "installTitle": "安装 {{name}}",
+    "installBody": "添加到主屏幕,下次访问更快捷。",
+    "installButton": "安装",
+    "iosInstructions": "点击“分享”,然后选择“添加到主屏幕”。",
+    "dismiss": "关闭"
   }
 }

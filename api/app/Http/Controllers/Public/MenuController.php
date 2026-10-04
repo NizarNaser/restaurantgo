@@ -81,6 +81,42 @@ class MenuController extends Controller
         ]);
     }
 
+    /**
+     * A per-tenant Web App Manifest so "Add to Home Screen" / Android's
+     * install prompt picks up the restaurant's own name and logo instead of
+     * a generic one — each tenant's subdomain is its own origin in
+     * production, so each gets installed as its own distinct "app".
+     */
+    public function manifest(string $slug): JsonResponse
+    {
+        $tenant = $this->resolvePublicTenant($slug);
+        $startUrl = $this->seo->menuUrl($tenant);
+        $iconUrl  = $tenant->favicon_path ?: $tenant->logo_path;
+
+        $icons = $iconUrl
+            ? [[
+                'src'   => $iconUrl,
+                'sizes' => 'any',
+                'type'  => str_ends_with(strtolower($iconUrl), '.svg') ? 'image/svg+xml' : 'image/png',
+            ]]
+            : [];
+        $icons[] = ['src' => '/icons/icon-192.png', 'sizes' => '192x192', 'type' => 'image/png'];
+        $icons[] = ['src' => '/icons/icon-512.png', 'sizes' => '512x512', 'type' => 'image/png'];
+
+        return response()->json([
+            'name'             => $tenant->name,
+            'short_name'       => mb_substr($tenant->name, 0, 20),
+            'description'      => "Order from {$tenant->name} online",
+            'start_url'        => $startUrl . '?pwa=1',
+            'scope'            => $startUrl . '/',
+            'id'               => $startUrl,
+            'display'          => 'standalone',
+            'background_color' => '#ffffff',
+            'theme_color'      => '#ff4757',
+            'icons'            => $icons,
+        ])->header('Content-Type', 'application/manifest+json');
+    }
+
     public function getMenu(string $slug): JsonResponse
     {
         $tenant = $this->resolvePublicTenant($slug);

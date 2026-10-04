@@ -13,7 +13,8 @@
     "notFound": "غير موجود",
     "call": "اتصال",
     "whatsapp": "واتساب",
-    "logout": "تسجيل الخروج"
+    "logout": "تسجيل الخروج",
+    "language": "اللغة"
   },
   "menu": {
     "allItems": "كل الأصناف",
@@ -38,7 +39,9 @@
     "previousPage": "الصفحة السابقة",
     "nextPage": "الصفحة التالية",
     "copyright": "© {{year}} {{name}}. جميع الحقوق محفوظة.",
-    "poweredBy": "بدعم من"
+    "poweredBy": "بدعم من",
+    "paginationNav": "ترقيم الصفحات",
+    "pageOfPages": "صفحة {{current}} من {{total}}"
   },
   "product": {
     "itemNotFound": "الصنف غير موجود.",
@@ -143,5 +146,12 @@
     "fri": "الجمعة",
     "sat": "السبت",
     "sun": "الأحد"
+  },
+  "pwa": {
+    "installTitle": "ثبّت تطبيق {{name}}",
+    "installBody": "أضفه إلى شاشتك الرئيسية للوصول السريع في المرة القادمة.",
+    "installButton": "تثبيت",
+    "iosInstructions": "اضغط على زر المشاركة، ثم \"إضافة إلى الشاشة الرئيسية\".",
+    "dismiss": "إغلاق"
   }
 }

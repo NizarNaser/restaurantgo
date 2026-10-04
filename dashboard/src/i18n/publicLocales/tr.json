@@ -13,7 +13,8 @@
     "notFound": "Bulunamadı",
     "call": "Ara",
     "whatsapp": "WhatsApp",
-    "logout": "Çıkış yap"
+    "logout": "Çıkış yap",
+    "language": "Dil"
   },
   "menu": {
     "allItems": "Tüm ürünler",
@@ -38,7 +39,9 @@
     "previousPage": "Önceki sayfa",
     "nextPage": "Sonraki sayfa",
     "copyright": "© {{year}} {{name}}. Tüm hakları saklıdır.",
-    "poweredBy": "Destekleyen:"
+    "poweredBy": "Destekleyen:",
+    "paginationNav": "Sayfalama",
+    "pageOfPages": "Sayfa {{current}} / {{total}}"
   },
   "product": {
     "itemNotFound": "Ürün bulunamadı.",
@@ -143,5 +146,12 @@
     "fri": "Cuma",
     "sat": "Cumartesi",
     "sun": "Pazar"
+  },
+  "pwa": {
+    "installTitle": "{{name}} uygulamasını yükle",
+    "installBody": "Bir sonraki sefere hızlı erişim için ana ekranına ekle.",
+    "installButton": "Yükle",
+    "iosInstructions": "Paylaş'a, ardından \"Ana Ekrana Ekle\"ye dokun.",
+    "dismiss": "Kapat"
   }
 }

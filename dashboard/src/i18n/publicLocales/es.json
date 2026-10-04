@@ -13,7 +13,8 @@
     "notFound": "No encontrado",
     "call": "Llamar",
     "whatsapp": "WhatsApp",
-    "logout": "Cerrar sesión"
+    "logout": "Cerrar sesión",
+    "language": "Idioma"
   },
   "menu": {
     "allItems": "Todos los artículos",
@@ -38,7 +39,9 @@
     "previousPage": "Página anterior",
     "nextPage": "Página siguiente",
     "copyright": "© {{year}} {{name}}. Todos los derechos reservados.",
-    "poweredBy": "Con tecnología de"
+    "poweredBy": "Con tecnología de",
+    "paginationNav": "Paginación",
+    "pageOfPages": "Página {{current}} de {{total}}"
   },
   "product": {
     "itemNotFound": "Artículo no encontrado.",
@@ -143,5 +146,12 @@
     "fri": "Viernes",
     "sat": "Sábado",
     "sun": "Domingo"
+  },
+  "pwa": {
+    "installTitle": "Instalar {{name}}",
+    "installBody": "Añádela a tu pantalla de inicio para un acceso rápido la próxima vez.",
+    "installButton": "Instalar",
+    "iosInstructions": "Toca Compartir y luego \"Añadir a pantalla de inicio\".",
+    "dismiss": "Cerrar"
   }
 }

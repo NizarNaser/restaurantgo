@@ -394,6 +394,7 @@ Route::middleware(['auth:sanctum', 'platform.staff'])->prefix('/admin')->group(f
 // ── Public Routes ─────────────────────────────────────────────────────────────
 Route::prefix('/v1/public/{slug}')->group(function () {
     Route::get('/info', [\App\Http\Controllers\Public\MenuController::class, 'getInfo']);
+    Route::get('/manifest.webmanifest', [\App\Http\Controllers\Public\MenuController::class, 'manifest']);
     Route::get('/menu', [\App\Http\Controllers\Public\MenuController::class, 'getMenu']);
     Route::get('/menu/items/{itemId}', [\App\Http\Controllers\Public\MenuController::class, 'getItem']);
 

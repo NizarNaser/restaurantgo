@@ -11,14 +11,54 @@ function applyDir(locale: string) {
   document.documentElement.lang = locale;
 }
 
+const PUBLIC_API = `${import.meta.env.VITE_API_URL || 'http://localhost:8000/api'}/v1/public`;
+
+/**
+ * Points the page at this tenant's own Web App Manifest (see
+ * MenuController::manifest on the API) so "Add to Home Screen"/Android's
+ * install prompt picks up the restaurant's name and logo, not a generic
+ * one — swapped per slug the same way the tab favicon already is.
+ */
+function useTenantManifestLink(slug: string | undefined) {
+  useEffect(() => {
+    if (!slug) return;
+    let link = document.querySelector<HTMLLinkElement>('link[rel="manifest"]');
+    if (!link) {
+      link = document.createElement('link');
+      link.rel = 'manifest';
+      document.head.appendChild(link);
+    }
+    link.href = `${PUBLIC_API}/${slug}/manifest.webmanifest`;
+    return () => link?.remove();
+  }, [slug]);
+}
+
 /**
  * Wraps every public restaurant route (/p/:slug/...) in its own i18next
  * instance — independent from the admin dashboard's en/ar-only instance —
  * so a customer's language choice is scoped to this route tree and never
  * leaks into (or out of) the staff-facing dashboard.
  */
+/**
+ * Chrome/Android only offers the install prompt (`beforeinstallprompt`,
+ * see InstallAppPrompt.tsx) once an active service worker is registered —
+ * without it, the manifest alone isn't enough to make the page
+ * installable. Registered only here, in the public-site layout, so it
+ * never touches the staff-facing admin dashboard.
+ */
+function useServiceWorker() {
+  useEffect(() => {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').catch(() => {});
+    }
+  }, []);
+}
+
 export default function PublicI18nLayout() {
   const { slug } = usePublicSlug();
+
+  useTenantManifestLink(slug);
+  useServiceWorker();
 
   // Restore this restaurant's previously-picked language on load/navigation.
   useEffect(() => {

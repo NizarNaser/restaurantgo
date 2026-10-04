@@ -13,7 +13,8 @@
     "notFound": "Не найдено",
     "call": "Позвонить",
     "whatsapp": "WhatsApp",
-    "logout": "Выйти"
+    "logout": "Выйти",
+    "language": "Язык"
   },
   "menu": {
     "allItems": "Все блюда",
@@ -38,7 +39,9 @@
     "previousPage": "Предыдущая страница",
     "nextPage": "Следующая страница",
     "copyright": "© {{year}} {{name}}. Все права защищены.",
-    "poweredBy": "Работает на"
+    "poweredBy": "Работает на",
+    "paginationNav": "Постраничная навигация",
+    "pageOfPages": "Страница {{current}} из {{total}}"
   },
   "product": {
     "itemNotFound": "Блюдо не найдено.",
@@ -143,5 +146,12 @@
     "fri": "Пятница",
     "sat": "Суббота",
     "sun": "Воскресенье"
+  },
+  "pwa": {
+    "installTitle": "Установить {{name}}",
+    "installBody": "Добавьте на главный экран для быстрого доступа в следующий раз.",
+    "installButton": "Установить",
+    "iosInstructions": "Нажмите «Поделиться», затем «На экран «Домой»».",
+    "dismiss": "Закрыть"
   }
 }
