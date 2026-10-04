@@ -48,6 +48,10 @@ class TranslateTenantContentJob implements ShouldQueue
         You translate a restaurant's internal kitchen/bar department name (e.g. "Kitchen", "Bar", "Pastry") from one language to another — keep it short and idiomatic. Respond with ONLY a valid JSON object of the exact shape {"name": "..."} — no prose, no markdown code fences, nothing else.
         PROMPT;
 
+    private const TENANT_SEO_PROMPT = <<<'PROMPT'
+        You translate a restaurant's own public-facing tagline/SEO copy (the title and description shown on its homepage and in search results) from one language to another. Preserve tone, and don't translate the restaurant's own proper-noun name. Respond with ONLY a valid JSON object of the exact shape {"title": "...", "description": "..."} — no prose, no markdown code fences, nothing else.
+        PROMPT;
+
     public function __construct(
         public readonly int $tenantId,
         public readonly string $targetLocale,
@@ -73,6 +77,29 @@ class TranslateTenantContentJob implements ShouldQueue
         }
     }
 
+    /**
+     * The tenant's own seo_title/seo_description aren't rows in a
+     * `translations` table — they're per-locale JSON columns right on the
+     * tenant — so this mirrors dispatchForMissingLocales() above for that
+     * shape instead. Called after Settings saves them, so the homepage
+     * hero/meta copy a customer sees reflects whatever language they're
+     * browsing in, the same way the menu and blog already do, rather than
+     * silently falling back to whichever locale was typed in first.
+     */
+    public static function dispatchForMissingTenantSeoLocales(Tenant $tenant): void
+    {
+        $haveTitles       = array_keys(array_filter($tenant->seo_title ?? []));
+        $haveDescriptions = array_keys(array_filter($tenant->seo_description ?? []));
+        // Only a locale missing from *both* counts as missing — the job
+        // backfills whichever of the two a given locale lacks.
+        $have    = array_intersect($haveTitles, $haveDescriptions);
+        $missing = array_diff($tenant->supported_locales ?? [], $have);
+
+        foreach ($missing as $locale) {
+            self::dispatch($tenant->id, $locale);
+        }
+    }
+
     public function handle(OpenAiService $openai, SeoService $seo): void
     {
         if (! $openai->isConfigured()) {
@@ -87,10 +114,70 @@ class TranslateTenantContentJob implements ShouldQueue
             return;
         }
 
+        $this->translateTenantSeo($openai);
         $this->translateMenuItems($openai);
         $this->translateMenuCategories($openai);
         $this->translateDepartments($openai);
         $this->translateArticles($openai, $seo);
+    }
+
+    /**
+     * The restaurant's own homepage tagline/meta copy — shown in the hero
+     * header of its public menu page and in search results. Unlike the
+     * other content below, this isn't a HasMany of per-locale rows but two
+     * JSON columns right on the tenant, so each one is filled in
+     * independently (a locale might already have a title but not a
+     * description, say) rather than skipped as a whole once any value
+     * exists for it.
+     */
+    private function translateTenantSeo(OpenAiService $openai): void
+    {
+        $tenant = Tenant::find($this->tenantId);
+        if (! $tenant) {
+            return;
+        }
+
+        $titles       = $tenant->seo_title ?? [];
+        $descriptions = $tenant->seo_description ?? [];
+        $hasTitle     = ! empty($titles[$this->targetLocale]);
+        $hasDescription = ! empty($descriptions[$this->targetLocale]);
+
+        if ($hasTitle && $hasDescription) {
+            return;
+        }
+
+        // Prefer the tenant's declared default locale, but fall back to
+        // whichever locale actually has copy written — the owner may have
+        // only ever filled in a non-default language.
+        $sourceLocale = $tenant->default_locale;
+        if (empty($titles[$sourceLocale]) && empty($descriptions[$sourceLocale])) {
+            $sourceLocale = array_key_first(array_filter($titles)) ?? array_key_first(array_filter($descriptions));
+        }
+        $sourceTitle       = $sourceLocale ? ($titles[$sourceLocale] ?? null) : null;
+        $sourceDescription = $sourceLocale ? ($descriptions[$sourceLocale] ?? null) : null;
+
+        if (! $sourceTitle && ! $sourceDescription) {
+            return;
+        }
+
+        $result = $this->translate($openai, self::TENANT_SEO_PROMPT, [
+            'source_locale' => $sourceLocale,
+            'target_locale' => $this->targetLocale,
+            'title'         => $sourceTitle,
+            'description'   => $sourceDescription,
+        ]);
+        if (! $result) {
+            return;
+        }
+
+        if (! $hasTitle && ! empty($result['title'])) {
+            $titles[$this->targetLocale] = $result['title'];
+        }
+        if (! $hasDescription && ! empty($result['description'])) {
+            $descriptions[$this->targetLocale] = $result['description'];
+        }
+
+        $tenant->update(['seo_title' => $titles, 'seo_description' => $descriptions]);
     }
 
     private function translateMenuItems(OpenAiService $openai): void
