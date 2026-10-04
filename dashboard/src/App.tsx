@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { I18nextProvider } from 'react-i18next';
 import { Loader2 } from 'lucide-react';
 import DashboardLayout from './layouts/DashboardLayout';
 import AuthLayout from './layouts/AuthLayout';
@@ -7,6 +8,7 @@ import PublicI18nLayout from './layouts/PublicI18nLayout';
 import RequirePermission from './components/RequirePermission';
 import RequireRole from './components/RequireRole';
 import { getTenantHostSlug } from './lib/publicSite';
+import adminI18n from './i18n';
 
 const DashboardPage = lazy(() => import('./pages/DashboardPage'));
 const MenuPage = lazy(() => import('./pages/MenuPage'));
@@ -127,11 +129,25 @@ function PlatformRoutes() {
 
 function App() {
   return (
-    <BrowserRouter>
-      <Suspense fallback={<PageLoader />}>
-        {tenantHostSlug ? <TenantPublicSiteRoutes /> : <PlatformRoutes />}
-      </Suspense>
-    </BrowserRouter>
+    // Explicit, rather than relying on react-i18next's implicit "last
+    // initialized instance wins" global default: PublicI18nLayout is
+    // imported eagerly (it sits in the route tree, not behind React.lazy)
+    // and initializes its own separate `publicI18n` instance as a side
+    // effect of module evaluation. Without this provider, that happens to
+    // overwrite the global default react-i18next hands to every
+    // unguarded useTranslation() call — including every admin/staff page,
+    // which then silently renders raw keys ("nav.menu", "login.welcomeBack")
+    // instead of translated text, since publicI18n has none of the admin
+    // dashboard's own translation keys loaded. Nested public routes still
+    // get the correct `publicI18n` via PublicI18nLayout's own (closer)
+    // <I18nextProvider>, which always wins over this outer one.
+    <I18nextProvider i18n={adminI18n}>
+      <BrowserRouter>
+        <Suspense fallback={<PageLoader />}>
+          {tenantHostSlug ? <TenantPublicSiteRoutes /> : <PlatformRoutes />}
+        </Suspense>
+      </BrowserRouter>
+    </I18nextProvider>
   );
 }
 
