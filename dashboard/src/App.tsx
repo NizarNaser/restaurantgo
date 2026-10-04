@@ -40,6 +40,7 @@ const CartPage = lazy(() => import('./pages/CartPage'));
 const OrderStatusPage = lazy(() => import('./pages/OrderStatusPage'));
 const PublicBlogPage = lazy(() => import('./pages/PublicBlogPage').then((m) => ({ default: m.PublicBlogPage })));
 const PublicArticlePage = lazy(() => import('./pages/PublicBlogPage').then((m) => ({ default: m.PublicArticlePage })));
+const PublicLegalPage = lazy(() => import('./pages/PublicLegalPage'));
 
 function PageLoader() {
   return (
@@ -66,6 +67,9 @@ function TenantPublicSiteRoutes() {
         <Route path="/order/:orderId" element={<OrderStatusPage />} />
         <Route path="/blog" element={<PublicBlogPage />} />
         <Route path="/blog/:articleSlug" element={<PublicArticlePage />} />
+        <Route path="/privacy" element={<PublicLegalPage kind="privacy" />} />
+        <Route path="/terms" element={<PublicLegalPage kind="terms" />} />
+        <Route path="/accessibility" element={<PublicLegalPage kind="accessibility" />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
     </Routes>
@@ -85,6 +89,9 @@ function PlatformRoutes() {
         <Route path="/p/:slug/order/:orderId" element={<OrderStatusPage />} />
         <Route path="/p/:slug/blog" element={<PublicBlogPage />} />
         <Route path="/p/:slug/blog/:articleSlug" element={<PublicArticlePage />} />
+        <Route path="/p/:slug/privacy" element={<PublicLegalPage kind="privacy" />} />
+        <Route path="/p/:slug/terms" element={<PublicLegalPage kind="terms" />} />
+        <Route path="/p/:slug/accessibility" element={<PublicLegalPage kind="accessibility" />} />
       </Route>
 
       <Route element={<AuthLayout />}>

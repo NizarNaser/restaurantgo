@@ -11,12 +11,12 @@ import InstallAppPrompt from '../components/public/InstallAppPrompt';
 import MenuAssistantWidget from '../components/public/MenuAssistantWidget';
 import PublicLanguageSwitcher from '../components/public/PublicLanguageSwitcher';
 import SocialLinks from '../components/public/SocialLinks';
+import PublicFooter from '../components/public/PublicFooter';
 import QrScannerModal from '../components/QrScannerModal';
 import StarRating from '../components/StarRating';
 import { useCartStore } from '../store/cartStore';
 import { getStoredPublicLocale } from '../lib/publicLocale';
 import { usePublicSlug } from '../hooks/usePublicSlug';
-import { getPlatformSiteUrl } from '../lib/publicSite';
 import { RTL_LOCALES } from '../i18n/index';
 import {
   formatWorkingHours, whatsappUrl, TAG_META,
@@ -730,21 +730,7 @@ export default function PublicMenuPage() {
         </section>
       </main>
 
-      <footer className="mt-10 py-6 text-center text-xs text-gray-400 border-t border-gray-100">
-        <p>{t('menu.copyright', { year: new Date().getFullYear(), name: info.name })}</p>
-        <a
-          href={getPlatformSiteUrl()}
-          target="_blank"
-          rel="noreferrer"
-          className="mt-2 inline-flex items-center gap-1.5 text-gray-400 hover:text-gray-600 transition-colors"
-        >
-          {t('menu.poweredBy')}
-          <span className="inline-flex items-center gap-1 font-semibold text-gray-500">
-            <span className="bg-[#ff4757] text-white rounded-md p-0.5"><ChefHat size={11} /></span>
-            RestaurantGo
-          </span>
-        </a>
-      </footer>
+      <PublicFooter info={info} buildPath={buildPath} />
 
       {cartItems.length > 0 && (
         <button
