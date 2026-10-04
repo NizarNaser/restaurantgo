@@ -798,6 +798,8 @@
     "metaDescriptionCount": "{{count}}/160 يظهر في نتائج البحث",
     "socialShareImageUrl": "رابط صورة المشاركة الاجتماعية",
     "featuredImage": "الصورة البارزة",
+    "insertImage": "إدراج صورة",
+    "insertImageFailed": "تعذّر رفع الصورة، يرجى المحاولة مجددًا.",
     "saveChanges": "حفظ التغييرات",
     "createArticle": "إنشاء المقال",
     "schedulePublication": "جدولة النشر",
