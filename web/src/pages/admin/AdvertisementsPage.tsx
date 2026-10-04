@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Plus, Loader2, Trash2 } from 'lucide-react';
+import { Plus, Loader2, Trash2, ImagePlus } from 'lucide-react';
 import api from '../../api/axios';
 
 interface Ad {
   id: number;
   title: string;
   advertiser_name: string | null;
+  image_path: string | null;
   placement: string;
   link_url: string | null;
   is_active: boolean;
@@ -29,6 +30,8 @@ export default function AdvertisementsPage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [form, setForm] = useState(emptyForm);
+  const [image, setImage] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   const fetchAds = () => {
     setLoading(true);
@@ -42,13 +45,46 @@ export default function AdvertisementsPage() {
     setForm((prev) => ({ ...prev, [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value }));
   };
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] ?? null;
+    setImage(file);
+    setImagePreview((prev) => {
+      if (prev) URL.revokeObjectURL(prev);
+      return file ? URL.createObjectURL(file) : null;
+    });
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+    setForm(emptyForm);
+    setImage(null);
+    setImagePreview((prev) => {
+      if (prev) URL.revokeObjectURL(prev);
+      return null;
+    });
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
     try {
-      await api.post('/admin/advertisements', form);
-      setModalOpen(false);
-      setForm(emptyForm);
+      // Only switch to multipart when an image was actually picked from
+      // the device — plain JSON still works for the common no-creative,
+      // text-only ad.
+      if (image) {
+        const data = new FormData();
+        Object.entries(form).forEach(([key, value]) => {
+          // FormData stringifies everything — Laravel's `boolean` rule
+          // accepts "1"/"0" but not the literal strings "true"/"false"
+          // that String(true) would otherwise produce.
+          data.append(key, typeof value === 'boolean' ? (value ? '1' : '0') : String(value));
+        });
+        data.append('image', image);
+        await api.post('/admin/advertisements', data, { headers: { 'Content-Type': 'multipart/form-data' } });
+      } else {
+        await api.post('/admin/advertisements', form);
+      }
+      closeModal();
       fetchAds();
     } catch (err: any) {
       alert(err.response?.data?.message || 'تعذر حفظ الإعلان.');
@@ -76,6 +112,7 @@ export default function AdvertisementsPage() {
         <table className="w-full text-right text-sm">
           <thead className="bg-gray-50 text-gray-500 border-b border-gray-200">
             <tr>
+              <th className="px-6 py-3"></th>
               <th className="px-6 py-3">العنوان</th>
               <th className="px-6 py-3">المعلن</th>
               <th className="px-6 py-3">المكان</th>
@@ -86,9 +123,16 @@ export default function AdvertisementsPage() {
           </thead>
           <tbody className="divide-y divide-gray-100">
             {ads.length === 0 ? (
-              <tr><td colSpan={6} className="px-6 py-12 text-center text-gray-400">لا توجد إعلانات بعد.</td></tr>
+              <tr><td colSpan={7} className="px-6 py-12 text-center text-gray-400">لا توجد إعلانات بعد.</td></tr>
             ) : ads.map((ad) => (
               <tr key={ad.id}>
+                <td className="px-6 py-4">
+                  {ad.image_path ? (
+                    <img src={ad.image_path} alt="" className="w-14 h-10 object-cover rounded-lg border border-gray-100" />
+                  ) : (
+                    <div className="w-14 h-10 rounded-lg bg-gray-50 border border-gray-100" />
+                  )}
+                </td>
                 <td className="px-6 py-4 font-medium text-gray-900">{ad.title}</td>
                 <td className="px-6 py-4 text-gray-500">{ad.advertiser_name ?? '-'}</td>
                 <td className="px-6 py-4 text-gray-600">{placements.find((p) => p.value === ad.placement)?.label ?? ad.placement}</td>
@@ -112,9 +156,18 @@ export default function AdvertisementsPage() {
           <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden max-h-[90vh] overflow-y-auto">
             <div className="p-6 border-b border-gray-100 flex justify-between items-center">
               <h2 className="text-xl font-semibold">إضافة إعلان</h2>
-              <button onClick={() => setModalOpen(false)} className="text-gray-400 hover:text-gray-600 text-xl leading-none">&times;</button>
+              <button onClick={closeModal} className="text-gray-400 hover:text-gray-600 text-xl leading-none">&times;</button>
             </div>
             <form onSubmit={handleSubmit} className="p-6 space-y-3">
+              <div>
+                <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-1.5">
+                  <ImagePlus size={16} className="text-gray-400" /> صورة الإعلان (اختياري)
+                </label>
+                {imagePreview ? (
+                  <img src={imagePreview} alt="" className="w-full h-28 object-cover rounded-lg border border-gray-200 mb-2" />
+                ) : null}
+                <input type="file" accept="image/*" onChange={handleImageChange} className="w-full text-sm text-gray-600" />
+              </div>
               <input name="title" required placeholder="عنوان الإعلان" className="input" value={form.title} onChange={handleChange} />
               <input name="advertiser_name" placeholder="اسم المعلن (اختياري)" className="input" value={form.advertiser_name} onChange={handleChange} />
               <input name="link_url" type="url" placeholder="رابط الإعلان" className="input" value={form.link_url} onChange={handleChange} />
