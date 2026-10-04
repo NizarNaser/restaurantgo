@@ -134,6 +134,7 @@ Route::middleware(['auth:sanctum', 'identify.tenant', 'check.subscription'])->gr
     Route::post('/articles/{article}/publish',        [ArticleController::class, 'publish']);
     Route::post('/articles/{article}/unpublish',      [ArticleController::class, 'unpublish']);
     Route::post('/articles/{article}/featured-image', [ArticleController::class, 'uploadFeaturedImage']);
+    Route::post('/articles/content-image', [ArticleController::class, 'uploadContentImage']);
     Route::post('/articles/translate', [ArticleController::class, 'autoTranslate'])->middleware('throttle:assistant');
 
     // Translations — how complete each supported language is across the

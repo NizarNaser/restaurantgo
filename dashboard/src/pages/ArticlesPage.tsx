@@ -1,6 +1,6 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
-  Plus, Search, Edit, Trash2, Loader2, Globe, Send, EyeOff, ExternalLink, ImagePlus,
+  Plus, Search, Edit, Trash2, Loader2, Globe, Send, EyeOff, ExternalLink, ImagePlus, Image,
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import api from '../api/axios';
@@ -83,6 +83,9 @@ export default function ArticlesPage() {
   const [activeSeoLocale, setActiveSeoLocale] = useState('en');
   const [supportedLocales, setSupportedLocales] = useState<string[]>(['en']);
   const [featuredImage, setFeaturedImage] = useState<File | null>(null);
+  const [uploadingContentImage, setUploadingContentImage] = useState(false);
+  const contentTextareaRef = useRef<HTMLTextAreaElement>(null);
+  const contentImageInputRef = useRef<HTMLInputElement>(null);
 
   const [scheduleFor, setScheduleFor] = useState('');
   const [schedulingId, setSchedulingId] = useState<number | null>(null);
@@ -173,6 +176,44 @@ export default function ArticlesPage() {
     const next = translations.filter((t) => t.locale !== locale);
     setTranslations(next);
     setActiveLocale(next[0].locale);
+  };
+
+  // Uploads a picture from the device (computer file browser, or a phone's
+  // camera/gallery — the file input offers both automatically) and inserts
+  // it as an <img> tag at the cursor's position in the raw-HTML content
+  // editor. Not tied to the article's own id (see uploadContentImage on the
+  // API side), so this works even while still writing a brand-new,
+  // never-yet-saved post.
+  const handleContentImageSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = '';
+    if (!file) return;
+
+    setUploadingContentImage(true);
+    try {
+      const form = new FormData();
+      form.append('file', file);
+      const res = await api.post('/articles/content-image', form, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+      const tag = `<img src="${res.data.url}" alt="" />`;
+
+      const textarea = contentTextareaRef.current;
+      const start = textarea?.selectionStart ?? current.content.length;
+      const end = textarea?.selectionEnd ?? current.content.length;
+      const nextContent = current.content.slice(0, start) + tag + current.content.slice(end);
+      updateCurrent({ content: nextContent });
+
+      // Put the cursor right after the inserted tag, same as a native input.
+      requestAnimationFrame(() => {
+        textarea?.focus();
+        textarea?.setSelectionRange(start + tag.length, start + tag.length);
+      });
+    } catch {
+      setFormError(t('articles.insertImageFailed'));
+    } finally {
+      setUploadingContentImage(false);
+    }
   };
 
   const handleSave = async (e: React.FormEvent) => {
@@ -532,8 +573,27 @@ export default function ArticlesPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{t('articles.content')}</label>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="block text-sm font-medium text-gray-700">{t('articles.content')}</label>
+                  <button
+                    type="button"
+                    onClick={() => contentImageInputRef.current?.click()}
+                    disabled={uploadingContentImage}
+                    className="inline-flex items-center gap-1.5 text-xs font-medium text-gray-600 hover:text-[#ff4757] disabled:opacity-50"
+                  >
+                    {uploadingContentImage ? <Loader2 size={14} className="animate-spin" /> : <Image size={14} />}
+                    {t('articles.insertImage')}
+                  </button>
+                  <input
+                    ref={contentImageInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleContentImageSelected}
+                    className="hidden"
+                  />
+                </div>
                 <textarea
+                  ref={contentTextareaRef}
                   value={current.content}
                   onChange={(e) => updateCurrent({ content: e.target.value })}
                   rows={10}

@@ -798,6 +798,8 @@
     "metaDescriptionCount": "{{count}}/160 shown in search",
     "socialShareImageUrl": "Social share image URL",
     "featuredImage": "Featured image",
+    "insertImage": "Insert image",
+    "insertImageFailed": "Could not upload that image, please try again.",
     "saveChanges": "Save changes",
     "createArticle": "Create article",
     "schedulePublication": "Schedule publication",

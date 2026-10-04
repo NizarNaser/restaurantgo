@@ -12,6 +12,8 @@ use App\Services\SeoService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class ArticleController extends Controller
 {
@@ -190,6 +192,26 @@ class ArticleController extends Controller
         $media = $article->addMedia($request->file('file'))->toMediaCollection('featured_image');
 
         return response()->json(['id' => $media->id, 'url' => $media->getUrl()], 201);
+    }
+
+    /**
+     * An image to embed inline in a post's body (the content editor is raw
+     * HTML — this is what backs its "insert image" button). Not tied to a
+     * specific article: a post can carry any number of these over its
+     * lifetime, and the editor needs somewhere to upload to even before a
+     * brand-new article has been saved and has an id of its own yet, unlike
+     * uploadFeaturedImage() above.
+     */
+    public function uploadContentImage(Request $request): JsonResponse
+    {
+        $request->validate(['file' => ['required', 'file', 'mimes:jpg,jpeg,png,webp,gif', 'max:10240']]);
+
+        $tenant = app('tenant');
+        $file = $request->file('file');
+        $filename = Str::random(40) . '.' . strtolower($file->getClientOriginalExtension());
+        $path = $file->storeAs("tenants/{$tenant->id}/articles/content", $filename, 'public');
+
+        return response()->json(['url' => Storage::disk('public')->url($path)], 201);
     }
 
     // ── Helpers ───────────────────────────────────────────────
