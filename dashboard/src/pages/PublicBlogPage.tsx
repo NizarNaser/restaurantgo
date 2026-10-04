@@ -15,6 +15,7 @@ const PUBLIC_API = `${import.meta.env.VITE_API_URL || 'http://localhost:8000/api
 
 /** Shared by both pages below — just enough for the branded header/footer. */
 function useRestaurantInfo(slug: string | undefined) {
+  const { i18n } = useTranslation();
   const [info, setInfo] = useState<RestaurantInfo | null>(null);
   useEffect(() => {
     if (!slug) return;
@@ -22,7 +23,12 @@ function useRestaurantInfo(slug: string | undefined) {
       .get(`${PUBLIC_API}/${slug}/info`, { params: { lang: getStoredPublicLocale(slug) ?? undefined } })
       .then((res) => setInfo(res.data.data))
       .catch(() => {});
-  }, [slug]);
+    // Re-fetch when the customer switches language via the header's
+    // PublicLanguageSwitcher, so anything locale-dependent here (currently
+    // just the tenant's own SEO description) stays in sync — mirrors
+    // PublicMenuPage's identical fetch effect.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [slug, i18n.language]);
   return info;
 }
 
@@ -54,7 +60,7 @@ function formatDate(value: string | null, locale: string) {
 
 /** Blog index for a restaurant's public site. */
 export function PublicBlogPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { slug, buildPath } = usePublicSlug();
   const info = useRestaurantInfo(slug);
   const [articles, setArticles] = useState<ArticleSummary[]>([]);
@@ -75,7 +81,12 @@ export function PublicBlogPage() {
       })
       .catch((err) => setError(err.response?.data?.message || t('blog.blogUnavailable')))
       .finally(() => setLoading(false));
-  }, [slug]);
+    // Re-fetch when the customer switches language — each post's title and
+    // excerpt are locale-specific, so switching language via the header's
+    // PublicLanguageSwitcher previously changed the page chrome only, not
+    // the posts themselves, which stayed in whatever language loaded first.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [slug, i18n.language]);
 
   if (loading || !info) {
     return (

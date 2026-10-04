@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Tenant;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ArticleRequest;
 use App\Http\Resources\ArticleResource;
+use App\Jobs\TranslateTenantContentJob;
 use App\Models\Article;
 use App\Services\AuditService;
 use App\Services\OpenAiService;
@@ -94,6 +95,8 @@ class ArticleController extends Controller
             $article->addMedia($request->file('featured_image'))->toMediaCollection('featured_image');
         }
 
+        TranslateTenantContentJob::dispatchForMissingLocales($tenant, $article->load('translations'));
+
         $this->audit->log('article.created', $article);
         $this->forgetSitemap();
 
@@ -125,6 +128,8 @@ class ArticleController extends Controller
                 $this->syncTranslations($article, $request->translations);
             }
         });
+
+        TranslateTenantContentJob::dispatchForMissingLocales(app('tenant'), $article->load('translations'));
 
         $this->audit->log('article.updated', $article);
         $this->forgetSitemap();
