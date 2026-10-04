@@ -126,13 +126,13 @@ export default function OrderStatusPage() {
             {order.items.map((item, i) => (
               <div key={i} className="flex justify-between text-sm text-gray-600">
                 <span>{item.quantity}× {item.name}</span>
-                <span>{money(item.subtotal)} {order.currency}</span>
+                <span dir="ltr">{money(item.subtotal)} {order.currency}</span>
               </div>
             ))}
           </div>
           <div className="flex justify-between font-bold text-gray-900 border-t border-gray-100 mt-3 pt-3">
             <span>{t('common.total')}</span>
-            <span>{money(order.total)} {order.currency}</span>
+            <span dir="ltr">{money(order.total)} {order.currency}</span>
           </div>
         </div>
 

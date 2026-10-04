@@ -107,7 +107,7 @@ export default function RestaurantDetailPage() {
         <div className="mt-5 flex flex-wrap items-center gap-3 text-sm">
           {info.contact?.phone && (
             <span className="flex items-center gap-1.5 text-gray-600 bg-gray-50 px-3 py-1.5 rounded-full">
-              <Phone size={14} /> {info.contact.phone}
+              <Phone size={14} /> <span dir="ltr">{info.contact.phone}</span>
             </span>
           )}
           {info.service_rating.average && (

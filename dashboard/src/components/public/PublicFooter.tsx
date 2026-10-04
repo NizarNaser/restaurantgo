@@ -45,7 +45,7 @@ export default function PublicFooter({
           {info.contact?.phone && (
             <p className="flex items-center gap-2 mt-2 text-sm">
               <Phone size={15} className="shrink-0" />
-              <a href={`tel:${info.contact.phone}`} className="hover:text-white transition-colors">{info.contact.phone}</a>
+              <a href={`tel:${info.contact.phone}`} dir="ltr" className="hover:text-white transition-colors">{info.contact.phone}</a>
             </p>
           )}
           <SocialLinks social={info.social} className="mt-4" />

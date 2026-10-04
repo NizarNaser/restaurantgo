@@ -79,7 +79,7 @@ function ItemCard({ item, onClick, onAdd, canOrder }: { item: PublicMenuItem; on
         <div className="p-4 flex flex-col flex-1">
           <div className="flex items-start justify-between gap-2">
             <h3 className="font-semibold text-gray-900 leading-snug">{item.name}</h3>
-            <span className="font-bold text-gray-900 whitespace-nowrap">{money(item.price, item.currency)}</span>
+            <span dir="ltr" className="font-bold text-gray-900 whitespace-nowrap">{money(item.price, item.currency)}</span>
           </div>
           {item.description && (
             <p className="text-sm text-gray-500 mt-1 line-clamp-2">{item.description}</p>
@@ -657,7 +657,11 @@ export default function PublicMenuPage() {
               {info.contact?.phone && (
                 <div className="flex items-start gap-3 text-gray-600">
                   <Phone size={18} className="text-[#ff4757] shrink-0 mt-0.5" />
-                  <span>{info.contact.phone}</span>
+                  {/* A phone number is always left-to-right digits regardless
+                      of page language — without this, Arabic's RTL bidi
+                      algorithm can reorder the "+" / group separators and
+                      make the number read backwards. */}
+                  <span dir="ltr">{info.contact.phone}</span>
                 </div>
               )}
               {workingHours.length > 0 && (
@@ -667,7 +671,7 @@ export default function PublicMenuPage() {
                     {workingHours.map((h) => (
                       <div key={h.day} className="flex gap-2">
                         <span className="w-20 shrink-0">{h.day}</span>
-                        <span>{h.range}</span>
+                        <span dir="ltr">{h.range}</span>
                       </div>
                     ))}
                   </div>
@@ -741,7 +745,7 @@ export default function PublicMenuPage() {
             <ShoppingCart size={18} />
             {t('menu.itemsInCart', { count: cartItems.reduce((sum, i) => sum + i.quantity, 0) })}
           </span>
-          <span>{money(cartSubtotal, cartItems[0]?.currency ?? 'USD')}</span>
+          <span dir="ltr">{money(cartSubtotal, cartItems[0]?.currency ?? 'USD')}</span>
         </button>
       )}
 
