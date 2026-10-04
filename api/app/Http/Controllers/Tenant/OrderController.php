@@ -138,7 +138,7 @@ class OrderController extends Controller
     {
         $this->authorizeTenant($order);
 
-        $order->load(['items.menuItem.category.department', 'table.hall', 'openedBy']);
+        $order->load(['items.menuItem.category.department.translations', 'table.hall', 'openedBy']);
 
         // Department only ever depends on the menu item, so it's constant
         // across every raw row a grouped line was built from — look it up
@@ -157,7 +157,7 @@ class OrderController extends Controller
 
             $department = $departmentByMenuItemId[$groupedLine['menu_item_id']] ?? null;
             if ($department) {
-                $departments[$department->id] ??= ['id' => $department->id, 'name' => $department->name, 'items' => []];
+                $departments[$department->id] ??= ['id' => $department->id, 'name' => $department->translation()?->name ?? $department->name, 'items' => []];
                 $departments[$department->id]['items'][] = $line;
             } else {
                 $unassignedItems[] = $line;
@@ -167,7 +167,15 @@ class OrderController extends Controller
         $tenant = app('tenant');
         $taxRate = (float) $tenant->tax_rate;
         $taxAmount = round(((float) $order->total) * $taxRate / 100, 2);
-        $grandTotal = round(((float) $order->total) + $taxAmount, 2);
+
+        // Dine-in only (this endpoint only ever serves the Halls & Tables
+        // bill/invoice) — delivery/online orders never see this. The owner
+        // can disclose the rate to customers without charging it yet (or
+        // vice versa), hence the separate apply_to_invoice toggle.
+        $serviceChargeRate = $tenant->service_charge_apply_to_invoice ? (float) $tenant->service_charge_rate : 0.0;
+        $serviceChargeAmount = round(((float) $order->total) * $serviceChargeRate / 100, 2);
+
+        $grandTotal = round(((float) $order->total) + $taxAmount + $serviceChargeAmount, 2);
 
         return response()->json([
             'order' => [
@@ -178,6 +186,8 @@ class OrderController extends Controller
                 'total'           => $order->total,
                 'tax_rate'    => $taxRate,
                 'tax_amount'  => $taxAmount,
+                'service_charge_rate'   => $serviceChargeRate,
+                'service_charge_amount' => $serviceChargeAmount,
                 'grand_total' => $grandTotal,
                 'currency'    => $order->currency,
                 'created_at'  => $order->created_at,

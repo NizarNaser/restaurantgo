@@ -410,6 +410,17 @@ export default function PublicMenuPage() {
         </div>
       </div>
 
+      {/* Dine-in only — the owner's service charge rate never applies to
+          delivery/online orders, so this notice only shows to a customer
+          who scanned a table's QR code. */}
+      {isDineIn && info.service_charge_message && (
+        <div className="max-w-5xl mx-auto px-4">
+          <p className="mt-4 pt-4 border-t border-gray-100 border-s-2 border-s-[#ff4757] ps-3 text-sm text-gray-500">
+            {info.service_charge_message}
+          </p>
+        </div>
+      )}
+
       <main className="max-w-5xl mx-auto px-4 mt-8 space-y-10">
         {!canOrder && (
           <div className="bg-amber-50 border border-amber-200 text-amber-800 rounded-xl p-4 flex flex-wrap items-center gap-3 text-sm">

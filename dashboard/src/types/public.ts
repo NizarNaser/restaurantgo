@@ -63,6 +63,8 @@ export interface RestaurantInfo {
   default_locale: string;
   supported_locales: string[];
   blog_url: string;
+  service_charge_rate: number;
+  service_charge_message: string | null;
   contact: RestaurantContact | null;
   service_rating: { average: number | null; count: number };
   analytics: RestaurantAnalytics;

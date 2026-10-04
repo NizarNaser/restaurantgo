@@ -29,8 +29,13 @@ class KitchenDisplayController extends Controller
     public function departments(): JsonResponse
     {
         $departments = Department::where('tenant_id', app('tenant')->id)
+            ->with('translations')
             ->orderBy('sort_order')
-            ->get(['id', 'name', 'kds_enabled']);
+            ->get()
+            ->map(function (Department $department) {
+                $department->name = $department->translation()?->name ?? $department->name;
+                return $department->only(['id', 'name', 'kds_enabled']);
+            });
 
         return response()->json($departments);
     }

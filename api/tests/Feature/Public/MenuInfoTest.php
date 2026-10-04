@@ -22,3 +22,30 @@ it('returns null analytics ids when the tenant has none configured', function ()
     $response->assertJsonPath('data.analytics.google_analytics_id', null);
     $response->assertJsonPath('data.analytics.facebook_pixel_id', null);
 });
+
+it('exposes the service charge message when the owner enabled showing it', function () {
+    $tenant = Tenant::where('slug', 'demo-restaurant')->firstOrFail();
+    $tenant->update([
+        'service_charge_rate' => 10,
+        'service_charge_message' => 'A 10% service charge applies to dine-in orders.',
+        'service_charge_show_message' => true,
+    ]);
+
+    $response = $this->getJson('/api/v1/public/demo-restaurant/info')->assertOk();
+
+    $response->assertJsonPath('data.service_charge_rate', 10);
+    $response->assertJsonPath('data.service_charge_message', 'A 10% service charge applies to dine-in orders.');
+});
+
+it('hides the service charge message when the owner has not enabled showing it', function () {
+    $tenant = Tenant::where('slug', 'demo-restaurant')->firstOrFail();
+    $tenant->update([
+        'service_charge_rate' => 10,
+        'service_charge_message' => 'A 10% service charge applies to dine-in orders.',
+        'service_charge_show_message' => false,
+    ]);
+
+    $response = $this->getJson('/api/v1/public/demo-restaurant/info')->assertOk();
+
+    $response->assertJsonPath('data.service_charge_message', null);
+});

@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Article;
+use App\Models\Department;
 use App\Models\MenuCategory;
 use App\Models\MenuItem;
 use App\Models\Tenant;
@@ -43,19 +44,24 @@ class TranslateTenantContentJob implements ShouldQueue
         You translate a restaurant's blog post (title, HTML body, and optional excerpt) from one language to another. Preserve the HTML tags in the body exactly, translating only the text content. Preserve tone and any proper nouns (restaurant name, dish names conventionally kept in their original language). Respond with ONLY a valid JSON object of the exact shape {"title": "...", "content": "...", "excerpt": "..."} (excerpt may be an empty string) — no prose, no markdown code fences, nothing else.
         PROMPT;
 
+    private const DEPARTMENT_PROMPT = <<<'PROMPT'
+        You translate a restaurant's internal kitchen/bar department name (e.g. "Kitchen", "Bar", "Pastry") from one language to another — keep it short and idiomatic. Respond with ONLY a valid JSON object of the exact shape {"name": "..."} — no prose, no markdown code fences, nothing else.
+        PROMPT;
+
     public function __construct(
         public readonly int $tenantId,
         public readonly string $targetLocale,
     ) {}
 
     /**
-     * Dispatch one job per locale the tenant supports that this menu item or
-     * category doesn't have a translation row for yet — called right after
-     * it's created or its translations are edited, so a restaurant's menu
-     * ends up in every language it's configured for without the owner
-     * having to separately visit Settings or translate each item by hand.
+     * Dispatch one job per locale the tenant supports that this menu item,
+     * category, or department doesn't have a translation row for yet —
+     * called right after it's created or its translations are edited, so a
+     * restaurant's menu ends up in every language it's configured for
+     * without the owner having to separately visit Settings or translate
+     * each row by hand.
      *
-     * @param  \App\Models\MenuItem|\App\Models\MenuCategory  $model  must already have a fresh (non-stale) `translations` relation loaded
+     * @param  \App\Models\MenuItem|\App\Models\MenuCategory|\App\Models\Department  $model  must already have a fresh (non-stale) `translations` relation loaded
      */
     public static function dispatchForMissingLocales(Tenant $tenant, $model): void
     {
@@ -75,6 +81,7 @@ class TranslateTenantContentJob implements ShouldQueue
 
         $this->translateMenuItems($openai);
         $this->translateMenuCategories($openai);
+        $this->translateDepartments($openai);
         $this->translateArticles($openai, $seo);
     }
 
@@ -138,6 +145,39 @@ class TranslateTenantContentJob implements ShouldQueue
                     }
 
                     $category->translations()->create([
+                        'locale'                => $this->targetLocale,
+                        'name'                   => $result['name'],
+                        'is_machine_translated' => true,
+                    ]);
+                }
+            });
+    }
+
+    private function translateDepartments(OpenAiService $openai): void
+    {
+        Department::withoutTenantScope()
+            ->where('tenant_id', $this->tenantId)
+            ->with('translations')
+            ->chunkById(20, function ($departments) use ($openai) {
+                foreach ($departments as $department) {
+                    if ($department->translations->contains('locale', $this->targetLocale)) {
+                        continue;
+                    }
+                    $source = $department->translations->firstWhere('locale', 'en') ?? $department->translations->first();
+                    if (! $source) {
+                        continue;
+                    }
+
+                    $result = $this->translate($openai, self::DEPARTMENT_PROMPT, [
+                        'source_locale' => $source->locale,
+                        'target_locale' => $this->targetLocale,
+                        'name'          => $source->name,
+                    ]);
+                    if (! $result || ! isset($result['name'])) {
+                        continue;
+                    }
+
+                    $department->translations()->create([
                         'locale'                => $this->targetLocale,
                         'name'                   => $result['name'],
                         'is_machine_translated' => true,

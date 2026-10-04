@@ -312,6 +312,8 @@ export default function TableOrderPage() {
             subtotal: res.data.order.total,
             taxRate: res.data.order.tax_rate,
             taxAmount: res.data.order.tax_amount,
+            serviceChargeRate: res.data.order.service_charge_rate,
+            serviceChargeAmount: res.data.order.service_charge_amount,
             grandTotal: res.data.order.grand_total,
             currency: res.data.order.currency,
             openedAt: res.data.order.created_at,

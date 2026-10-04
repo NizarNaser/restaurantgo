@@ -12,7 +12,7 @@ interface LocaleStats {
 }
 
 interface NeedsReviewRow {
-  type: 'menu_item' | 'menu_category' | 'article';
+  type: 'menu_item' | 'menu_category' | 'department' | 'article';
   id: number;
   locale: string;
   name: string;
@@ -22,6 +22,7 @@ interface LocaleSummary {
   locale: string;
   menu_items: LocaleStats;
   menu_categories: LocaleStats;
+  departments: LocaleStats;
   articles: LocaleStats;
   needs_review: NeedsReviewRow[];
 }
@@ -35,6 +36,7 @@ const LANGUAGE_NAMES: Record<string, string> = {
 const TYPE_LINKS: Record<NeedsReviewRow['type'], string> = {
   menu_item: '/menu',
   menu_category: '/menu',
+  department: '/restaurant-setup',
   article: '/articles',
 };
 
@@ -127,9 +129,10 @@ export default function TranslationsPage() {
               </button>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
               <StatBar stats={row.menu_items} label={t('translations.menuItems')} />
               <StatBar stats={row.menu_categories} label={t('translations.categories')} />
+              <StatBar stats={row.departments} label={t('translations.departments')} />
               <StatBar stats={row.articles} label={t('translations.articles')} />
             </div>
 

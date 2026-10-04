@@ -14,6 +14,7 @@ class Tenant extends Model
         'name', 'slug', 'subdomain', 'custom_domain',
         'plan_id', 'trial_ends_at', 'status',
         'timezone', 'default_currency', 'default_locale', 'supported_locales', 'tax_rate',
+        'service_charge_rate', 'service_charge_message', 'service_charge_show_message', 'service_charge_apply_to_invoice',
         'logo_path', 'favicon_path', 'cover_image_path',
         'seo_title', 'seo_description', 'seo_og_image', 'google_site_verification',
         'google_analytics_id', 'facebook_pixel_id',
@@ -35,6 +36,9 @@ class Tenant extends Model
         'paypal_payments_receivable'        => 'boolean',
         'paypal_email_confirmed'            => 'boolean',
         'tax_rate'                          => 'decimal:2',
+        'service_charge_rate'               => 'decimal:2',
+        'service_charge_show_message'       => 'boolean',
+        'service_charge_apply_to_invoice'   => 'boolean',
     ];
 
     // ── Relations ──────────────────────────────────────────────

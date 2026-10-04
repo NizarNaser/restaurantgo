@@ -65,6 +65,8 @@ export default function InvoicePanel({
   const subtotal = invoice ? parseFloat(invoice.order.subtotal) : parseFloat(order.total);
   const taxRate = invoice?.order.tax_rate ?? 0;
   const taxAmount = invoice?.order.tax_amount ?? 0;
+  const serviceChargeRate = invoice?.order.service_charge_rate ?? 0;
+  const serviceChargeAmount = invoice?.order.service_charge_amount ?? 0;
   const grandTotal = invoice ? invoice.order.grand_total : parseFloat(order.total);
   const discountAmount = parseFloat(order.discount_amount ?? '0');
 
@@ -196,6 +198,12 @@ export default function InvoicePanel({
             <div className="flex justify-between text-gray-500">
               <span>{t('invoices.tax', { rate: taxRate })}</span>
               <span>{currency} {taxAmount.toFixed(2)}</span>
+            </div>
+          )}
+          {serviceChargeRate > 0 && (
+            <div className="flex justify-between text-gray-500">
+              <span>{t('invoices.serviceCharge', { rate: serviceChargeRate })}</span>
+              <span>{currency} {serviceChargeAmount.toFixed(2)}</span>
             </div>
           )}
           {cart.length > 0 && (

@@ -87,6 +87,8 @@ export function buildFullBillTicket(params: {
   subtotal: string;
   taxRate: number;
   taxAmount: number;
+  serviceChargeRate: number;
+  serviceChargeAmount: number;
   grandTotal: number;
   currency: string;
   openedAt: string;
@@ -113,6 +115,10 @@ export function buildFullBillTicket(params: {
 
   if (params.taxRate > 0) {
     bytes.push(...line(`Tax (${params.taxRate}%): ${params.currency} ${params.taxAmount.toFixed(2)}`));
+  }
+
+  if (params.serviceChargeRate > 0) {
+    bytes.push(...line(`Service charge (${params.serviceChargeRate}%): ${params.currency} ${params.serviceChargeAmount.toFixed(2)}`));
   }
 
   bytes.push(

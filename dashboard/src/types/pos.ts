@@ -37,7 +37,9 @@ export interface DiscountApplicationRecord {
 export interface InvoiceRecord {
   order: {
     id: number; status: string; subtotal: string; discount_amount: string; total: string;
-    tax_rate: number; tax_amount: number; grand_total: number;
+    tax_rate: number; tax_amount: number;
+    service_charge_rate: number; service_charge_amount: number;
+    grand_total: number;
     currency: string; created_at: string; paid_at: string | null;
   };
   table: { table_number: string; hall_name: string | null } | null;

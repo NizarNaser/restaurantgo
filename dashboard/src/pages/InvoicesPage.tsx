@@ -32,7 +32,9 @@ interface PaginatedResponse {
 interface InvoiceRecord {
   order: {
     id: number; subtotal: string; discount_amount: string; total: string;
-    tax_rate: number; tax_amount: number; grand_total: number;
+    tax_rate: number; tax_amount: number;
+    service_charge_rate: number; service_charge_amount: number;
+    grand_total: number;
     currency: string; created_at: string; paid_at: string | null;
   };
   table: { table_number: string; hall_name: string | null } | null;
@@ -261,6 +263,9 @@ export default function InvoicesPage() {
                 )}
                 {invoice.order.tax_rate > 0 && (
                   <div className="flex justify-between text-gray-500"><span>{t('invoices.tax', { rate: invoice.order.tax_rate })}</span><span>{invoice.order.currency} {invoice.order.tax_amount.toFixed(2)}</span></div>
+                )}
+                {invoice.order.service_charge_rate > 0 && (
+                  <div className="flex justify-between text-gray-500"><span>{t('invoices.serviceCharge', { rate: invoice.order.service_charge_rate })}</span><span>{invoice.order.currency} {invoice.order.service_charge_amount.toFixed(2)}</span></div>
                 )}
                 <div className="flex justify-between font-bold"><span>{t('orders.total')}</span><span>{invoice.order.currency} {invoice.order.grand_total.toFixed(2)}</span></div>
               </div>

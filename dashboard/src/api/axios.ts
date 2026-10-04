@@ -1,4 +1,5 @@
 import axios from 'axios';
+import i18n from '../i18n';
 
 // Falls back to the current hostname (not a hardcoded 'localhost') so the
 // dashboard keeps working when opened from a phone via the dev machine's LAN
@@ -11,12 +12,18 @@ const api = axios.create({
   },
 });
 
-// Attach the auth token to every request automatically
+// Attach the auth token and the admin's chosen dashboard language to every
+// request. Without Accept-Language, the API falls back to resolving content
+// locale from the browser's own language rather than what the admin picked
+// in the dashboard's language switcher — showing e.g. a menu item's name in
+// whatever locale the browser happens to default to, independent of the
+// admin's actual UI language choice.
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('auth_token');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
+  config.headers['Accept-Language'] = i18n.language;
   return config;
 });
 
