@@ -63,7 +63,9 @@ describe('buildFullBillTicket', () => {
       subtotal: '20.00',
       taxRate: 10,
       taxAmount: 2,
-      grandTotal: 22,
+      serviceChargeRate: 5,
+      serviceChargeAmount: 1,
+      grandTotal: 23,
       currency: 'USD',
       openedAt: '2026-01-01T12:00:00Z',
       closedAt: '2026-01-01T13:00:00Z',
@@ -75,19 +77,22 @@ describe('buildFullBillTicket', () => {
     expect(text).toContain('(350g)');
     expect(text).toContain('Subtotal: USD 20.00');
     expect(text).toContain('Tax (10%): USD 2.00');
-    expect(text).toContain('TOTAL: USD 22.00');
+    expect(text).toContain('Service charge (5%): USD 1.00');
+    expect(text).toContain('TOTAL: USD 23.00');
     expect(text).toContain('Served by: Demo Owner');
     expect(text).toContain('Opened:');
     expect(text).toContain('Closed:');
   });
 
-  it('omits the tax line when the tax rate is 0, and the closed line for a still-open table', () => {
+  it('omits the tax and service charge lines when both rates are 0, and the closed line for a still-open table', () => {
     const bytes = buildFullBillTicket({
       tableNumber: 'T1',
       items: [{ name: 'Mojito', quantity: 1, subtotal: '6.00' }],
       subtotal: '6.00',
       taxRate: 0,
       taxAmount: 0,
+      serviceChargeRate: 0,
+      serviceChargeAmount: 0,
       grandTotal: 6,
       currency: 'USD',
       openedAt: '2026-01-01T12:00:00Z',
@@ -95,6 +100,7 @@ describe('buildFullBillTicket', () => {
     const text = decode(bytes);
 
     expect(text).not.toContain('Tax (');
+    expect(text).not.toContain('Service charge (');
     expect(text).not.toContain('Closed:');
     expect(text).toContain('TOTAL: USD 6.00');
   });

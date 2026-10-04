@@ -18,9 +18,14 @@ class PrinterController extends Controller
     public function index(): JsonResponse
     {
         $printers = Printer::where('tenant_id', app('tenant')->id)
-            ->with('department')
+            ->with('department.translations')
             ->orderBy('name')
-            ->get();
+            ->get()
+            ->each(function (Printer $printer) {
+                if ($printer->department) {
+                    $printer->department->name = $printer->department->translation()?->name ?? $printer->department->name;
+                }
+            });
 
         return response()->json($printers);
     }

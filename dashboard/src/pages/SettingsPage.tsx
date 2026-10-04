@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Save, Loader2, Globe, Clock, DollarSign, Languages, QrCode, ExternalLink, BarChart3, Image as ImageIcon, Upload, Palette, KeyRound, Mail, Share2, MapPin, Phone, AlertTriangle } from 'lucide-react';
+import { Save, Loader2, Globe, Clock, DollarSign, Languages, QrCode, ExternalLink, BarChart3, Image as ImageIcon, Upload, Palette, KeyRound, Mail, Share2, MapPin, Phone, AlertTriangle, Percent } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -13,6 +13,10 @@ interface TenantSettings {
   default_currency: string;
   default_locale: string;
   tax_rate: number | string;
+  service_charge_rate: number | string;
+  service_charge_message: string | null;
+  service_charge_show_message: boolean;
+  service_charge_apply_to_invoice: boolean;
   supported_locales: string[];
   logo_path: string | null;
   favicon_path: string | null;
@@ -504,6 +508,10 @@ export default function SettingsPage() {
         default_currency: settings.default_currency,
         default_locale: settings.default_locale,
         tax_rate: settings.tax_rate || 0,
+        service_charge_rate: settings.service_charge_rate || 0,
+        service_charge_message: settings.service_charge_message || null,
+        service_charge_show_message: settings.service_charge_show_message ?? false,
+        service_charge_apply_to_invoice: settings.service_charge_apply_to_invoice ?? false,
         supported_locales: settings.supported_locales,
         seo_title: settings.seo_title || null,
         seo_description: settings.seo_description || null,
@@ -939,6 +947,59 @@ export default function SettingsPage() {
                 ))}
               </div>
             </div>
+          </div>
+
+          {/* Service Charge — dine-in only, never applied to delivery/online orders */}
+          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 space-y-5">
+            <h2 className="text-base font-semibold text-gray-800 flex items-center gap-2">
+              <Percent size={18} className="text-[#ff4757]" /> {t('settings.serviceCharge')}
+            </h2>
+            <p className="text-sm text-gray-500 -mt-2">{t('settings.serviceChargeDesc')}</p>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{t('settings.serviceChargeRate')}</label>
+              <input
+                type="number" name="service_charge_rate" min={0} max={100} step={0.01}
+                className="input w-full sm:w-48"
+                value={settings?.service_charge_rate ?? 0}
+                onChange={handleChange}
+              />
+            </div>
+
+            <label className="flex items-center gap-2 text-sm text-gray-700">
+              <input
+                type="checkbox"
+                className="rounded border-gray-300"
+                checked={settings?.service_charge_show_message ?? false}
+                onChange={(e) => settings && setSettings({ ...settings, service_charge_show_message: e.target.checked })}
+              />
+              {t('settings.serviceChargeShowMessage')}
+            </label>
+
+            {settings?.service_charge_show_message && (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{t('settings.serviceChargeMessage')}</label>
+                <textarea
+                  name="service_charge_message" rows={2}
+                  className="input w-full"
+                  placeholder={t('settings.serviceChargeMessagePlaceholder')}
+                  value={settings?.service_charge_message ?? ''}
+                  onChange={handleChange}
+                />
+                <p className="text-xs text-gray-400 mt-1">{t('settings.serviceChargeMessageHint')}</p>
+              </div>
+            )}
+
+            <label className="flex items-center gap-2 text-sm text-gray-700">
+              <input
+                type="checkbox"
+                className="rounded border-gray-300"
+                checked={settings?.service_charge_apply_to_invoice ?? false}
+                onChange={(e) => settings && setSettings({ ...settings, service_charge_apply_to_invoice: e.target.checked })}
+              />
+              {t('settings.serviceChargeApplyToInvoice')}
+            </label>
+            <p className="text-xs text-gray-400 -mt-3">{t('settings.serviceChargeApplyToInvoiceHint')}</p>
           </div>
 
           {/* Social Media */}

@@ -96,6 +96,55 @@ it('defaults to a 0% tax rate when the tenant has none configured', function () 
         ->assertJsonPath('order.grand_total', 10);
 });
 
+it('applies the service charge to the dine-in invoice when enabled', function () {
+    $this->tenant->update(['service_charge_rate' => 10, 'service_charge_apply_to_invoice' => true]);
+
+    Sanctum::actingAs($this->waiter, ['*']);
+    $order = $this->postJson("/api/tables/{$this->table->id}/open")->json('order');
+    $this->postJson("/api/orders/{$order['id']}/items", [
+        'items' => [['menu_item_id' => $this->salad->id, 'quantity' => 1]],
+    ])->assertCreated();
+
+    $this->getJson("/api/orders/{$order['id']}/invoice")
+        ->assertJsonPath('order.service_charge_rate', 10)
+        ->assertJsonPath('order.service_charge_amount', 1)
+        ->assertJsonPath('order.grand_total', 11);
+});
+
+it('does not apply the service charge rate to the invoice when the apply toggle is off', function () {
+    $this->tenant->update(['service_charge_rate' => 10, 'service_charge_apply_to_invoice' => false]);
+
+    Sanctum::actingAs($this->waiter, ['*']);
+    $order = $this->postJson("/api/tables/{$this->table->id}/open")->json('order');
+    $this->postJson("/api/orders/{$order['id']}/items", [
+        'items' => [['menu_item_id' => $this->salad->id, 'quantity' => 1]],
+    ])->assertCreated();
+
+    $this->getJson("/api/orders/{$order['id']}/invoice")
+        ->assertJsonPath('order.service_charge_rate', 0)
+        ->assertJsonPath('order.service_charge_amount', 0)
+        ->assertJsonPath('order.grand_total', 10);
+});
+
+it('combines tax and service charge on the same invoice', function () {
+    $this->tenant->update([
+        'tax_rate' => 5,
+        'service_charge_rate' => 10,
+        'service_charge_apply_to_invoice' => true,
+    ]);
+
+    Sanctum::actingAs($this->waiter, ['*']);
+    $order = $this->postJson("/api/tables/{$this->table->id}/open")->json('order');
+    $this->postJson("/api/orders/{$order['id']}/items", [
+        'items' => [['menu_item_id' => $this->salad->id, 'quantity' => 1]],
+    ])->assertCreated();
+
+    $this->getJson("/api/orders/{$order['id']}/invoice")
+        ->assertJsonPath('order.tax_amount', 0.5)
+        ->assertJsonPath('order.service_charge_amount', 1)
+        ->assertJsonPath('order.grand_total', 11.5);
+});
+
 it('releases a table opened by mistake (no items) back to vacant, cancelling the empty order', function () {
     Sanctum::actingAs($this->waiter, ['*']);
     $order = $this->postJson("/api/tables/{$this->table->id}/open")->json('order');

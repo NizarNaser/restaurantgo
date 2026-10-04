@@ -39,6 +39,9 @@ class MenuController extends Controller
                 'locale'            => $locale,
                 'default_locale'    => $tenant->default_locale ?? config('app.locale'),
                 'supported_locales' => $tenant->supported_locales ?: [$tenant->default_locale ?? config('app.locale')],
+                // Dine-in only — never shown/charged for delivery orders.
+                'service_charge_rate'         => (float) $tenant->service_charge_rate,
+                'service_charge_message'      => $tenant->service_charge_show_message ? $tenant->service_charge_message : null,
                 'public_url'  => $this->seo->menuUrl($tenant),
                 'blog_url'    => $this->seo->blogUrl($tenant),
                 'analytics'   => [
@@ -94,8 +97,13 @@ class MenuController extends Controller
         // one-tap department filters (e.g. "Bar") above the finer-grained
         // category list, without the customer needing to know category names.
         $departments = Department::where('tenant_id', $tenant->id)
+            ->with('translations')
             ->orderBy('sort_order')
-            ->get(['id', 'name']);
+            ->get()
+            ->map(fn(Department $dept) => [
+                'id'   => $dept->id,
+                'name' => $dept->translation($locale)?->name ?? $dept->name,
+            ]);
 
         $items = $this->ratedItemsQuery($tenant->id)
             ->where('is_available', true)

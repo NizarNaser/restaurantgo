@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Tenant;
 use App\Http\Controllers\Controller;
 use App\Jobs\TranslateTenantContentJob;
 use App\Models\Article;
+use App\Models\Department;
 use App\Models\MenuCategory;
 use App\Models\MenuItem;
 use Illuminate\Http\JsonResponse;
@@ -37,9 +38,10 @@ class TranslationController extends Controller
         $locales  = $tenant->supported_locales ?? [];
         $default  = $tenant->default_locale ?? 'en';
 
-        $items      = MenuItem::forTenant($tenant->id)->with('translations')->get();
-        $categories = MenuCategory::where('tenant_id', $tenant->id)->with('translations')->get();
-        $articles   = Article::where('tenant_id', $tenant->id)->where('status', Article::STATUS_PUBLISHED)->with('translations')->get();
+        $items       = MenuItem::forTenant($tenant->id)->with('translations')->get();
+        $categories  = MenuCategory::where('tenant_id', $tenant->id)->with('translations')->get();
+        $departments = Department::where('tenant_id', $tenant->id)->with('translations')->get();
+        $articles    = Article::where('tenant_id', $tenant->id)->where('status', Article::STATUS_PUBLISHED)->with('translations')->get();
 
         $locales = array_values(array_diff($locales, [$default])) ?: $locales;
 
@@ -49,12 +51,14 @@ class TranslationController extends Controller
 
             $itemStats = $this->countFor($items, $locale, 'name', $needsReview, 'menu_item');
             $catStats  = $this->countFor($categories, $locale, 'name', $needsReview, 'menu_category');
+            $deptStats = $this->countFor($departments, $locale, 'name', $needsReview, 'department');
             $artStats  = $this->countFor($articles, $locale, 'title', $needsReview, 'article');
 
             $result[] = [
                 'locale'            => $locale,
                 'menu_items'        => $itemStats,
                 'menu_categories'   => $catStats,
+                'departments'       => $deptStats,
                 'articles'          => $artStats,
                 'needs_review'      => $needsReview,
             ];
@@ -66,7 +70,7 @@ class TranslationController extends Controller
     public function markReviewed(Request $request): JsonResponse
     {
         $data = $request->validate([
-            'type'   => ['required', Rule::in(['menu_item', 'menu_category', 'article'])],
+            'type'   => ['required', Rule::in(['menu_item', 'menu_category', 'department', 'article'])],
             'id'     => ['required', 'integer'],
             'locale' => ['required', 'string', 'max:10'],
         ]);
@@ -76,6 +80,7 @@ class TranslationController extends Controller
         $translation = match ($data['type']) {
             'menu_item'     => MenuItem::forTenant($tenant->id)->findOrFail($data['id'])->translations()->where('locale', $data['locale'])->firstOrFail(),
             'menu_category' => MenuCategory::where('tenant_id', $tenant->id)->findOrFail($data['id'])->translations()->where('locale', $data['locale'])->firstOrFail(),
+            'department'    => Department::where('tenant_id', $tenant->id)->findOrFail($data['id'])->translations()->where('locale', $data['locale'])->firstOrFail(),
             'article'       => Article::where('tenant_id', $tenant->id)->findOrFail($data['id'])->translations()->where('locale', $data['locale'])->firstOrFail(),
         };
 

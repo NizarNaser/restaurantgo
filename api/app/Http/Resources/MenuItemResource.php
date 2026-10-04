@@ -14,8 +14,11 @@ class MenuItemResource extends JsonResource
             'category_id' => $this->menu_category_id ?? $this->category_id,
             'is_available' => $this->is_available,
             'is_featured' => $this->is_featured,
-            'name' => $this->translations->first()?->name ?? 'Unnamed',
-            'description' => $this->translations->first()?->description,
+            // translation() resolves the current locale, falling back to 'en'
+            // then whatever exists — ->translations->first() used to just
+            // grab an arbitrary (insertion-order) row regardless of locale.
+            'name' => $this->translation()?->name ?? 'Unnamed',
+            'description' => $this->translation()?->description,
             'weight' => $this->weight,
             'tags' => $this->tags ?? [],
             'price' => $this->prices->first()?->price ?? $this->base_price ?? 0,

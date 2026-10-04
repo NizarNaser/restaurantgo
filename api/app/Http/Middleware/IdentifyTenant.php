@@ -25,7 +25,12 @@ class IdentifyTenant
         app()->instance('tenant', $tenant);
         app()->bind(Tenant::class, fn() => $tenant);
 
-        // Set locale from tenant default — extract first tag from Accept-Language (e.g. "en_US,en;q=0.9" → "en")
+        // Accept-Language wins when present — extract its first tag (e.g.
+        // "en_US,en;q=0.9" → "en"); the tenant's default_locale is only the
+        // fallback when no header was sent at all. The dashboard explicitly
+        // sends this header set to the admin's chosen UI language (see
+        // dashboard/src/api/axios.ts), so it reflects a deliberate choice,
+        // not just whatever the browser's own language happens to be.
         $rawLocale = $request->header('Accept-Language', $tenant->default_locale ?? 'en');
         $locale = substr(preg_replace('/[^a-zA-Z_-].*/', '', explode(',', $rawLocale)[0]), 0, 5);
         app()->setLocale($locale ?: ($tenant->default_locale ?? 'en'));

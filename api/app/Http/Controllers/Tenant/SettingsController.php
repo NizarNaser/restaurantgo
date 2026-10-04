@@ -34,6 +34,10 @@ class SettingsController extends Controller
             'default_currency'    => $tenant->default_currency,
             'default_locale'      => $tenant->default_locale,
             'tax_rate'            => $tenant->tax_rate,
+            'service_charge_rate'              => $tenant->service_charge_rate,
+            'service_charge_message'           => $tenant->service_charge_message,
+            'service_charge_show_message'      => $tenant->service_charge_show_message,
+            'service_charge_apply_to_invoice'  => $tenant->service_charge_apply_to_invoice,
             // Tenants created before the supported-languages feature existed
             // can still have an empty/null list — fall back to their own
             // default locale rather than handing back nothing to pick from.
@@ -117,6 +121,10 @@ class SettingsController extends Controller
             'default_currency'    => ['required', 'string', 'max:3'],
             'default_locale'      => ['required', 'string', 'max:10'],
             'tax_rate'            => ['nullable', 'numeric', 'min:0', 'max:100'],
+            'service_charge_rate'             => ['nullable', 'numeric', 'min:0', 'max:100'],
+            'service_charge_message'          => ['nullable', 'string', 'max:500'],
+            'service_charge_show_message'     => ['boolean'],
+            'service_charge_apply_to_invoice' => ['boolean'],
             'supported_locales'   => ['required', 'array', 'min:1'],
             'supported_locales.*' => ['string', 'max:10'],
             'seo_title'             => ['nullable', 'array'],
