@@ -330,8 +330,19 @@ function DangerZoneCard({ slug }: { slug: string }) {
   );
 }
 
-const TIMEZONES = ['UTC', 'America/New_York', 'America/Los_Angeles', 'Europe/London', 'Europe/Paris', 'Asia/Dubai', 'Asia/Riyadh', 'Asia/Beirut', 'Africa/Cairo', 'Asia/Baghdad'];
-const CURRENCIES = ['USD', 'EUR', 'GBP', 'SAR', 'AED', 'EGP', 'LBP', 'IQD'];
+const TIMEZONES = ['UTC', 'America/New_York', 'America/Los_Angeles', 'Europe/London', 'Europe/Paris', 'Europe/Kyiv', 'Asia/Dubai', 'Asia/Riyadh', 'Asia/Beirut', 'Africa/Cairo', 'Asia/Baghdad'];
+// A starting set of common currencies shown as suggestions — not an
+// exhaustive list (ISO 4217 has ~180 of them, and this restaurant's own
+// list of operating currencies keeps growing as RestaurantGo reaches new
+// countries). The field below accepts any 3-letter code typed in, exactly
+// like the per-item price currency field on the Menu page already does —
+// this is just the autocomplete list, not a hard restriction.
+const CURRENCIES = [
+  'USD', 'EUR', 'GBP', 'SAR', 'AED', 'EGP', 'LBP', 'IQD', 'JOD', 'KWD', 'BHD', 'OMR', 'QAR',
+  'TRY', 'ILS', 'MAD', 'TND', 'DZD', 'UAH', 'RUB', 'PLN', 'CZK', 'HUF', 'RON', 'BGN', 'CHF',
+  'SEK', 'NOK', 'DKK', 'CNY', 'JPY', 'KRW', 'INR', 'PKR', 'THB', 'MYR', 'IDR', 'PHP', 'VND',
+  'SGD', 'HKD', 'CAD', 'AUD', 'NZD', 'BRL', 'MXN', 'ZAR', 'NGN', 'KES', 'GHS',
+];
 // The default/primary language for the restaurant's public menu and site.
 const LOCALES = [
   { code: 'en', name: 'English' },
@@ -904,9 +915,17 @@ export default function SettingsPage() {
                 <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-1">
                   <DollarSign size={14} /> {t('financial.currency')}
                 </label>
-                <select name="default_currency" className="input w-full bg-white" value={settings?.default_currency ?? 'USD'} onChange={handleChange}>
-                  {CURRENCIES.map(c => <option key={c} value={c}>{c}</option>)}
-                </select>
+                <input
+                  name="default_currency"
+                  list="currency-suggestions"
+                  maxLength={3}
+                  className="input w-full uppercase"
+                  value={settings?.default_currency ?? 'USD'}
+                  onChange={(e) => settings && setSettings({ ...settings, default_currency: e.target.value.toUpperCase() })}
+                />
+                <datalist id="currency-suggestions">
+                  {CURRENCIES.map(c => <option key={c} value={c} />)}
+                </datalist>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-1">
