@@ -43,8 +43,6 @@ class TranslationController extends Controller
         $departments = Department::where('tenant_id', $tenant->id)->with('translations')->get();
         $articles    = Article::where('tenant_id', $tenant->id)->where('status', Article::STATUS_PUBLISHED)->with('translations')->get();
 
-        $locales = array_values(array_diff($locales, [$default])) ?: $locales;
-
         $result = [];
         foreach ($locales as $locale) {
             $needsReview = [];
@@ -56,6 +54,13 @@ class TranslationController extends Controller
 
             $result[] = [
                 'locale'            => $locale,
+                // The owner's declared "written in this language first"
+                // locale — still shown with its own coverage (an item can
+                // easily end up missing even its own source language, e.g.
+                // one only ever entered in a different locale), just
+                // labelled differently on the dashboard so it doesn't read
+                // as "this language needs translating too".
+                'is_default'        => $locale === $default,
                 'menu_items'        => $itemStats,
                 'menu_categories'   => $catStats,
                 'departments'       => $deptStats,

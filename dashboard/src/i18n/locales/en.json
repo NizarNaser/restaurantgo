@@ -719,7 +719,8 @@
     "coverImageHint": "A wide photo of your restaurant shown behind the header on your public menu page.",
     "localization": "Localization",
     "timezone": "Timezone",
-    "dashboardLanguage": "Dashboard Language",
+    "dashboardLanguage": "Restaurant's Default Language",
+    "dashboardLanguageHint": "The language your menu, blog, and site copy are written in first, and translated from into your other languages — not the staff dashboard's own display language (switch that from the sidebar instead).",
     "taxRate": "Tax Rate (%)",
     "taxRateHint": "Applied to dine-in bills when printed or closed.",
     "serviceCharge": "Service Charge",
@@ -819,6 +820,7 @@
     "markReviewed": "Mark reviewed",
     "startedNotice": "Translation into {{language}} started — this runs in the background and can take a few minutes.",
     "startFailed": "Could not start translation, please try again.",
-    "onlyOneLanguage": "Only one language is enabled — add more in Settings to see translation coverage here."
+    "onlyOneLanguage": "Only one language is enabled — add more in Settings to see translation coverage here.",
+    "defaultLanguage": "Default language"
   }
 }

@@ -915,6 +915,7 @@ export default function SettingsPage() {
                 <select name="default_locale" className="input w-full bg-white" value={settings?.default_locale ?? 'en'} onChange={handleChange}>
                   {LOCALES.map(l => <option key={l.code} value={l.code}>{l.name}</option>)}
                 </select>
+                <p className="text-xs text-gray-400 mt-1">{t('settings.dashboardLanguageHint')}</p>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">{t('settings.taxRate')}</label>
