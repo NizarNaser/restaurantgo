@@ -80,16 +80,15 @@ export default function AdSlot({
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.4 }}
-              className="block card card-hover overflow-hidden"
+              className="flex items-stretch rtl:flex-row-reverse card card-hover overflow-hidden"
             >
               {ad.image_path ? (
-                <img src={ad.image_path} alt={ad.title} className="w-full h-32 object-cover" />
+                <img src={ad.image_path} alt={ad.title} className="w-24 sm:w-32 h-28 sm:h-36 flex-shrink-0 object-cover" />
               ) : (
-                <div className="w-full h-32 bg-gradient-to-br from-red-50 to-orange-50 flex items-center justify-center">
-                  <span className="text-sm font-medium text-gray-500">{ad.title}</span>
-                </div>
+                <div className="w-24 sm:w-32 h-28 sm:h-36 flex-shrink-0 bg-gradient-to-br from-red-50 to-orange-50" />
               )}
-              <div className="px-3 py-2 flex items-center justify-between">
+              <div className="flex-1 min-w-0 px-3 py-2 flex flex-col justify-center gap-1">
+                <p className="font-semibold text-gray-900 text-sm line-clamp-2">{ad.title}</p>
                 <span className="text-xs text-gray-400">{t('adSlot.sponsored')}{ad.advertiser_name ? ` · ${ad.advertiser_name}` : ''}</span>
               </div>
             </motion.a>
@@ -148,16 +147,15 @@ export default function AdSlot({
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: i * 0.08 }}
           whileHover={{ y: -4 }}
-          className="block card card-hover overflow-hidden"
+          className="flex items-stretch rtl:flex-row-reverse card card-hover overflow-hidden"
         >
           {ad.image_path ? (
-            <img src={ad.image_path} alt={ad.title} className="w-full h-32 object-cover" />
+            <img src={ad.image_path} alt={ad.title} className="w-24 sm:w-32 h-28 sm:h-36 flex-shrink-0 object-cover" />
           ) : (
-            <div className="w-full h-32 bg-gradient-to-br from-red-50 to-orange-50 flex items-center justify-center">
-              <span className="text-sm font-medium text-gray-500">{ad.title}</span>
-            </div>
+            <div className="w-24 sm:w-32 h-28 sm:h-36 flex-shrink-0 bg-gradient-to-br from-red-50 to-orange-50" />
           )}
-          <div className="px-3 py-2 flex items-center justify-between">
+          <div className="flex-1 min-w-0 px-3 py-2 flex flex-col justify-center gap-1">
+            <p className="font-semibold text-gray-900 text-sm line-clamp-2">{ad.title}</p>
             <span className="text-xs text-gray-400">{t('adSlot.sponsored')}{ad.advertiser_name ? ` · ${ad.advertiser_name}` : ''}</span>
           </div>
         </motion.a>
