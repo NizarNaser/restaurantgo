@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Plus, Loader2, Trash2, ImagePlus } from 'lucide-react';
+import { Plus, Loader2, Trash2, Pencil, ImagePlus } from 'lucide-react';
 import api from '../../api/axios';
 
 interface Ad {
@@ -32,6 +32,7 @@ export default function AdvertisementsPage() {
   const [form, setForm] = useState(emptyForm);
   const [image, setImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [editingId, setEditingId] = useState<number | null>(null);
 
   const fetchAds = () => {
     setLoading(true);
@@ -49,7 +50,7 @@ export default function AdvertisementsPage() {
     const file = e.target.files?.[0] ?? null;
     setImage(file);
     setImagePreview((prev) => {
-      if (prev) URL.revokeObjectURL(prev);
+      if (prev?.startsWith('blob:')) URL.revokeObjectURL(prev);
       return file ? URL.createObjectURL(file) : null;
     });
   };
@@ -58,16 +59,45 @@ export default function AdvertisementsPage() {
     setModalOpen(false);
     setForm(emptyForm);
     setImage(null);
+    setEditingId(null);
     setImagePreview((prev) => {
-      if (prev) URL.revokeObjectURL(prev);
+      if (prev?.startsWith('blob:')) URL.revokeObjectURL(prev);
       return null;
     });
+  };
+
+  const openCreate = () => {
+    setEditingId(null);
+    setForm(emptyForm);
+    setImage(null);
+    setImagePreview(null);
+    setModalOpen(true);
+  };
+
+  const openEdit = (ad: Ad) => {
+    setEditingId(ad.id);
+    setForm({
+      title: ad.title,
+      advertiser_name: ad.advertiser_name ?? '',
+      link_url: ad.link_url ?? '',
+      placement: ad.placement,
+      // The API serializes a date-cast column as a full ISO datetime, not
+      // the plain YYYY-MM-DD a <input type="date"> requires — the leading
+      // 10 characters are that date either way.
+      starts_at: ad.starts_at ? ad.starts_at.slice(0, 10) : '',
+      ends_at: ad.ends_at ? ad.ends_at.slice(0, 10) : '',
+      is_active: ad.is_active,
+    });
+    setImage(null);
+    setImagePreview(ad.image_path);
+    setModalOpen(true);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
     try {
+      const url = editingId ? `/admin/advertisements/${editingId}` : '/admin/advertisements';
       // Only switch to multipart when an image was actually picked from
       // the device — plain JSON still works for the common no-creative,
       // text-only ad.
@@ -76,13 +106,19 @@ export default function AdvertisementsPage() {
         Object.entries(form).forEach(([key, value]) => {
           // FormData stringifies everything — Laravel's `boolean` rule
           // accepts "1"/"0" but not the literal strings "true"/"false"
-          // that String(true) would otherwise produce.
+          // that String(value) would otherwise produce.
           data.append(key, typeof value === 'boolean' ? (value ? '1' : '0') : String(value));
         });
         data.append('image', image);
-        await api.post('/admin/advertisements', data, { headers: { 'Content-Type': 'multipart/form-data' } });
+        // PHP never populates $_FILES for a genuine PUT/PATCH request body —
+        // sending this as a POST with Laravel's _method override is what
+        // lets the server parse the upload at all on an edit.
+        if (editingId) data.append('_method', 'PUT');
+        await api.post(url, data, { headers: { 'Content-Type': 'multipart/form-data' } });
+      } else if (editingId) {
+        await api.put(url, form);
       } else {
-        await api.post('/admin/advertisements', form);
+        await api.post(url, form);
       }
       closeModal();
       fetchAds();
@@ -105,7 +141,7 @@ export default function AdvertisementsPage() {
     <div>
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold text-gray-900">الإعلانات المدفوعة</h1>
-        <button onClick={() => setModalOpen(true)} className="btn btn-primary"><Plus size={18} className="ml-2" /> إضافة إعلان</button>
+        <button onClick={openCreate} className="btn btn-primary"><Plus size={18} className="ml-2" /> إضافة إعلان</button>
       </div>
 
       <div className="mt-6 card overflow-hidden">
@@ -142,7 +178,8 @@ export default function AdvertisementsPage() {
                     {ad.is_active ? 'فعّال' : 'متوقف'}
                   </span>
                 </td>
-                <td className="px-6 py-4">
+                <td className="px-6 py-4 flex items-center gap-1">
+                  <button onClick={() => openEdit(ad)} className="p-1.5 text-gray-400 hover:text-[#ff4757] hover:bg-red-50 rounded-lg"><Pencil size={16} /></button>
                   <button onClick={() => handleDelete(ad.id)} className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg"><Trash2 size={16} /></button>
                 </td>
               </tr>
@@ -155,7 +192,7 @@ export default function AdvertisementsPage() {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/50 backdrop-blur-sm" dir="rtl">
           <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden max-h-[90vh] overflow-y-auto">
             <div className="p-6 border-b border-gray-100 flex justify-between items-center">
-              <h2 className="text-xl font-semibold">إضافة إعلان</h2>
+              <h2 className="text-xl font-semibold">{editingId ? 'تعديل الإعلان' : 'إضافة إعلان'}</h2>
               <button onClick={closeModal} className="text-gray-400 hover:text-gray-600 text-xl leading-none">&times;</button>
             </div>
             <form onSubmit={handleSubmit} className="p-6 space-y-3">
