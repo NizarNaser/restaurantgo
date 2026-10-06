@@ -38,27 +38,35 @@ class IdentifyTenant
         return $next($request);
     }
 
+    /**
+     * Every route using this middleware is also behind `auth:sanctum` (see
+     * routes/api.php), so an authenticated user's own `tenant_id` is always
+     * the right — and only trustworthy — source of truth here. There used
+     * to be an `X-Tenant-Id` header path "for local dev", checked *before*
+     * this one and with no verification it matched the caller's own tenant:
+     * since no frontend ever actually sent that header, it was dead for
+     * every legitimate caller while staying fully live for an attacker —
+     * any authenticated account, of any role, could read or write another
+     * tenant's data (reservations, financials, payroll, settings) just by
+     * sending a different tenant's ID in that header. Removed outright
+     * rather than "fixed to match the user" — there's no legitimate case
+     * where an authenticated request needs a tenant other than its own.
+     */
     private function resolveTenant(Request $request): ?Tenant
     {
         $host = $request->getHost();
         $baseDomain = config('app.base_domain', 'restaurantgo.com');
 
-        // 3. API requests with tenant header (for dashboard) — check first for local dev
-        if ($tenantId = $request->header('X-Tenant-Id')) {
-            return Tenant::find($tenantId);
-        }
-
-        // 4. Authenticated user's tenant — works for localhost dev
         if ($request->user()?->tenant_id) {
             return Tenant::find($request->user()->tenant_id);
         }
 
-        // 1. Custom domain (e.g., menu.myrestaurant.com)
+        // Custom domain (e.g., menu.myrestaurant.com)
         if (! str_ends_with($host, $baseDomain)) {
             return Tenant::where('custom_domain', $host)->first();
         }
 
-        // 2. Subdomain (e.g., myrestaurant.restaurantgo.com)
+        // Subdomain (e.g., myrestaurant.restaurantgo.com)
         $subdomain = str_replace('.' . $baseDomain, '', $host);
         if ($subdomain && $subdomain !== $baseDomain) {
             return Tenant::where('subdomain', $subdomain)->first();

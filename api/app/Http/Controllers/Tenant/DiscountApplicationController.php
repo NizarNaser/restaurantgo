@@ -62,38 +62,49 @@ class DiscountApplicationController extends Controller
     public function approve(Request $request, DiscountApplication $discountApplication): JsonResponse
     {
         $this->authorizeTenant($discountApplication);
-        abort_if($discountApplication->status !== DiscountApplication::STATUS_PENDING, 422, 'This request has already been handled.');
-        $this->guardNoApprovedDiscount($discountApplication->order);
 
         $approver = $this->staffAccess->resolveApprover($request);
         abort_unless($approver, 401, 'Could not verify an owner/manager credential.');
         abort_unless($approver->hasRole(['owner', 'manager']), 403, 'Only an owner or manager can approve a discount.');
 
+        // The "already pending?" and "no stacked discount?" checks used to
+        // run before this transaction, against a plain (unlocked) read —
+        // two near-simultaneous approve() calls (the same request retried,
+        // or two staff on a shared terminal) could both pass both checks
+        // before either one's write committed, applying the discount twice.
+        // Locking the application and order rows here forces the second
+        // caller to wait for the first to finish, then see its result.
         DB::transaction(function () use ($discountApplication, $approver) {
-            $order = $discountApplication->order;
-            $card = $discountApplication->discountCard;
+            $application = DiscountApplication::whereKey($discountApplication->id)->lockForUpdate()->firstOrFail();
+            abort_if($application->status !== DiscountApplication::STATUS_PENDING, 422, 'This request has already been handled.');
 
-            if ($discountApplication->mode === DiscountApplication::MODE_DEDUCT) {
-                $newDiscountAmount = (float) $order->discount_amount + (float) $discountApplication->amount;
+            $order = Order::whereKey($application->order_id)->lockForUpdate()->firstOrFail();
+            $this->guardNoApprovedDiscount($order);
+
+            $card = DiscountCard::whereKey($application->discount_card_id)->lockForUpdate()->firstOrFail();
+
+            if ($application->mode === DiscountApplication::MODE_DEDUCT) {
+                $newDiscountAmount = (float) $order->discount_amount + (float) $application->amount;
                 $order->update([
                     'discount_card_id' => $card->id,
                     'discount_amount'  => $newDiscountAmount,
                     'total'            => (float) $order->subtotal - $newDiscountAmount,
                 ]);
             } else {
-                $card->accumulate((float) $discountApplication->amount);
+                $card->accumulate((float) $application->amount);
             }
 
-            $discountApplication->update([
+            $application->update([
                 'status'              => DiscountApplication::STATUS_APPROVED,
                 'approved_by_user_id' => $approver->id,
                 'approved_at'         => now(),
             ]);
         });
 
+        $discountApplication->refresh();
         $this->audit->log('discount_application.approved', $discountApplication, [], $approver);
 
-        return response()->json($discountApplication->fresh());
+        return response()->json($discountApplication);
     }
 
     public function reject(DiscountApplication $discountApplication): JsonResponse
@@ -112,7 +123,6 @@ class DiscountApplicationController extends Controller
     {
         $this->authorizeTenantOrder($order);
         abort_if(in_array($order->status, ['completed', 'cancelled']), 422, 'This order is already closed.');
-        $this->guardNoApprovedDiscount($order);
 
         $data = $request->validate([
             'discount_card_id' => ['required', 'integer', 'exists:discount_cards,id'],
@@ -123,21 +133,36 @@ class DiscountApplicationController extends Controller
         abort_unless($approver, 401, 'Could not verify an owner/manager credential.');
         abort_unless($approver->hasRole(['owner', 'manager']), 403, 'Only an owner or manager can approve redeeming card credit.');
 
-        $card = DiscountCard::where('tenant_id', app('tenant')->id)->findOrFail($data['discount_card_id']);
-        abort_if($data['amount'] > (float) $card->accumulated_balance, 422, "This card's accumulated credit is lower than that amount.");
+        // The balance check and guardNoApprovedDiscount() used to both run
+        // outside this transaction, against plain (unlocked) reads — two
+        // near-simultaneous redeem() calls against the same card (a shared
+        // terminal, a double-tap) could both pass the same stale balance
+        // check before either decrement committed, spending more credit
+        // than the card actually held. Locking the card and order rows
+        // forces the second caller to wait and then re-check against the
+        // first caller's already-applied result.
+        $application = DB::transaction(function () use ($order, $data, $approver, $request) {
+            $lockedOrder = Order::whereKey($order->id)->lockForUpdate()->firstOrFail();
+            $this->guardNoApprovedDiscount($lockedOrder);
 
-        $application = DB::transaction(function () use ($order, $card, $data, $approver, $request) {
+            $card = DiscountCard::where('tenant_id', app('tenant')->id)
+                ->whereKey($data['discount_card_id'])
+                ->lockForUpdate()
+                ->firstOrFail();
+
+            abort_if($data['amount'] > (float) $card->accumulated_balance, 422, "This card's accumulated credit is lower than that amount.");
+
             $card->redeem($data['amount']);
 
-            $newDiscountAmount = (float) $order->discount_amount + $data['amount'];
-            $order->update([
+            $newDiscountAmount = (float) $lockedOrder->discount_amount + $data['amount'];
+            $lockedOrder->update([
                 'discount_card_id' => $card->id,
                 'discount_amount'  => $newDiscountAmount,
-                'total'            => (float) $order->subtotal - $newDiscountAmount,
+                'total'            => (float) $lockedOrder->subtotal - $newDiscountAmount,
             ]);
 
             return DiscountApplication::create([
-                'order_id'             => $order->id,
+                'order_id'             => $lockedOrder->id,
                 'discount_card_id'     => $card->id,
                 'requested_by_user_id' => $request->user()->id,
                 'mode'                 => DiscountApplication::MODE_REDEEM,

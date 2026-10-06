@@ -3,9 +3,12 @@
 use App\Models\Order;
 use App\Models\Tenant;
 
+const WEBHOOK_TEST_SECRET = 'whsec_test_secret_for_order_payment_webhook';
+
 beforeEach(function () {
     $this->seed();
     $this->tenant = Tenant::where('slug', 'demo-restaurant')->firstOrFail();
+    config(['services.stripe.webhook_secret' => WEBHOOK_TEST_SECRET]);
 
     $this->order = Order::create([
         'tenant_id' => $this->tenant->id, 'type' => 'delivery', 'status' => 'pending',
@@ -30,11 +33,29 @@ function orderPaymentWebhookPayload(int $orderId, string $eventId = 'evt_test_or
     ];
 }
 
+/**
+ * Posts a webhook payload with a real, correctly-signed Stripe-Signature
+ * header — the webhook endpoint now fails closed on an unverified payload
+ * (see WebhookController), so these tests must exercise the real signature
+ * path rather than relying on the old unsigned-fallback behavior.
+ */
+function postSignedStripeWebhook(array $payload)
+{
+    $body = json_encode($payload);
+    $timestamp = time();
+    $signedPayload = "{$timestamp}.{$body}";
+    $signature = hash_hmac('sha256', $signedPayload, WEBHOOK_TEST_SECRET);
+
+    return test()->call(
+        'POST',
+        '/api/webhooks/stripe',
+        server: ['HTTP_Stripe-Signature' => "t={$timestamp},v1={$signature}", 'CONTENT_TYPE' => 'application/json'],
+        content: $body,
+    );
+}
+
 it('marks an order as paid from a checkout.session.completed webhook', function () {
-    // STRIPE_WEBHOOK_SECRET is empty in phpunit.xml, so the controller falls
-    // back to unverified event parsing — no signature header needed, same as
-    // every other unsigned-webhook local-dev path in this app.
-    $this->postJson('/api/webhooks/stripe', orderPaymentWebhookPayload($this->order->id))->assertOk();
+    postSignedStripeWebhook(orderPaymentWebhookPayload($this->order->id))->assertOk();
 
     $this->order->refresh();
     expect($this->order->payment_status)->toBe(Order::PAYMENT_STATUS_PAID);
@@ -43,18 +64,18 @@ it('marks an order as paid from a checkout.session.completed webhook', function 
 });
 
 it('is idempotent when the same webhook is redelivered', function () {
-    $this->postJson('/api/webhooks/stripe', orderPaymentWebhookPayload($this->order->id))->assertOk();
+    postSignedStripeWebhook(orderPaymentWebhookPayload($this->order->id))->assertOk();
     $this->order->refresh();
     $firstPaidAt = $this->order->paid_at;
 
-    $this->postJson('/api/webhooks/stripe', orderPaymentWebhookPayload($this->order->id, 'evt_test_redelivered'))->assertOk();
+    postSignedStripeWebhook(orderPaymentWebhookPayload($this->order->id, 'evt_test_redelivered'))->assertOk();
 
     $this->order->refresh();
     expect($this->order->paid_at->eq($firstPaidAt))->toBeTrue();
 });
 
 it('ignores an order payment webhook for an unknown order id', function () {
-    $this->postJson('/api/webhooks/stripe', orderPaymentWebhookPayload(999999))->assertOk();
+    postSignedStripeWebhook(orderPaymentWebhookPayload(999999))->assertOk();
 });
 
 it('still processes a subscription-shaped session with no metadata.kind, unaffected by the new branch', function () {
@@ -74,5 +95,27 @@ it('still processes a subscription-shaped session with no metadata.kind, unaffec
     // No subscription on the session, so onCheckoutCompleted's existing
     // early-return kicks in — this just proves the new order-payment branch
     // doesn't intercept or crash on it.
-    $this->postJson('/api/webhooks/stripe', $payload)->assertOk();
+    postSignedStripeWebhook($payload)->assertOk();
+});
+
+it('rejects a webhook whose signature does not match', function () {
+    $body = json_encode(orderPaymentWebhookPayload($this->order->id));
+
+    test()->call(
+        'POST',
+        '/api/webhooks/stripe',
+        server: ['HTTP_Stripe-Signature' => 't=' . time() . ',v1=not_the_real_signature', 'CONTENT_TYPE' => 'application/json'],
+        content: $body,
+    )->assertStatus(400);
+
+    expect($this->order->fresh()->payment_status)->toBe(Order::PAYMENT_STATUS_PENDING);
+});
+
+it('rejects any webhook outright when no secret is configured, instead of parsing it unverified', function () {
+    config(['services.stripe.webhook_secret' => null]);
+
+    $this->postJson('/api/webhooks/stripe', orderPaymentWebhookPayload($this->order->id))
+        ->assertStatus(500);
+
+    expect($this->order->fresh()->payment_status)->toBe(Order::PAYMENT_STATUS_PENDING);
 });

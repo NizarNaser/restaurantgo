@@ -9,6 +9,7 @@ import ReviewForm from '../components/public/ReviewForm';
 import StarRating from '../components/StarRating';
 import { useCartStore } from '../store/cartStore';
 import { getStoredPublicLocale } from '../lib/publicLocale';
+import { formatMoney as money } from '../lib/money';
 import { usePublicSlug } from '../hooks/usePublicSlug';
 import { TAG_META } from '../types/public';
 import type { PublicMenuItem } from '../types/public';
@@ -26,10 +27,6 @@ interface ItemReview {
 interface ItemDetail extends PublicMenuItem {
   category_name: string | null;
   reviews: ItemReview[];
-}
-
-function money(price: number | string, currency: string) {
-  return `${parseFloat(String(price)).toFixed(2)} ${currency}`;
 }
 
 export default function ProductDetailPage() {

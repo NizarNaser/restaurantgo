@@ -6,12 +6,9 @@ import { ArrowLeft, Loader2, Minus, Plus, Trash2, ShoppingCart } from 'lucide-re
 import { useCartStore } from '../store/cartStore';
 import { useAuthStore } from '../store/authStore';
 import { usePublicSlug } from '../hooks/usePublicSlug';
+import { formatMoney as money } from '../lib/money';
 
 const PUBLIC_API = `${import.meta.env.VITE_API_URL || 'http://localhost:8000/api'}/v1/public`;
-
-function money(amount: number, currency: string) {
-  return `${amount.toFixed(2)} ${currency}`;
-}
 
 export default function CartPage() {
   const { t } = useTranslation();

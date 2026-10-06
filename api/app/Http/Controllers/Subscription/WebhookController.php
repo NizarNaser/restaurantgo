@@ -7,7 +7,6 @@ use App\Services\StripeService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
-use Stripe\Event;
 use Stripe\Exception\SignatureVerificationException;
 use Stripe\Webhook;
 
@@ -27,10 +26,17 @@ class WebhookController extends Controller
         $secret    = config('services.stripe.webhook_secret');
         $signature = $request->header('Stripe-Signature');
 
+        // Fail closed, not open: without a configured secret there is no way
+        // to verify this payload actually came from Stripe, so it must be
+        // rejected — never parsed and trusted as-is.
+        if (! $secret) {
+            Log::warning('Stripe webhook rejected: STRIPE_WEBHOOK_SECRET is not configured.');
+
+            return response('Webhook not configured.', 500);
+        }
+
         try {
-            $event = $secret
-                ? Webhook::constructEvent($payload, $signature, $secret)
-                : Event::constructFrom(json_decode($payload, true, flags: JSON_THROW_ON_ERROR));
+            $event = Webhook::constructEvent($payload, $signature, $secret);
         } catch (SignatureVerificationException $e) {
             Log::warning('Stripe webhook signature verification failed', ['error' => $e->getMessage()]);
 

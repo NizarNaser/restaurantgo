@@ -4,14 +4,10 @@ import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 import { Loader2, CheckCircle2, ChefHat, Clock, PackageCheck, XCircle } from 'lucide-react';
 import { usePublicSlug } from '../hooks/usePublicSlug';
+import { formatAmount as money } from '../lib/money';
 
 const PUBLIC_API = `${import.meta.env.VITE_API_URL || 'http://localhost:8000/api'}/v1/public`;
 const POLL_INTERVAL_MS = 8000;
-
-// Laravel's decimal cast serializes as a string in JSON (e.g. "62.50"), not a number.
-function money(amount: string | number) {
-  return parseFloat(String(amount)).toFixed(2);
-}
 
 const STEPS = [
   { key: 'pending', labelKey: 'order.steps.pending', icon: Clock },
@@ -126,13 +122,13 @@ export default function OrderStatusPage() {
             {order.items.map((item, i) => (
               <div key={i} className="flex justify-between text-sm text-gray-600">
                 <span>{item.quantity}× {item.name}</span>
-                <span dir="ltr">{money(item.subtotal)} {order.currency}</span>
+                <span dir="ltr">{money(item.subtotal, order.currency)} {order.currency}</span>
               </div>
             ))}
           </div>
           <div className="flex justify-between font-bold text-gray-900 border-t border-gray-100 mt-3 pt-3">
             <span>{t('common.total')}</span>
-            <span dir="ltr">{money(order.total)} {order.currency}</span>
+            <span dir="ltr">{money(order.total, order.currency)} {order.currency}</span>
           </div>
         </div>
 

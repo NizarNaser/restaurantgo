@@ -30,9 +30,21 @@ class InventoryService
         }
 
         DB::transaction(function () use ($order) {
-            $order->loadMissing('items.menuItem.recipeLines');
+            // Re-fetch and lock the order row, then re-check under that
+            // lock — the earlier check above reads whatever was already in
+            // memory, which two near-simultaneous completions of the same
+            // order (a double-tap on "close table", two staff on a shared
+            // terminal) could both have loaded before either one committed.
+            // Without this, both calls pass the stale check and both
+            // deduct the recipe's ingredients and attribute the shift.
+            $locked = Order::whereKey($order->id)->lockForUpdate()->first();
+            if (! $locked || $locked->stock_deducted_at) {
+                return;
+            }
 
-            foreach ($order->items as $item) {
+            $locked->loadMissing('items.menuItem.recipeLines');
+
+            foreach ($locked->items as $item) {
                 if (! $item->menuItem) {
                     // The MenuItem was deleted after this order was placed —
                     // its recipe is unrecoverable. Skip rather than fail the sale.
@@ -47,13 +59,14 @@ class InventoryService
                         $line->componentable_type,
                         $line->componentable_id,
                         (float) $line->gross_quantity * $item->quantity,
-                        $order,
+                        $locked,
                         StockMovement::REASON_SALE_DEDUCTION,
                     );
                 }
             }
 
-            $order->forceFill(['stock_deducted_at' => now()])->save();
+            $locked->forceFill(['stock_deducted_at' => now()])->save();
+            $order->stock_deducted_at = $locked->stock_deducted_at;
         });
     }
 
