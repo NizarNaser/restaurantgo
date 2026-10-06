@@ -32,6 +32,7 @@
     "advertisements": "Pubblicità",
     "contactMessages": "Messaggi di contatto",
     "auditLogs": "Registro di controllo",
+    "seo": "SEO e ricerca Google",
     "panelSubtitle": "Pannello di controllo aziendale",
     "logout": "Esci"
   },
@@ -61,6 +62,26 @@
     "allCountries": "Tutti i paesi",
     "allCities": "Tutte le città",
     "noResults": "Nessun ristorante corrisponde alla tua ricerca."
+  },
+  "restaurant": {
+    "notFound": "Questo ristorante non è stato trovato.",
+    "viewFullMenu": "Visualizza il menu completo",
+    "reviewsCount": "{{count}} recensioni",
+    "booking": {
+      "title": "Prenota un tavolo o un evento",
+      "table": "Tavolo",
+      "event": "Evento",
+      "eventNamePlaceholder": "Nome dell'evento",
+      "fullNamePlaceholder": "Nome completo",
+      "phonePlaceholder": "Numero di telefono",
+      "emailPlaceholder": "Indirizzo e-mail (facoltativo)",
+      "partySizePlaceholder": "Numero di persone",
+      "notesPlaceholder": "Note (facoltativo)",
+      "submit": "Invia richiesta di prenotazione",
+      "successTitle": "La tua richiesta di prenotazione è stata inviata!",
+      "successSubtitle": "Il ristorante ti contatterà per confermare.",
+      "error": "Impossibile inviare la richiesta, riprova."
+    }
   },
   "contact": {
     "subtitle": "Hai una domanda o vuoi informazioni sulla pubblicità a pagamento? Scrivici e ti risponderemo presto.",

@@ -63,6 +63,26 @@
     "allCities": "All cities",
     "noResults": "No restaurants match your search."
   },
+  "restaurant": {
+    "notFound": "This restaurant could not be found.",
+    "viewFullMenu": "View full menu",
+    "reviewsCount": "{{count}} reviews",
+    "booking": {
+      "title": "Book a table or event",
+      "table": "Table",
+      "event": "Event",
+      "eventNamePlaceholder": "Event name",
+      "fullNamePlaceholder": "Full name",
+      "phonePlaceholder": "Phone number",
+      "emailPlaceholder": "Email address (optional)",
+      "partySizePlaceholder": "Number of guests",
+      "notesPlaceholder": "Notes (optional)",
+      "submit": "Send booking request",
+      "successTitle": "Your booking request was sent!",
+      "successSubtitle": "The restaurant will contact you to confirm.",
+      "error": "Couldn't send your booking request, please try again."
+    }
+  },
   "contact": {
     "subtitle": "Have a question or want to ask about paid advertising? Send us a message and we'll get back to you soon.",
     "success": "Your message was sent successfully!",

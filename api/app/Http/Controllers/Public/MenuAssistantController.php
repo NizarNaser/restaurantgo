@@ -7,6 +7,7 @@ use App\Http\Controllers\Public\Concerns\ResolvesPublicTenant;
 use App\Models\MenuItem;
 use App\Models\Tenant;
 use App\Services\OpenAiService;
+use App\Services\SeoService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -35,6 +36,7 @@ class MenuAssistantController extends Controller
     private function buildSystemPrompt(Tenant $tenant, string $locale): string
     {
         $branch = $tenant->branches()->where('is_active', true)->first();
+        $address = app(SeoService::class)->pick($branch?->address, $locale);
 
         $totalAvailable = MenuItem::forTenant($tenant->id)->available()->count();
 
@@ -64,7 +66,7 @@ class MenuAssistantController extends Controller
             You are a helpful assistant answering customer questions about "{$tenant->name}", a restaurant. Only answer questions about this restaurant — its menu, hours, location, and general questions a diner might have (dietary needs, spice level, etc.) based on the menu below. You cannot place an order or add anything to the cart yourself — if the customer wants to order, tell them to use the Add to Cart buttons on this page.
 
             Restaurant: {$tenant->name}
-            Address: {$branch?->address}, {$branch?->city}
+            Address: {$address}, {$branch?->city}
             Phone: {$branch?->phone}
             Working hours: {$hours}
 

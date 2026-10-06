@@ -16,6 +16,7 @@ import QrScannerModal from '../components/QrScannerModal';
 import StarRating from '../components/StarRating';
 import { useCartStore } from '../store/cartStore';
 import { getStoredPublicLocale } from '../lib/publicLocale';
+import { countryName } from '../lib/countryName';
 import { usePublicSlug } from '../hooks/usePublicSlug';
 import { RTL_LOCALES } from '../i18n/index';
 import {
@@ -650,7 +651,7 @@ export default function PublicMenuPage() {
                 <div className="flex items-start gap-3 text-gray-600">
                   <MapPin size={18} className="text-[#ff4757] shrink-0 mt-0.5" />
                   <span>
-                    {[info.contact.address, info.contact.city, info.contact.country].filter(Boolean).join(', ')}
+                    {[info.contact.address, info.contact.city, info.contact.country && countryName(info.contact.country, i18n.resolvedLanguage ?? 'en')].filter(Boolean).join(', ')}
                   </span>
                 </div>
               )}

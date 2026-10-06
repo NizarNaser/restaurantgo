@@ -14,7 +14,7 @@ interface TenantSettings {
   default_locale: string;
   tax_rate: number | string;
   service_charge_rate: number | string;
-  service_charge_message: string | null;
+  service_charge_message: Record<string, string> | null;
   service_charge_show_message: boolean;
   service_charge_apply_to_invoice: boolean;
   supported_locales: string[];
@@ -73,7 +73,7 @@ function serializeWorkingHours(week: WeekHours): Record<string, string> {
 
 interface BranchContact {
   phone: string | null;
-  address: string | null;
+  address: Record<string, string> | null;
   city: string | null;
   country: string | null;
   latitude: number | string | null;
@@ -366,7 +366,11 @@ export default function SettingsPage() {
   const [loadError, setLoadError] = useState('');
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
-  const [activeSeoLocale, setActiveSeoLocale] = useState('en');
+  // Shared tab selector for every per-locale field on this page (SEO copy,
+  // branch address, service-charge note) — they all offer the same set of
+  // tabs (the tenant's supported_locales), so one selector keeps them in
+  // sync instead of each field tracking its own.
+  const [activeLocaleTab, setActiveLocaleTab] = useState('en');
   // Tracks which languages were enabled the last time we loaded/saved, so
   // after a save we can tell which ones are brand new and offer to
   // auto-translate the existing menu/blog into them.
@@ -401,7 +405,7 @@ export default function SettingsPage() {
         }
         setSettings(data);
         knownLocalesRef.current = data.supported_locales;
-        setActiveSeoLocale(data.default_locale || 'en');
+        setActiveLocaleTab(data.default_locale || 'en');
       } catch (e: any) {
         console.error('Failed to load settings', e);
         // Without this, a failed load (e.g. a suspended/unpaid account
@@ -647,6 +651,42 @@ export default function SettingsPage() {
             </div>
           </div>
 
+          {/* Shared language tab for every per-locale field below (address,
+              service-charge note, SEO copy) — pick a language once here and
+              every such field edits that language, instead of each field
+              tracking its own tab. The dot flags a language still missing
+              any one of those fields, so a gap is visible without opening
+              each tab to check. */}
+          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-4">
+            <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-1.5">
+              <Languages size={14} /> {t('settings.editingLanguage')}
+            </label>
+            <div className="flex flex-wrap gap-2">
+              {(settings?.supported_locales ?? ['en']).map((code) => {
+                const missing = !branch?.address?.[code] || !settings?.seo_title?.[code] || !settings?.seo_description?.[code]
+                  || (settings?.service_charge_show_message && !settings?.service_charge_message?.[code]);
+                return (
+                  <button
+                    key={code}
+                    type="button"
+                    onClick={() => setActiveLocaleTab(code)}
+                    className={`relative px-3 py-1.5 rounded-full text-xs font-semibold transition-colors ${
+                      activeLocaleTab === code ? 'bg-[#ff4757] text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    }`}
+                  >
+                    {LOCALES.find((l) => l.code === code)?.name ?? code}
+                    {missing && (
+                      <span
+                        className={`absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full ${activeLocaleTab === code ? 'bg-white' : 'bg-amber-500'}`}
+                        title={t('settings.missingTranslation')}
+                      />
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
           {/* Visit or contact us — feeds the public menu page's contact card */}
           {/* A plain div, not a <form> — it already sits inside the page's
               main settings <form>, and nested <form> elements are invalid
@@ -671,13 +711,18 @@ export default function SettingsPage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{t('settings.address')}</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  {t('settings.address')}
+                  <span className="text-gray-400 font-normal"> — {LOCALES.find((l) => l.code === activeLocaleTab)?.name ?? activeLocaleTab}</span>
+                </label>
                 <input
                   type="text"
-                  name="address"
                   className="input w-full"
-                  value={branch?.address ?? ''}
-                  onChange={handleBranchChange}
+                  value={branch?.address?.[activeLocaleTab] ?? ''}
+                  onChange={(e) => branch && setBranch({
+                    ...branch,
+                    address: { ...branch.address, [activeLocaleTab]: e.target.value },
+                  })}
                 />
               </div>
               <div>
@@ -998,13 +1043,19 @@ export default function SettingsPage() {
 
             {settings?.service_charge_show_message && (
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{t('settings.serviceChargeMessage')}</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  {t('settings.serviceChargeMessage')}
+                  <span className="text-gray-400 font-normal"> — {LOCALES.find((l) => l.code === activeLocaleTab)?.name ?? activeLocaleTab}</span>
+                </label>
                 <textarea
-                  name="service_charge_message" rows={2}
+                  rows={2}
                   className="input w-full"
                   placeholder={t('settings.serviceChargeMessagePlaceholder')}
-                  value={settings?.service_charge_message ?? ''}
-                  onChange={handleChange}
+                  value={settings?.service_charge_message?.[activeLocaleTab] ?? ''}
+                  onChange={(e) => settings && setSettings({
+                    ...settings,
+                    service_charge_message: { ...settings.service_charge_message, [activeLocaleTab]: e.target.value },
+                  })}
                 />
                 <p className="text-xs text-gray-400 mt-1">{t('settings.serviceChargeMessageHint')}</p>
               </div>
@@ -1108,47 +1159,33 @@ export default function SettingsPage() {
             <p className="text-sm text-gray-500 -mt-2">{t('settings.seoDesc')}</p>
             <div className="grid grid-cols-1 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">{t('settings.seoPerLanguage')}</label>
-                <div className="flex flex-wrap gap-2">
-                  {(settings?.supported_locales ?? ['en']).map((code) => (
-                    <button
-                      key={code}
-                      type="button"
-                      onClick={() => setActiveSeoLocale(code)}
-                      className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-colors ${
-                        activeSeoLocale === code ? 'bg-[#ff4757] text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                      }`}
-                    >
-                      {LOCALES.find((l) => l.code === code)?.name ?? code}
-                    </button>
-                  ))}
-                </div>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{t('menu.metaTitle')}</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  {t('menu.metaTitle')}
+                  <span className="text-gray-400 font-normal"> — {LOCALES.find((l) => l.code === activeLocaleTab)?.name ?? activeLocaleTab}</span>
+                </label>
                 <input
                   type="text"
                   placeholder={settings?.name}
                   className="input w-full"
-                  value={settings?.seo_title?.[activeSeoLocale] ?? ''}
+                  value={settings?.seo_title?.[activeLocaleTab] ?? ''}
                   onChange={(e) => settings && setSettings({
                     ...settings,
-                    seo_title: { ...settings.seo_title, [activeSeoLocale]: e.target.value },
+                    seo_title: { ...settings.seo_title, [activeLocaleTab]: e.target.value },
                   })}
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   {t('menu.metaDescription')}
-                  <span className="text-gray-400 font-normal"> — {t('menu.metaDescriptionCount', { count: settings?.seo_description?.[activeSeoLocale]?.length ?? 0 })}</span>
+                  <span className="text-gray-400 font-normal"> — {t('menu.metaDescriptionCount', { count: settings?.seo_description?.[activeLocaleTab]?.length ?? 0 })}</span>
                 </label>
                 <textarea
                   rows={2}
                   className="input w-full"
-                  value={settings?.seo_description?.[activeSeoLocale] ?? ''}
+                  value={settings?.seo_description?.[activeLocaleTab] ?? ''}
                   onChange={(e) => settings && setSettings({
                     ...settings,
-                    seo_description: { ...settings.seo_description, [activeSeoLocale]: e.target.value },
+                    seo_description: { ...settings.seo_description, [activeLocaleTab]: e.target.value },
                   })}
                 />
               </div>

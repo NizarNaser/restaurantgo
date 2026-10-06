@@ -32,6 +32,7 @@
     "advertisements": "Publicités",
     "contactMessages": "Messages de contact",
     "auditLogs": "Journal d'audit",
+    "seo": "Référencement et recherche Google",
     "panelSubtitle": "Panneau de contrôle de l'entreprise",
     "logout": "Se déconnecter"
   },
@@ -61,6 +62,26 @@
     "allCountries": "Tous les pays",
     "allCities": "Toutes les villes",
     "noResults": "Aucun restaurant ne correspond à votre recherche."
+  },
+  "restaurant": {
+    "notFound": "Ce restaurant est introuvable.",
+    "viewFullMenu": "Voir le menu complet",
+    "reviewsCount": "{{count}} avis",
+    "booking": {
+      "title": "Réserver une table ou un événement",
+      "table": "Table",
+      "event": "Événement",
+      "eventNamePlaceholder": "Nom de l'événement",
+      "fullNamePlaceholder": "Nom complet",
+      "phonePlaceholder": "Numéro de téléphone",
+      "emailPlaceholder": "Adresse e-mail (facultatif)",
+      "partySizePlaceholder": "Nombre de personnes",
+      "notesPlaceholder": "Remarques (facultatif)",
+      "submit": "Envoyer la demande de réservation",
+      "successTitle": "Votre demande de réservation a été envoyée !",
+      "successSubtitle": "Le restaurant vous contactera pour confirmer.",
+      "error": "Impossible d'envoyer votre demande, veuillez réessayer."
+    }
   },
   "contact": {
     "subtitle": "Vous avez une question ou souhaitez vous renseigner sur la publicité payante ? Envoyez-nous un message, nous vous répondrons rapidement.",

@@ -63,6 +63,26 @@
     "allCities": "كل المدن",
     "noResults": "لا توجد مطاعم مطابقة لبحثك."
   },
+  "restaurant": {
+    "notFound": "لم يتم العثور على هذا المطعم.",
+    "viewFullMenu": "عرض القائمة الكاملة",
+    "reviewsCount": "{{count}} تقييم",
+    "booking": {
+      "title": "احجز طاولة أو مناسبة",
+      "table": "طاولة",
+      "event": "مناسبة",
+      "eventNamePlaceholder": "اسم المناسبة",
+      "fullNamePlaceholder": "الاسم الكامل",
+      "phonePlaceholder": "رقم الهاتف",
+      "emailPlaceholder": "البريد الإلكتروني (اختياري)",
+      "partySizePlaceholder": "عدد الأشخاص",
+      "notesPlaceholder": "ملاحظات (اختياري)",
+      "submit": "إرسال طلب الحجز",
+      "successTitle": "تم إرسال طلب الحجز بنجاح!",
+      "successSubtitle": "سيتواصل معك المطعم لتأكيد الحجز.",
+      "error": "تعذر إرسال طلب الحجز، حاول مجددًا."
+    }
+  },
   "contact": {
     "subtitle": "لديك سؤال أو تريد الاستفسار عن الإعلانات المدفوعة؟ راسلنا وسنرد عليك قريبًا.",
     "success": "تم إرسال رسالتك بنجاح!",

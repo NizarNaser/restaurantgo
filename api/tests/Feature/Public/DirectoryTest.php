@@ -24,7 +24,13 @@ it('filters the directory by city', function () {
 it('returns country/city filter options', function () {
     $this->getJson('/api/v1/directory/filters')
         ->assertOk()
-        ->assertJson(['LB' => ['Beirut']]);
+        ->assertJson(['LB' => [['value' => 'Beirut', 'label' => 'Beirut']]]);
+});
+
+it('localises filter city labels for the requested language, keeping the filter value raw', function () {
+    $this->getJson('/api/v1/directory/filters?lang=ar')
+        ->assertOk()
+        ->assertJson(['LB' => [['value' => 'Beirut', 'label' => 'بيروت']]]);
 });
 
 it('ranks the top-rated restaurants by average rating, best first', function () {

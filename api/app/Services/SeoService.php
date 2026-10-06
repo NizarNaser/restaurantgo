@@ -83,16 +83,17 @@ class SeoService
 
     // ── Schema.org / JSON-LD ──────────────────────────────────
 
-    public function restaurantJsonLd(Tenant $tenant): array
+    public function restaurantJsonLd(Tenant $tenant, ?string $locale = null): array
     {
         $branch = $tenant->branches()->where('is_active', true)->first();
+        $locale = $locale ?? $tenant->default_locale;
 
         $schema = array_filter([
             '@context'    => 'https://schema.org',
             '@type'       => 'Restaurant',
             'name'        => $tenant->name,
             'url'         => $this->tenantBaseUrl($tenant),
-            'description' => $this->pick($tenant->seo_description, $tenant->default_locale),
+            'description' => $this->pick($tenant->seo_description, $locale),
             'image'       => $tenant->seo_og_image ?: $tenant->logo_path,
             'hasMenu'     => $this->menuUrl($tenant),
             'currenciesAccepted' => $tenant->default_currency,
@@ -101,8 +102,8 @@ class SeoService
         if ($branch) {
             $schema['address'] = array_filter([
                 '@type'           => 'PostalAddress',
-                'streetAddress'   => $branch->address,
-                'addressLocality' => $branch->city,
+                'streetAddress'   => $this->pick($branch->address, $locale),
+                'addressLocality' => app(CityTranslationService::class)->translate($branch->city, $locale),
                 'addressCountry'  => $branch->country,
             ]);
             $schema['telephone'] = $branch->phone;

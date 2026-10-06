@@ -17,7 +17,7 @@ const BASE_DOMAIN = import.meta.env.VITE_BASE_DOMAIN as string | undefined;
 // roster here would promise a dashboard experience that doesn't exist yet.
 const DASHBOARD_LANGUAGES = [
   { code: 'en', name: 'English' },
-  { code: 'ar', name: 'العربية' },
+  { code: 'ar', name: 'العربية' }, // i18n-check-ignore — a language's own native name, not translatable text
 ];
 
 interface PlanOption {

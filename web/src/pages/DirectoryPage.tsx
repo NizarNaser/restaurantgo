@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { Search, SearchX } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import api from '../api/axios';
+import { countryName } from '../lib/countryName';
 import AdSlot from '../components/AdSlot';
 import Pagination from '../components/Pagination';
 import Reveal from '../components/Reveal';
@@ -11,7 +12,12 @@ import RestaurantCard, { type Restaurant } from '../components/RestaurantCard';
 
 const PER_PAGE = 10;
 
-type Filters = Record<string, string[]>;
+interface CityOption {
+  value: string;
+  label: string;
+}
+
+type Filters = Record<string, CityOption[]>;
 
 function CardSkeleton() {
   return (
@@ -26,7 +32,7 @@ function CardSkeleton() {
 }
 
 export default function DirectoryPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [filters, setFilters] = useState<Filters>({});
@@ -38,8 +44,10 @@ export default function DirectoryPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    api.get('/v1/directory/filters').then((res) => setFilters(res.data)).catch(() => {});
-  }, []);
+    api.get('/v1/directory/filters', { params: { lang: i18n.resolvedLanguage } }).then((res) => setFilters(res.data)).catch(() => {});
+    // Re-fetch when the visitor switches site language — city labels are locale-specific.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [i18n.resolvedLanguage]);
 
   // Any filter change starts the results over from page 1.
   useEffect(() => {
@@ -55,13 +63,14 @@ export default function DirectoryPage() {
     if (page > 1) urlParams.page = String(page);
     setSearchParams(urlParams, { replace: true });
 
-    api.get('/v1/directory/restaurants', { params: { ...urlParams, per_page: PER_PAGE, page } })
+    api.get('/v1/directory/restaurants', { params: { ...urlParams, lang: i18n.resolvedLanguage, per_page: PER_PAGE, page } })
       .then((res) => {
         setRestaurants(res.data.data);
         setLastPage(res.data.last_page ?? 1);
       })
       .finally(() => setLoading(false));
-  }, [country, city, search, page]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [country, city, search, page, i18n.resolvedLanguage]);
 
   const cities = country ? filters[country] ?? [] : Object.values(filters).flat();
 
@@ -88,11 +97,11 @@ export default function DirectoryPage() {
           onChange={(e) => { setCountry(e.target.value); setCity(''); }}
         >
           <option value="">{t('directory.allCountries')}</option>
-          {Object.keys(filters).map((c) => <option key={c} value={c}>{c}</option>)}
+          {Object.keys(filters).map((c) => <option key={c} value={c}>{countryName(c, i18n.resolvedLanguage ?? 'en')}</option>)}
         </select>
         <select className="input bg-white sm:w-48" value={city} onChange={(e) => setCity(e.target.value)}>
           <option value="">{t('directory.allCities')}</option>
-          {cities.map((c) => <option key={c} value={c}>{c}</option>)}
+          {cities.map((c) => <option key={c.value} value={c.value}>{c.label}</option>)}
         </select>
       </Reveal>
 

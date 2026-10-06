@@ -8,6 +8,7 @@ use App\Models\Department;
 use App\Models\MenuCategory;
 use App\Models\MenuItem;
 use App\Models\Review;
+use App\Services\CityTranslationService;
 use App\Services\SeoService;
 use Illuminate\Http\JsonResponse;
 
@@ -15,7 +16,7 @@ class MenuController extends Controller
 {
     use ResolvesPublicTenant;
 
-    public function __construct(private readonly SeoService $seo) {}
+    public function __construct(private readonly SeoService $seo, private readonly CityTranslationService $cities) {}
 
     public function getInfo(string $slug): JsonResponse
     {
@@ -41,7 +42,7 @@ class MenuController extends Controller
                 'supported_locales' => $tenant->supported_locales ?: [$tenant->default_locale ?? config('app.locale')],
                 // Dine-in only — never shown/charged for delivery orders.
                 'service_charge_rate'         => (float) $tenant->service_charge_rate,
-                'service_charge_message'      => $tenant->service_charge_show_message ? $tenant->service_charge_message : null,
+                'service_charge_message'      => $tenant->service_charge_show_message ? $this->seo->pick($tenant->service_charge_message, $locale) : null,
                 'public_url'  => $this->seo->menuUrl($tenant),
                 'blog_url'    => $this->seo->blogUrl($tenant),
                 'analytics'   => [
@@ -50,8 +51,8 @@ class MenuController extends Controller
                 ],
                 'contact'     => $branch ? [
                     'phone'         => $branch->phone,
-                    'address'       => $branch->address,
-                    'city'          => $branch->city,
+                    'address'       => $this->seo->pick($branch->address, $locale),
+                    'city'          => $this->cities->translate($branch->city, $locale),
                     'country'       => $branch->country,
                     'working_hours' => $branch->working_hours,
                     'latitude'      => $branch->latitude ? (float) $branch->latitude : null,
@@ -77,7 +78,7 @@ class MenuController extends Controller
                 $this->seo->pick($tenant->seo_description, $locale),
                 $this->seo->tenantBaseUrl($tenant),
             ),
-            'json_ld' => [$this->seo->restaurantJsonLd($tenant)],
+            'json_ld' => [$this->seo->restaurantJsonLd($tenant, $locale)],
         ]);
     }
 
@@ -167,7 +168,7 @@ class MenuController extends Controller
                 $this->seo->menuUrl($tenant),
             ),
             'json_ld' => [
-                $this->seo->restaurantJsonLd($tenant),
+                $this->seo->restaurantJsonLd($tenant, $locale),
                 $this->seo->menuJsonLd($tenant, $categories, $items, $locale),
             ],
         ]);
