@@ -19,7 +19,7 @@ const restaurant = {
 beforeEach(() => {
   vi.clearAllMocks();
   mockedApi.get.mockImplementation((url: string) => {
-    if (url === '/v1/directory/filters') return Promise.resolve({ data: { LB: ['Beirut'] } });
+    if (url === '/v1/directory/filters') return Promise.resolve({ data: { LB: [{ value: 'Beirut', label: 'Beirut' }] } });
     if (url === '/v1/directory/restaurants') return Promise.resolve({ data: { data: [restaurant] } });
     if (url === '/v1/ads') return Promise.resolve({ data: [] });
     return Promise.reject(new Error(`Unexpected GET ${url}`));
@@ -31,7 +31,9 @@ describe('DirectoryPage', () => {
     render(<MemoryRouter><DirectoryPage /></MemoryRouter>);
 
     expect(await screen.findByText('Demo Restaurant')).toBeInTheDocument();
-    expect(screen.getByText('Beirut, LB')).toBeInTheDocument();
+    // The country code ('LB') is localized client-side via Intl.DisplayNames
+    // rather than shown raw — see RestaurantCard.tsx's countryName() helper.
+    expect(screen.getByText('Beirut, Lebanon')).toBeInTheDocument();
   });
 
   it('re-fetches restaurants when a city filter is chosen', async () => {
@@ -43,7 +45,7 @@ describe('DirectoryPage', () => {
 
     await waitFor(() => {
       expect(mockedApi.get).toHaveBeenCalledWith('/v1/directory/restaurants', {
-        params: { city: 'Beirut', per_page: 10, page: 1 },
+        params: { city: 'Beirut', per_page: 10, page: 1, lang: 'en' },
       });
     });
   });

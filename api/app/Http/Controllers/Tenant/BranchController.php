@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Tenant;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\TranslateTenantContentJob;
 use App\Models\Branch;
 use App\Services\AuditService;
 use Illuminate\Http\JsonResponse;
@@ -47,7 +48,8 @@ class BranchController extends Controller
 
         $data = $request->validate([
             'phone'                => ['nullable', 'string', 'max:50'],
-            'address'              => ['nullable', 'string', 'max:255'],
+            'address'              => ['nullable', 'array'],
+            'address.*'            => ['nullable', 'string', 'max:255'],
             'city'                 => ['nullable', 'string', 'max:100'],
             'country'              => ['nullable', 'string', 'size:2'],
             'latitude'             => ['nullable', 'numeric', 'between:-90,90'],
@@ -78,6 +80,11 @@ class BranchController extends Controller
 
         $branch->update($data);
         $this->audit->log('branch.contact_updated', $branch);
+
+        // So the address a customer sees under "Visit or contact us" matches
+        // whatever language they're browsing in, the same way the tenant's
+        // own SEO copy and service-charge note already do.
+        TranslateTenantContentJob::dispatchForMissingBranchAddressLocales(app('tenant'), $branch);
 
         return response()->json($branch->fresh());
     }

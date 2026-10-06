@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'motion/react';
 import { MapPin, Phone, Star, ExternalLink, Loader2, CheckCircle2, ChefHat, CalendarCheck, SearchX } from 'lucide-react';
 import api from '../api/axios';
+import { countryName } from '../lib/countryName';
 import Reveal from '../components/Reveal';
 
 interface RestaurantInfo {
@@ -21,6 +23,7 @@ interface RestaurantInfo {
 }
 
 export default function RestaurantDetailPage() {
+  const { t, i18n } = useTranslation();
   const { slug } = useParams<{ slug: string }>();
   const [info, setInfo] = useState<RestaurantInfo | null>(null);
   const [loading, setLoading] = useState(true);
@@ -42,11 +45,15 @@ export default function RestaurantDetailPage() {
 
   useEffect(() => {
     if (!slug) return;
-    api.get(`/v1/public/${slug}/info`)
+    setLoading(true);
+    api.get(`/v1/public/${slug}/info`, { params: { lang: i18n.resolvedLanguage } })
       .then((res) => setInfo(res.data.data))
       .catch(() => setNotFound(true))
       .finally(() => setLoading(false));
-  }, [slug]);
+    // Re-fetch when the visitor switches site language — the description,
+    // city and address returned by this endpoint are locale-specific.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [slug, i18n.resolvedLanguage]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -60,7 +67,7 @@ export default function RestaurantDetailPage() {
       await api.post(`/v1/public/${slug}/reservations`, form);
       setSubmitted(true);
     } catch (err: any) {
-      setError(err.response?.data?.message || 'تعذر إرسال طلب الحجز، حاول مجددًا.');
+      setError(err.response?.data?.message || t('restaurant.booking.error'));
     } finally {
       setSubmitting(false);
     }
@@ -80,7 +87,7 @@ export default function RestaurantDetailPage() {
         <div className="icon-badge w-16 h-16 bg-gray-100 text-gray-400">
           <SearchX size={28} />
         </div>
-        <p className="text-gray-500 font-medium">لم يتم العثور على هذا المطعم.</p>
+        <p className="text-gray-500 font-medium">{t('restaurant.notFound')}</p>
       </div>
     );
   }
@@ -96,7 +103,7 @@ export default function RestaurantDetailPage() {
             <h1 className="text-2xl font-extrabold text-gray-900">{info.name}</h1>
             {info.contact && (
               <p className="text-sm text-gray-500 flex items-center gap-1 mt-1">
-                <MapPin size={14} /> {[info.contact.address, info.contact.city, info.contact.country].filter(Boolean).join('، ')}
+                <MapPin size={14} /> {[info.contact.address, info.contact.city, info.contact.country && countryName(info.contact.country, i18n.resolvedLanguage ?? 'en')].filter(Boolean).join(t('common.citySeparator'))}
               </p>
             )}
           </div>
@@ -112,7 +119,7 @@ export default function RestaurantDetailPage() {
           )}
           {info.service_rating.average && (
             <span className="flex items-center gap-1.5 text-amber-600 bg-amber-50 px-3 py-1.5 rounded-full font-medium">
-              <Star size={14} fill="currentColor" /> {info.service_rating.average} ({info.service_rating.count} تقييم)
+              <Star size={14} fill="currentColor" /> {info.service_rating.average} ({t('restaurant.reviewsCount', { count: info.service_rating.count })})
             </span>
           )}
         </div>
@@ -123,7 +130,7 @@ export default function RestaurantDetailPage() {
           rel="noreferrer"
           className="btn btn-outline mt-6"
         >
-          عرض القائمة الكاملة <ExternalLink size={16} />
+          {t('restaurant.viewFullMenu')} <ExternalLink size={16} />
         </a>
       </Reveal>
 
@@ -132,7 +139,7 @@ export default function RestaurantDetailPage() {
           <div className="icon-badge w-9 h-9 bg-red-50 text-[var(--color-primary)]">
             <CalendarCheck size={18} />
           </div>
-          <h2 className="font-bold text-gray-900 text-lg">احجز طاولة أو مناسبة</h2>
+          <h2 className="font-bold text-gray-900 text-lg">{t('restaurant.booking.title')}</h2>
         </div>
 
         <AnimatePresence mode="wait">
@@ -144,37 +151,37 @@ export default function RestaurantDetailPage() {
               className="mt-6 flex flex-col items-center text-center gap-2 py-6"
             >
               <CheckCircle2 className="text-green-500" size={44} />
-              <p className="text-gray-700 font-medium">تم إرسال طلب الحجز بنجاح!</p>
-              <p className="text-sm text-gray-500">سيتواصل معك المطعم لتأكيد الحجز.</p>
+              <p className="text-gray-700 font-medium">{t('restaurant.booking.successTitle')}</p>
+              <p className="text-sm text-gray-500">{t('restaurant.booking.successSubtitle')}</p>
             </motion.div>
           ) : (
             <motion.form key="form" onSubmit={handleSubmit} className="mt-4 space-y-3" exit={{ opacity: 0 }}>
               <div className="grid grid-cols-2 gap-3">
                 <button type="button" onClick={() => setForm((p) => ({ ...p, type: 'table' }))}
-                  className={`btn ${form.type === 'table' ? 'btn-primary' : 'btn-outline'}`}>طاولة</button>
+                  className={`btn ${form.type === 'table' ? 'btn-primary' : 'btn-outline'}`}>{t('restaurant.booking.table')}</button>
                 <button type="button" onClick={() => setForm((p) => ({ ...p, type: 'event' }))}
-                  className={`btn ${form.type === 'event' ? 'btn-primary' : 'btn-outline'}`}>مناسبة</button>
+                  className={`btn ${form.type === 'event' ? 'btn-primary' : 'btn-outline'}`}>{t('restaurant.booking.event')}</button>
               </div>
 
               {form.type === 'event' && (
-                <input name="event_name" required placeholder="اسم المناسبة" className="input" value={form.event_name} onChange={handleChange} />
+                <input name="event_name" required placeholder={t('restaurant.booking.eventNamePlaceholder')} className="input" value={form.event_name} onChange={handleChange} />
               )}
 
-              <input name="customer_name" required placeholder="الاسم الكامل" className="input" value={form.customer_name} onChange={handleChange} />
-              <input name="customer_phone" required placeholder="رقم الهاتف" className="input" value={form.customer_phone} onChange={handleChange} />
-              <input name="customer_email" type="email" placeholder="البريد الإلكتروني (اختياري)" className="input" value={form.customer_email} onChange={handleChange} />
+              <input name="customer_name" required placeholder={t('restaurant.booking.fullNamePlaceholder')} className="input" value={form.customer_name} onChange={handleChange} />
+              <input name="customer_phone" required placeholder={t('restaurant.booking.phonePlaceholder')} className="input" value={form.customer_phone} onChange={handleChange} />
+              <input name="customer_email" type="email" placeholder={t('restaurant.booking.emailPlaceholder')} className="input" value={form.customer_email} onChange={handleChange} />
 
               <div className="grid grid-cols-2 gap-3">
-                <input name="party_size" type="number" min={1} required placeholder="عدد الأشخاص" className="input" value={form.party_size} onChange={handleChange} />
+                <input name="party_size" type="number" min={1} required placeholder={t('restaurant.booking.partySizePlaceholder')} className="input" value={form.party_size} onChange={handleChange} />
                 <input name="reserved_at" type="datetime-local" required className="input" value={form.reserved_at} onChange={handleChange} />
               </div>
 
-              <textarea name="notes" placeholder="ملاحظات (اختياري)" className="input h-20" value={form.notes} onChange={handleChange} />
+              <textarea name="notes" placeholder={t('restaurant.booking.notesPlaceholder')} className="input h-20" value={form.notes} onChange={handleChange} />
 
               {error && <p className="text-sm text-red-500">{error}</p>}
 
               <button type="submit" disabled={submitting} className="btn btn-primary w-full">
-                {submitting ? <Loader2 size={18} className="animate-spin" /> : 'إرسال طلب الحجز'}
+                {submitting ? <Loader2 size={18} className="animate-spin" /> : t('restaurant.booking.submit')}
               </button>
             </motion.form>
           )}

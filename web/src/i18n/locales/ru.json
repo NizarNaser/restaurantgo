@@ -32,6 +32,7 @@
     "advertisements": "Реклама",
     "contactMessages": "Сообщения обратной связи",
     "auditLogs": "Журнал аудита",
+    "seo": "SEO и поиск Google",
     "panelSubtitle": "Панель управления компанией",
     "logout": "Выйти"
   },
@@ -61,6 +62,26 @@
     "allCountries": "Все страны",
     "allCities": "Все города",
     "noResults": "Рестораны, соответствующие вашему запросу, не найдены."
+  },
+  "restaurant": {
+    "notFound": "Этот ресторан не найден.",
+    "viewFullMenu": "Посмотреть полное меню",
+    "reviewsCount": "{{count}} отзывов",
+    "booking": {
+      "title": "Забронировать столик или мероприятие",
+      "table": "Столик",
+      "event": "Мероприятие",
+      "eventNamePlaceholder": "Название мероприятия",
+      "fullNamePlaceholder": "Полное имя",
+      "phonePlaceholder": "Номер телефона",
+      "emailPlaceholder": "Email (необязательно)",
+      "partySizePlaceholder": "Количество гостей",
+      "notesPlaceholder": "Примечания (необязательно)",
+      "submit": "Отправить заявку на бронирование",
+      "successTitle": "Заявка на бронирование отправлена!",
+      "successSubtitle": "Ресторан свяжется с вами для подтверждения.",
+      "error": "Не удалось отправить заявку, попробуйте снова."
+    }
   },
   "contact": {
     "subtitle": "Есть вопрос или хотите узнать о платной рекламе? Напишите нам, и мы скоро ответим.",

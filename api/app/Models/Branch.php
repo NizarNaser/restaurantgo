@@ -18,6 +18,7 @@ class Branch extends Model
     ];
 
     protected $casts = [
+        'address'       => 'array',
         'working_hours' => 'array',
         'is_active'     => 'boolean',
         'latitude'      => 'decimal:7',

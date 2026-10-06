@@ -64,7 +64,7 @@ class ArticleController extends Controller
                 type: 'website',
             ),
             'json_ld' => [
-                $this->seo->restaurantJsonLd($tenant),
+                $this->seo->restaurantJsonLd($tenant, $locale),
                 $this->seo->breadcrumbJsonLd([
                     ['name' => $tenant->name, 'url' => $this->seo->tenantBaseUrl($tenant)],
                     ['name' => 'Blog',        'url' => $this->seo->blogUrl($tenant)],

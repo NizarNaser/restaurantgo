@@ -57,7 +57,7 @@ class SeoRenderController extends Controller
                 $this->seo->menuUrl($tenant),
             ),
             'jsonLd' => [
-                $this->seo->restaurantJsonLd($tenant),
+                $this->seo->restaurantJsonLd($tenant, $locale),
                 $this->seo->menuJsonLd($tenant, $categories, $items, $locale),
             ],
         ]);

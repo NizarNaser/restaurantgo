@@ -32,6 +32,7 @@
     "advertisements": "广告",
     "contactMessages": "联系消息",
     "auditLogs": "审计日志",
+    "seo": "SEO 与谷歌搜索",
     "panelSubtitle": "公司控制面板",
     "logout": "退出登录"
   },
@@ -61,6 +62,26 @@
     "allCountries": "所有国家",
     "allCities": "所有城市",
     "noResults": "没有与您的搜索匹配的餐厅。"
+  },
+  "restaurant": {
+    "notFound": "未找到该餐厅。",
+    "viewFullMenu": "查看完整菜单",
+    "reviewsCount": "{{count}} 条评价",
+    "booking": {
+      "title": "预订餐桌或活动",
+      "table": "餐桌",
+      "event": "活动",
+      "eventNamePlaceholder": "活动名称",
+      "fullNamePlaceholder": "姓名",
+      "phonePlaceholder": "电话号码",
+      "emailPlaceholder": "电子邮箱（选填）",
+      "partySizePlaceholder": "人数",
+      "notesPlaceholder": "备注（选填）",
+      "submit": "发送预订请求",
+      "successTitle": "预订请求已发送！",
+      "successSubtitle": "餐厅将与您联系以确认预订。",
+      "error": "发送失败，请重试。"
+    }
   },
   "contact": {
     "subtitle": "有问题或想咨询付费广告？给我们留言，我们会尽快回复您。",

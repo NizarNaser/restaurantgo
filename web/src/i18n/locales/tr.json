@@ -32,6 +32,7 @@
     "advertisements": "Reklamlar",
     "contactMessages": "İletişim mesajları",
     "auditLogs": "Denetim günlüğü",
+    "seo": "SEO ve Google Arama",
     "panelSubtitle": "Şirket kontrol paneli",
     "logout": "Çıkış yap"
   },
@@ -61,6 +62,26 @@
     "allCountries": "Tüm ülkeler",
     "allCities": "Tüm şehirler",
     "noResults": "Aramanızla eşleşen restoran bulunamadı."
+  },
+  "restaurant": {
+    "notFound": "Bu restoran bulunamadı.",
+    "viewFullMenu": "Tüm menüyü görüntüle",
+    "reviewsCount": "{{count}} değerlendirme",
+    "booking": {
+      "title": "Masa veya etkinlik rezervasyonu yapın",
+      "table": "Masa",
+      "event": "Etkinlik",
+      "eventNamePlaceholder": "Etkinlik adı",
+      "fullNamePlaceholder": "Ad soyad",
+      "phonePlaceholder": "Telefon numarası",
+      "emailPlaceholder": "E-posta adresi (isteğe bağlı)",
+      "partySizePlaceholder": "Kişi sayısı",
+      "notesPlaceholder": "Notlar (isteğe bağlı)",
+      "submit": "Rezervasyon talebi gönder",
+      "successTitle": "Rezervasyon talebiniz gönderildi!",
+      "successSubtitle": "Restoran, onaylamak için sizinle iletişime geçecek.",
+      "error": "Talep gönderilemedi, lütfen tekrar deneyin."
+    }
   },
   "contact": {
     "subtitle": "Bir sorunuz mu var ya da ücretli reklam hakkında bilgi mi almak istiyorsunuz? Bize mesaj gönderin, kısa süre içinde size döneceğiz.",

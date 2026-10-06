@@ -32,6 +32,7 @@
     "advertisements": "広告",
     "contactMessages": "お問い合わせメッセージ",
     "auditLogs": "監査ログ",
+    "seo": "SEOとGoogle検索",
     "panelSubtitle": "会社コントロールパネル",
     "logout": "ログアウト"
   },
@@ -61,6 +62,26 @@
     "allCountries": "すべての国",
     "allCities": "すべての都市",
     "noResults": "検索条件に一致するレストランがありません。"
+  },
+  "restaurant": {
+    "notFound": "このレストランが見つかりませんでした。",
+    "viewFullMenu": "メニューをすべて見る",
+    "reviewsCount": "{{count}}件のレビュー",
+    "booking": {
+      "title": "テーブルまたはイベントを予約",
+      "table": "テーブル",
+      "event": "イベント",
+      "eventNamePlaceholder": "イベント名",
+      "fullNamePlaceholder": "お名前",
+      "phonePlaceholder": "電話番号",
+      "emailPlaceholder": "メールアドレス（任意）",
+      "partySizePlaceholder": "人数",
+      "notesPlaceholder": "備考（任意）",
+      "submit": "予約リクエストを送信",
+      "successTitle": "予約リクエストを送信しました！",
+      "successSubtitle": "確認のためレストランからご連絡します。",
+      "error": "送信できませんでした。もう一度お試しください。"
+    }
   },
   "contact": {
     "subtitle": "ご質問や有料広告についてのお問い合わせがありましたら、メッセージをお送りください。近日中にご返信いたします。",

@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { MapPin, Star, ChefHat } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { countryName } from '../lib/countryName';
 
 export interface Restaurant {
   tenant_name: string;
@@ -30,7 +31,7 @@ export function gradientFor(name: string) {
 }
 
 export default function RestaurantCard({ restaurant, rank, delay = 0 }: { restaurant: Restaurant; rank?: number; delay?: number }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const r = restaurant;
   return (
     <motion.div
@@ -56,7 +57,7 @@ export default function RestaurantCard({ restaurant, rank, delay = 0 }: { restau
         <div className="p-4">
           <h3 className="font-bold text-gray-900">{r.tenant_name}</h3>
           <p className="mt-1 text-sm text-gray-500 flex items-center gap-1">
-            <MapPin size={14} /> {[r.city, r.country].filter(Boolean).join(t('common.citySeparator'))}
+            <MapPin size={14} /> {[r.city, r.country && countryName(r.country, i18n.resolvedLanguage ?? 'en')].filter(Boolean).join(t('common.citySeparator'))}
           </p>
           {r.rating_average && (
             <p className="mt-2 text-sm text-amber-600 flex items-center gap-1 font-medium">

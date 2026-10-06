@@ -4,6 +4,7 @@ import { MapPin, Phone, ChefHat } from 'lucide-react';
 import SocialLinks from './SocialLinks';
 import { getPlatformSiteUrl } from '../../lib/publicSite';
 import type { RestaurantInfo } from '../../types/public';
+import { countryName } from '../../lib/countryName';
 
 /**
  * Shared dark footer for a restaurant's public pages (menu, blog, article,
@@ -20,7 +21,7 @@ export default function PublicFooter({
   info: RestaurantInfo;
   buildPath: (suffix: string) => string;
 }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   return (
     <footer className="bg-gray-900 text-gray-400 mt-10">
@@ -39,7 +40,7 @@ export default function PublicFooter({
           {info.contact?.address && (
             <p className="flex items-start gap-2 mt-4 text-sm">
               <MapPin size={15} className="shrink-0 mt-0.5" />
-              <span>{[info.contact.address, info.contact.city, info.contact.country].filter(Boolean).join(', ')}</span>
+              <span>{[info.contact.address, info.contact.city, info.contact.country && countryName(info.contact.country, i18n.resolvedLanguage ?? 'en')].filter(Boolean).join(', ')}</span>
             </p>
           )}
           {info.contact?.phone && (

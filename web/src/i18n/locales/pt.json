@@ -32,6 +32,7 @@
     "advertisements": "Anúncios",
     "contactMessages": "Mensagens de contato",
     "auditLogs": "Registro de auditoria",
+    "seo": "SEO e Busca do Google",
     "panelSubtitle": "Painel de controle da empresa",
     "logout": "Sair"
   },
@@ -61,6 +62,26 @@
     "allCountries": "Todos os países",
     "allCities": "Todas as cidades",
     "noResults": "Nenhum restaurante corresponde à sua busca."
+  },
+  "restaurant": {
+    "notFound": "Este restaurante não foi encontrado.",
+    "viewFullMenu": "Ver cardápio completo",
+    "reviewsCount": "{{count}} avaliações",
+    "booking": {
+      "title": "Reservar uma mesa ou evento",
+      "table": "Mesa",
+      "event": "Evento",
+      "eventNamePlaceholder": "Nome do evento",
+      "fullNamePlaceholder": "Nome completo",
+      "phonePlaceholder": "Número de telefone",
+      "emailPlaceholder": "E-mail (opcional)",
+      "partySizePlaceholder": "Número de pessoas",
+      "notesPlaceholder": "Observações (opcional)",
+      "submit": "Enviar pedido de reserva",
+      "successTitle": "Seu pedido de reserva foi enviado!",
+      "successSubtitle": "O restaurante entrará em contato para confirmar.",
+      "error": "Não foi possível enviar o pedido, tente novamente."
+    }
   },
   "contact": {
     "subtitle": "Tem alguma dúvida ou quer saber sobre publicidade paga? Envie-nos uma mensagem e responderemos em breve.",

@@ -4,6 +4,7 @@ import { motion } from 'motion/react';
 import { Utensils, Calendar, BarChart3, Users, ArrowRight, Sparkles, Star, Building2, Heart, Search, Megaphone, Trophy, Truck, Wand2, Printer, LayoutGrid, Boxes, Languages, Bot } from 'lucide-react';
 import { Trans, useTranslation } from 'react-i18next';
 import api from '../api/axios';
+import { countryName } from '../lib/countryName';
 import AdSlot from '../components/AdSlot';
 import Pagination from '../components/Pagination';
 import Reveal from '../components/Reveal';
@@ -11,10 +12,15 @@ import RestaurantCard, { type Restaurant } from '../components/RestaurantCard';
 
 const PER_PAGE = 10;
 
-type FilterOptions = Record<string, string[]>;
+interface CityOption {
+  value: string;
+  label: string;
+}
+
+type FilterOptions = Record<string, CityOption[]>;
 
 export default function HomePage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
 
   const services = [
@@ -48,19 +54,23 @@ export default function HomePage() {
   const [lastPage, setLastPage] = useState(1);
 
   useEffect(() => {
-    api.get('/v1/directory/filters').then((res) => setFilters(res.data)).catch(() => {});
-    api.get('/v1/directory/top-rated', { params: { limit: 5 } }).then((res) => setTopRated(res.data)).catch(() => setTopRated([]));
-  }, []);
+    api.get('/v1/directory/filters', { params: { lang: i18n.resolvedLanguage } }).then((res) => setFilters(res.data)).catch(() => {});
+    api.get('/v1/directory/top-rated', { params: { limit: 5, lang: i18n.resolvedLanguage } }).then((res) => setTopRated(res.data)).catch(() => setTopRated([]));
+    // Re-fetch when the visitor switches site language — descriptions/city
+    // labels returned by these endpoints are locale-specific.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [i18n.resolvedLanguage]);
 
   useEffect(() => {
     setRegistered(null);
-    api.get('/v1/directory/restaurants', { params: { per_page: PER_PAGE, page } })
+    api.get('/v1/directory/restaurants', { params: { per_page: PER_PAGE, page, lang: i18n.resolvedLanguage } })
       .then((res) => {
         setRegistered(res.data.data);
         setLastPage(res.data.last_page ?? 1);
       })
       .catch(() => setRegistered([]));
-  }, [page]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, i18n.resolvedLanguage]);
 
   const cities = country ? filters[country] ?? [] : Object.values(filters).flat();
 
@@ -152,11 +162,11 @@ export default function HomePage() {
                 onChange={(e) => { setCountry(e.target.value); setCity(''); }}
               >
                 <option value="">{t('directory.allCountries')}</option>
-                {Object.keys(filters).map((c) => <option key={c} value={c}>{c}</option>)}
+                {Object.keys(filters).map((c) => <option key={c} value={c}>{countryName(c, i18n.resolvedLanguage ?? 'en')}</option>)}
               </select>
               <select className="input bg-gray-50 border-0 sm:w-44" value={city} onChange={(e) => setCity(e.target.value)}>
                 <option value="">{t('directory.allCities')}</option>
-                {cities.map((c) => <option key={c} value={c}>{c}</option>)}
+                {cities.map((c) => <option key={c.value} value={c.value}>{c.label}</option>)}
               </select>
               <button type="submit" className="btn btn-primary sm:px-6">
                 <Search size={18} /> {t('home.search.button')}

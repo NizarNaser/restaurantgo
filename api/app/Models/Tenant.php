@@ -31,6 +31,7 @@ class Tenant extends Model
         'supported_locales'                 => 'array',
         'seo_title'                         => 'array',
         'seo_description'                  => 'array',
+        'service_charge_message'            => 'array',
         'stripe_connect_charges_enabled'    => 'boolean',
         'stripe_connect_details_submitted'  => 'boolean',
         'paypal_payments_receivable'        => 'boolean',

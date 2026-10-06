@@ -2,10 +2,14 @@ import { useTranslation } from 'react-i18next';
 import { Languages } from 'lucide-react';
 import { setStoredPublicLocale } from '../../lib/publicLocale';
 
+// Every value here is a language's own native name, not translatable text
+// (e.g. "العربية" is simply what Arabic is called) — i18n-check-ignore on
+// each line below since the check can't otherwise tell that apart from a
+// genuinely hardcoded string.
 const LANGUAGE_NAMES: Record<string, string> = {
-  en: 'English', ar: 'العربية', fr: 'Français', de: 'Deutsch', es: 'Español',
-  it: 'Italiano', pt: 'Português', ru: 'Русский', uk: 'Українська', tr: 'Türkçe',
-  zh: '中文', ja: '日本語',
+  en: 'English', ar: 'العربية', fr: 'Français', de: 'Deutsch', es: 'Español', // i18n-check-ignore
+  it: 'Italiano', pt: 'Português', ru: 'Русский', uk: 'Українська', tr: 'Türkçe', // i18n-check-ignore
+  zh: '中文', ja: '日本語', // i18n-check-ignore
 };
 
 /**

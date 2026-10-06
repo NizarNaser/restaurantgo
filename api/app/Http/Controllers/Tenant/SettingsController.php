@@ -123,7 +123,8 @@ class SettingsController extends Controller
             'default_locale'      => ['required', 'string', 'max:10'],
             'tax_rate'            => ['nullable', 'numeric', 'min:0', 'max:100'],
             'service_charge_rate'             => ['nullable', 'numeric', 'min:0', 'max:100'],
-            'service_charge_message'          => ['nullable', 'string', 'max:500'],
+            'service_charge_message'          => ['nullable', 'array'],
+            'service_charge_message.*'        => ['nullable', 'string', 'max:500'],
             'service_charge_show_message'     => ['boolean'],
             'service_charge_apply_to_invoice' => ['boolean'],
             'supported_locales'   => ['required', 'array', 'min:1'],
@@ -152,6 +153,10 @@ class SettingsController extends Controller
         // whichever locale this was typed in first — same as menu items,
         // categories, departments, and blog posts already auto-translate.
         TranslateTenantContentJob::dispatchForMissingTenantSeoLocales($tenant);
+
+        // Same reasoning as the SEO copy above, for the service-charge note
+        // shown to every dine-in customer on the public menu.
+        TranslateTenantContentJob::dispatchForMissingServiceChargeMessageLocales($tenant);
 
         // Tenant name / SEO copy appear in the sitemap and its cached output.
         cache()->forget("sitemap:tenant:{$tenant->id}");

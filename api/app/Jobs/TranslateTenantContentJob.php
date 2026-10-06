@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Article;
+use App\Models\Branch;
 use App\Models\Department;
 use App\Models\MenuCategory;
 use App\Models\MenuItem;
@@ -50,6 +51,14 @@ class TranslateTenantContentJob implements ShouldQueue
 
     private const TENANT_SEO_PROMPT = <<<'PROMPT'
         You translate a restaurant's own public-facing tagline/SEO copy (the title and description shown on its homepage and in search results) from one language to another. Preserve tone, and don't translate the restaurant's own proper-noun name. Respond with ONLY a valid JSON object of the exact shape {"title": "...", "description": "..."} — no prose, no markdown code fences, nothing else.
+        PROMPT;
+
+    private const BRANCH_ADDRESS_PROMPT = <<<'PROMPT'
+        You translate a restaurant's street address from one language to another, the way it would naturally be written for a local reader of the target language (transliterate street/area names rather than inventing a translation for them). Respond with ONLY a valid JSON object of the exact shape {"address": "..."} — no prose, no markdown code fences, nothing else.
+        PROMPT;
+
+    private const SERVICE_CHARGE_MESSAGE_PROMPT = <<<'PROMPT'
+        You translate a short note a restaurant shows dine-in customers explaining its service charge (e.g. "A 10% service charge is added to all dine-in orders.") from one language to another. Preserve tone and meaning exactly — this is a billing disclosure. Respond with ONLY a valid JSON object of the exact shape {"message": "..."} — no prose, no markdown code fences, nothing else.
         PROMPT;
 
     public function __construct(
@@ -100,6 +109,52 @@ class TranslateTenantContentJob implements ShouldQueue
         }
     }
 
+    /**
+     * Mirrors dispatchForMissingTenantSeoLocales() above for the branch's own
+     * street address — also a per-locale JSON column, not a `translations`
+     * table row. Called after Settings' "Visit or contact us" card saves.
+     */
+    public static function dispatchForMissingBranchAddressLocales(Tenant $tenant, Branch $branch): void
+    {
+        $addresses = $branch->address ?? [];
+        if (empty(array_filter($addresses))) {
+            return;
+        }
+
+        $have    = array_keys(array_filter($addresses));
+        $missing = array_diff($tenant->supported_locales ?? [], $have);
+
+        foreach ($missing as $locale) {
+            self::dispatch($tenant->id, $locale);
+        }
+    }
+
+    /**
+     * Mirrors dispatchForMissingTenantSeoLocales() above for the tenant's
+     * service-charge disclosure note — also a per-locale JSON column. Only
+     * dispatches when the owner actually shows this note to customers and
+     * has written it in at least one language — otherwise there's nothing
+     * to translate from, and no point burning an AI call on text nobody sees.
+     */
+    public static function dispatchForMissingServiceChargeMessageLocales(Tenant $tenant): void
+    {
+        if (! $tenant->service_charge_show_message) {
+            return;
+        }
+
+        $messages = $tenant->service_charge_message ?? [];
+        if (empty(array_filter($messages))) {
+            return;
+        }
+
+        $have    = array_keys(array_filter($messages));
+        $missing = array_diff($tenant->supported_locales ?? [], $have);
+
+        foreach ($missing as $locale) {
+            self::dispatch($tenant->id, $locale);
+        }
+    }
+
     public function handle(OpenAiService $openai, SeoService $seo): void
     {
         if (! $openai->isConfigured()) {
@@ -115,6 +170,8 @@ class TranslateTenantContentJob implements ShouldQueue
         }
 
         $this->translateTenantSeo($openai);
+        $this->translateBranchAddress($openai);
+        $this->translateServiceChargeMessage($openai);
         $this->translateMenuItems($openai);
         $this->translateMenuCategories($openai);
         $this->translateDepartments($openai);
@@ -178,6 +235,85 @@ class TranslateTenantContentJob implements ShouldQueue
         }
 
         $tenant->update(['seo_title' => $titles, 'seo_description' => $descriptions]);
+    }
+
+    /**
+     * The branch's own street address — like the tenant SEO copy above, a
+     * per-locale JSON column rather than a `translations` table row. There's
+     * only ever one real-world branch per tenant today (see
+     * BranchController::primaryBranch), so this always targets that one.
+     */
+    private function translateBranchAddress(OpenAiService $openai): void
+    {
+        $branch = Branch::withoutTenantScope()->where('tenant_id', $this->tenantId)->first();
+        if (! $branch) {
+            return;
+        }
+
+        $addresses = $branch->address ?? [];
+        if (! empty($addresses[$this->targetLocale])) {
+            return;
+        }
+
+        $tenant = Tenant::find($this->tenantId);
+        $sourceLocale = $tenant?->default_locale;
+        if (empty($addresses[$sourceLocale])) {
+            $sourceLocale = array_key_first(array_filter($addresses));
+        }
+        $sourceAddress = $sourceLocale ? ($addresses[$sourceLocale] ?? null) : null;
+        if (! $sourceAddress) {
+            return;
+        }
+
+        $result = $this->translate($openai, self::BRANCH_ADDRESS_PROMPT, [
+            'source_locale' => $sourceLocale,
+            'target_locale' => $this->targetLocale,
+            'address'       => $sourceAddress,
+        ]);
+        if (! $result || empty($result['address'])) {
+            return;
+        }
+
+        $addresses[$this->targetLocale] = $result['address'];
+        $branch->update(['address' => $addresses]);
+    }
+
+    /**
+     * The dine-in service-charge disclosure note — same per-locale JSON
+     * column shape as the tenant SEO copy above.
+     */
+    private function translateServiceChargeMessage(OpenAiService $openai): void
+    {
+        $tenant = Tenant::find($this->tenantId);
+        if (! $tenant) {
+            return;
+        }
+
+        $messages = $tenant->service_charge_message ?? [];
+        if (! empty($messages[$this->targetLocale])) {
+            return;
+        }
+
+        $sourceLocale = $tenant->default_locale;
+        if (empty($messages[$sourceLocale])) {
+            $sourceLocale = array_key_first(array_filter($messages));
+        }
+        $sourceMessage = $sourceLocale ? ($messages[$sourceLocale] ?? null) : null;
+        if (! $sourceMessage) {
+            return;
+        }
+
+        $result = $this->translate($openai, self::SERVICE_CHARGE_MESSAGE_PROMPT, [
+            'source_locale' => $sourceLocale,
+            'target_locale' => $this->targetLocale,
+            'message'       => $sourceMessage,
+        ]);
+        if (! $result || empty($result['message'])) {
+            return;
+        }
+
+        $messages[$this->targetLocale] = $result['message'];
+        $tenant->update(['service_charge_message' => $messages]);
     }
 
     private function translateMenuItems(OpenAiService $openai): void

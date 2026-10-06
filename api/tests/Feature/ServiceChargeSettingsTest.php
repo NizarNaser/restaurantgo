@@ -35,14 +35,14 @@ it('saves the service charge settings', function () {
         'default_locale' => $this->tenant->default_locale,
         'supported_locales' => $this->tenant->supported_locales ?: ['en'],
         'service_charge_rate' => 12.5,
-        'service_charge_message' => 'A 12.5% service charge applies to dine-in orders.',
+        'service_charge_message' => ['en' => 'A 12.5% service charge applies to dine-in orders.'],
         'service_charge_show_message' => true,
         'service_charge_apply_to_invoice' => false,
     ])->assertOk();
 
     $this->tenant->refresh();
     expect((float) $this->tenant->service_charge_rate)->toBe(12.5);
-    expect($this->tenant->service_charge_message)->toBe('A 12.5% service charge applies to dine-in orders.');
+    expect($this->tenant->service_charge_message['en'])->toBe('A 12.5% service charge applies to dine-in orders.');
     expect($this->tenant->service_charge_show_message)->toBeTrue();
     expect($this->tenant->service_charge_apply_to_invoice)->toBeFalse();
 });
