@@ -158,7 +158,9 @@
     "explore": "Explorar",
     "menu": "Menú",
     "findTable": "Encuentra tu mesa",
-    "legal": "Legal"
+    "legal": "Legal",
+    "doNotSell": "No vender ni compartir mi información personal",
+    "doNotSellConfirmed": "Guardado — cookies de seguimiento rechazadas"
   },
   "legal": {
     "disclaimer": "Esta página ofrece información estándar para {{name}} — no sustituye el asesoramiento legal adaptado a la situación específica de este restaurante.",
@@ -173,11 +175,13 @@
       "dataSharingTitle": "Compartir tu información",
       "dataSharingBody": "Compartimos tu información solo con los proveedores que nos ayudan a operar el sitio y procesar pagos, y únicamente en la medida necesaria para ese fin.",
       "cookiesTitle": "Cookies",
-      "cookiesBody": "Nuestro sitio usa cookies esenciales y almacenamiento local para recordar tu idioma preferido y tu carrito de compra. Estas no te rastrean en otros sitios web.",
+      "cookiesBody": "Nuestro sitio utiliza cookies esenciales y almacenamiento local para recordar tu preferencia de idioma y tu carrito. Si {{name}} ha activado herramientas de análisis o marketing, estas solo se ejecutan después de que las aceptes en el aviso de cookies, y puedes cambiar tu elección en cualquier momento borrando los datos de este sitio en tu navegador.",
       "rightsTitle": "Tus derechos",
       "rightsBody": "De acuerdo con el Reglamento General de Protección de Datos de la UE (RGPD), tienes derecho a acceder, corregir o eliminar tus datos personales, y a oponerte o restringir su tratamiento. Para ejercer estos derechos, contáctanos con los datos a continuación.",
       "contactTitle": "Contáctanos",
-      "contactBody": "Para cualquier consulta o solicitud sobre privacidad, contacta directamente a {{name}} usando el teléfono o la dirección indicados en nuestra página de contacto."
+      "contactBody": "Para cualquier consulta o solicitud sobre privacidad, contacta directamente a {{name}} usando el teléfono o la dirección indicados en nuestra página de contacto.",
+      "ccpaTitle": "Derechos de privacidad de California (CCPA/CPRA)",
+      "ccpaBody": "Si eres residente de California, tienes derechos adicionales bajo la Ley de Privacidad del Consumidor de California (CCPA/CPRA): el derecho a saber qué información personal recopilamos, a solicitar su eliminación o corrección, a optar por no participar en la \"venta\" o el \"intercambio\" de tu información (lo que, en este sitio, significa rechazar las cookies opcionales de análisis/marketing descritas anteriormente), y a no sufrir discriminación por ejercer estos derechos. Usa el enlace \"No vender ni compartir mi información personal\" en el pie de página del sitio para optar por no participar, o contáctanos usando los datos indicados a continuación para cualquier otra solicitud."
     },
     "terms": {
       "title": "Términos y Aviso de Derechos de Autor",
@@ -207,5 +211,11 @@
       "contactTitle": "Contáctanos",
       "contactBody": "Puedes contactar a {{name}} usando el teléfono o la dirección de nuestra página de contacto para reportar problemas de accesibilidad o solicitar ayuda."
     }
+  },
+  "cookieConsent": {
+    "title": "Preferencias de cookies",
+    "message": "Utilizamos cookies esenciales para el funcionamiento de este sitio y, solo con tu permiso, herramientas de análisis que el restaurante haya activado. Consulta nuestra",
+    "acceptAll": "Aceptar todo",
+    "necessaryOnly": "Solo esenciales"
   }
 }

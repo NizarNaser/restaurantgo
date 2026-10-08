@@ -383,7 +383,7 @@ export default function PublicMenuPage() {
           <div
             ref={categoryScrollRef}
             onScroll={updateCategoryScrollState}
-            className="bg-white rounded-2xl shadow-lg border border-gray-100 px-3 py-3 overflow-x-auto hide-scrollbar flex gap-2 whitespace-nowrap"
+            className="bg-white rounded-2xl shadow-lg border border-gray-100 px-3 pt-3 pb-4 overflow-x-auto thin-scrollbar flex gap-2 whitespace-nowrap"
           >
             <button
               onClick={() => selectCategory(null)}
@@ -410,7 +410,7 @@ export default function PublicMenuPage() {
               type="button"
               onClick={() => scrollCategories('left')}
               aria-label={t('menu.scrollCategoriesLeft')}
-              className="absolute top-1/2 -translate-y-1/2 -left-2 w-8 h-8 rounded-full bg-white shadow-md border border-gray-100 flex items-center justify-center text-gray-600 hover:text-gray-900"
+              className="hidden sm:flex absolute top-1/2 -translate-y-1/2 -left-2 w-8 h-8 rounded-full bg-white shadow-md border border-gray-100 items-center justify-center text-gray-600 hover:text-gray-900"
             >
               <ChevronLeft size={16} />
             </button>
@@ -420,7 +420,7 @@ export default function PublicMenuPage() {
               type="button"
               onClick={() => scrollCategories('right')}
               aria-label={t('menu.scrollCategoriesRight')}
-              className="absolute top-1/2 -translate-y-1/2 -right-2 w-8 h-8 rounded-full bg-white shadow-md border border-gray-100 flex items-center justify-center text-gray-600 hover:text-gray-900"
+              className="hidden sm:flex absolute top-1/2 -translate-y-1/2 -right-2 w-8 h-8 rounded-full bg-white shadow-md border border-gray-100 items-center justify-center text-gray-600 hover:text-gray-900"
             >
               <ChevronRight size={16} />
             </button>

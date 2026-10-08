@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Services\Payments\OrderPaymentGateway;
+use App\Services\Payments\StripeOrderPaymentGateway;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
@@ -21,6 +23,12 @@ class AppServiceProvider extends ServiceProvider
             $this->app->register(\Laravel\Telescope\TelescopeServiceProvider::class);
             $this->app->register(TelescopeServiceProvider::class);
         }
+
+        // The only order-checkout gateway today — see OrderPaymentGateway's
+        // own docblock for why this is its own seam (PAY-02/Phase 4-5 in
+        // COMPLIANCE_SECURITY_PAYMENTS_PLAN.md). Swapping or branching
+        // per-tenant later is a one-line change here, not a controller rewrite.
+        $this->app->bind(OrderPaymentGateway::class, StripeOrderPaymentGateway::class);
     }
 
     /**

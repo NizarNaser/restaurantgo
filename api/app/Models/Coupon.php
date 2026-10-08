@@ -12,7 +12,7 @@ class Coupon extends Model
     ];
 
     protected $casts = [
-        'value'      => 'decimal:2',
+        'value'      => 'decimal:3',
         'expires_at' => 'datetime',
         'is_active'  => 'boolean',
     ];

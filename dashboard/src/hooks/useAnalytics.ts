@@ -1,5 +1,7 @@
 import { useEffect } from 'react';
 import type { RestaurantAnalytics } from '../types/public';
+import { usePublicSlug } from './usePublicSlug';
+import { useCookieConsent } from './useCookieConsent';
 
 const MANAGED = 'data-analytics-managed';
 
@@ -9,12 +11,20 @@ const MANAGED = 'data-analytics-managed';
  * columns with nothing reading them until now. No-ops per id the tenant
  * hasn't set, and tears everything down on unmount/tenant change so one
  * restaurant's pixel never leaks onto another's page.
+ *
+ * Gated on this visitor's cookie-consent choice (see `CookieConsentBanner`)
+ * — these are non-essential tracking scripts, so under GDPR/ePrivacy they
+ * must not load before an explicit opt-in, not just be removable after the
+ * fact. See PRIV-01 in COMPLIANCE_SECURITY_PAYMENTS_PLAN.md.
  */
 export function useAnalytics(analytics?: RestaurantAnalytics | null) {
+  const { slug } = usePublicSlug();
+  const consent = useCookieConsent(slug);
   const gaId = analytics?.google_analytics_id ?? null;
   const pixelId = analytics?.facebook_pixel_id ?? null;
 
   useEffect(() => {
+    if (consent !== 'accepted') return;
     if (!gaId && !pixelId) return;
 
     if (gaId) {
@@ -56,5 +66,5 @@ export function useAnalytics(analytics?: RestaurantAnalytics | null) {
     return () => {
       document.head.querySelectorAll(`script[${MANAGED}]`).forEach((el) => el.remove());
     };
-  }, [gaId, pixelId]);
+  }, [gaId, pixelId, consent]);
 }

@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Services\Currency;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -30,7 +31,8 @@ class PaymentFailed extends Notification implements ShouldQueue
             ->line('We were unable to process your latest subscription payment.');
 
         if ($this->amount !== null) {
-            $message->line('Amount due: '.number_format($this->amount, 2).' '.strtoupper($this->currency ?? ''));
+            $decimals = Currency::decimals($this->currency ?? 'USD');
+            $message->line('Amount due: '.number_format($this->amount, $decimals).' '.strtoupper($this->currency ?? ''));
         }
 
         return $message

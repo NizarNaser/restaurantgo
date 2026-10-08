@@ -7,6 +7,7 @@ use App\Models\DiscountApplication;
 use App\Models\DiscountCard;
 use App\Models\Order;
 use App\Services\AuditService;
+use App\Services\Currency;
 use App\Services\StaffAccessService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -42,7 +43,7 @@ class DiscountApplicationController extends Controller
         ]);
 
         $card = DiscountCard::where('tenant_id', app('tenant')->id)->where('is_active', true)->findOrFail($data['discount_card_id']);
-        $amount = round(((float) $order->subtotal) * ((float) $card->discount_percentage) / 100, 2);
+        $amount = Currency::round(((float) $order->subtotal) * ((float) $card->discount_percentage) / 100, $order->currency);
 
         $application = DiscountApplication::create([
             'order_id'             => $order->id,

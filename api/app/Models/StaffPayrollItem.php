@@ -14,11 +14,11 @@ class StaffPayrollItem extends Model
 
     protected $casts = [
         'hours_worked' => 'decimal:2',
-        'base_salary'  => 'decimal:2',
-        'overtime_pay' => 'decimal:2',
-        'bonuses'      => 'decimal:2',
-        'deductions'   => 'decimal:2',
-        'net_salary'   => 'decimal:2',
+        'base_salary'  => 'decimal:3',
+        'overtime_pay' => 'decimal:3',
+        'bonuses'      => 'decimal:3',
+        'deductions'   => 'decimal:3',
+        'net_salary'   => 'decimal:3',
     ];
 
     public function payrollRun() { return $this->belongsTo(StaffPayrollRun::class, 'staff_payroll_run_id'); }

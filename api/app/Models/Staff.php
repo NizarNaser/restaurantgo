@@ -16,7 +16,7 @@ class Staff extends Model
 
     protected $casts = [
         'hire_date'     => 'date',
-        'base_salary'   => 'decimal:2',
+        'base_salary'   => 'decimal:3',
         'overtime_rate' => 'decimal:2',
     ];
 

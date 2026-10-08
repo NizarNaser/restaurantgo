@@ -27,10 +27,10 @@ class Order extends Model
     ];
 
     protected $casts = [
-        'subtotal'            => 'decimal:2',
-        'total'               => 'decimal:2',
-        'platform_fee_amount' => 'decimal:2',
-        'discount_amount'     => 'decimal:2',
+        'subtotal'            => 'decimal:3',
+        'total'               => 'decimal:3',
+        'platform_fee_amount' => 'decimal:3',
+        'discount_amount'     => 'decimal:3',
         'paid_at'             => 'datetime',
         'stock_deducted_at'   => 'datetime',
     ];
@@ -66,7 +66,7 @@ class Order extends Model
     public static function withDisplayItems(self $order): array
     {
         $array = $order->toArray();
-        $array['items'] = OrderItem::groupForDisplay($order->items)->all();
+        $array['items'] = OrderItem::groupForDisplay($order->items, $order->currency)->all();
 
         return $array;
     }

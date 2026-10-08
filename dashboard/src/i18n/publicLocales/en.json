@@ -158,7 +158,9 @@
     "explore": "Explore",
     "menu": "Menu",
     "findTable": "Find Your Table",
-    "legal": "Legal"
+    "legal": "Legal",
+    "doNotSell": "Do Not Sell or Share My Personal Information",
+    "doNotSellConfirmed": "Saved — tracking cookies declined"
   },
   "legal": {
     "disclaimer": "This page provides standard information for {{name}} — it is not a substitute for legal advice tailored to this restaurant's specific situation.",
@@ -173,11 +175,13 @@
       "dataSharingTitle": "Sharing Your Information",
       "dataSharingBody": "We share your information only with the service providers that help us run our site and process payments, and only to the extent needed for that purpose.",
       "cookiesTitle": "Cookies",
-      "cookiesBody": "Our site uses essential cookies and local storage to remember your language preference and shopping cart. These do not track you across other websites.",
+      "cookiesBody": "Our site uses essential cookies and local storage to remember your language preference and shopping cart. If {{name}} has enabled analytics or marketing tools, those only run after you accept them in the cookie banner, and you can change your choice at any time by clearing this site's data in your browser.",
       "rightsTitle": "Your Rights",
       "rightsBody": "Under the EU General Data Protection Regulation (GDPR), you have the right to access, correct, or delete your personal data, and to object to or restrict its processing. To exercise these rights, contact us using the details below.",
       "contactTitle": "Contact Us",
-      "contactBody": "For any privacy questions or requests, please contact {{name}} directly using the phone number or address listed on our contact page."
+      "contactBody": "For any privacy questions or requests, please contact {{name}} directly using the phone number or address listed on our contact page.",
+      "ccpaTitle": "California Privacy Rights (CCPA/CPRA)",
+      "ccpaBody": "If you are a California resident, you have additional rights under the California Consumer Privacy Act (CCPA/CPRA): the right to know what personal information we collect, to request its deletion or correction, to opt out of the “sale” or “sharing” of your information (which, for this site, means declining the optional analytics/marketing cookies described above), and to not be discriminated against for exercising these rights. Use the “Do Not Sell or Share My Personal Information” link in the site footer to opt out, or contact us using the details below for any other request."
     },
     "terms": {
       "title": "Terms & Copyright Notice",
@@ -207,5 +211,11 @@
       "contactTitle": "Contact Us",
       "contactBody": "You can reach {{name}} using the phone number or address on our contact page to report accessibility issues or request assistance."
     }
+  },
+  "cookieConsent": {
+    "title": "Cookie preferences",
+    "message": "We use essential cookies to run this site, and — only with your permission — analytics tools the restaurant has enabled. Read our",
+    "acceptAll": "Accept all",
+    "necessaryOnly": "Necessary only"
   }
 }

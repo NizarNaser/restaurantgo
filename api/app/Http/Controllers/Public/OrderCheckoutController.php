@@ -6,7 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Public\Concerns\ResolvesPublicTenant;
 use App\Models\MenuItem;
 use App\Models\Order;
-use App\Services\StripeService;
+use App\Services\Currency;
+use App\Services\Payments\OrderPaymentGateway;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -16,7 +17,7 @@ class OrderCheckoutController extends Controller
 {
     use ResolvesPublicTenant;
 
-    public function __construct(private readonly StripeService $stripe)
+    public function __construct(private readonly OrderPaymentGateway $paymentGateway)
     {
     }
 
@@ -87,7 +88,7 @@ class OrderCheckoutController extends Controller
             foreach ($data['items'] as $line) {
                 $menuItem = $menuItems[$line['menu_item_id']];
                 $unitPrice = $menuItem->priceIn($currency);
-                $lineSubtotal = round($unitPrice * $line['quantity'], 2);
+                $lineSubtotal = Currency::round($unitPrice * $line['quantity'], $currency);
                 $subtotal += $lineSubtotal;
 
                 $order->items()->create([
@@ -107,14 +108,14 @@ class OrderCheckoutController extends Controller
 
         $successUrl = rtrim($data['success_url'], '/') . '/' . $order->id . '?code=' . $order->tracking_code . '&payment=success';
 
-        $session = $this->stripe->createOrderCheckoutSession($tenant, $order->load('items'), $successUrl, $data['cancel_url']);
+        $checkoutUrl = $this->paymentGateway->createCheckoutUrl($tenant, $order->load('items'), $successUrl, $data['cancel_url']);
 
         return response()->json([
             'order_id'      => $order->id,
             'tracking_code' => $order->tracking_code,
             'total'         => $order->total,
             'currency'      => $order->currency,
-            'checkout_url'  => $session->url,
+            'checkout_url'  => $checkoutUrl,
         ], 201);
     }
 }

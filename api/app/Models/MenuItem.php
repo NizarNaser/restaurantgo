@@ -22,7 +22,7 @@ class MenuItem extends Model implements HasMedia
     ];
 
     protected $casts = [
-        'base_price'      => 'decimal:2',
+        'base_price'      => 'decimal:3',
         'is_available'    => 'boolean',
         'is_featured'     => 'boolean',
         'tags'            => 'array',

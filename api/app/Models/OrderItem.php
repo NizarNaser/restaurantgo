@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\Currency;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
@@ -17,8 +18,8 @@ class OrderItem extends Model
     ];
 
     protected $casts = [
-        'unit_price'   => 'decimal:2',
-        'subtotal'     => 'decimal:2',
+        'unit_price'   => 'decimal:3',
+        'subtotal'     => 'decimal:3',
         'quantity'     => 'integer',
         'started_at'   => 'datetime',
         'ready_at'     => 'datetime',
@@ -36,19 +37,22 @@ class OrderItem extends Model
      * is written back, and the underlying rows (and their individual
      * kitchen_status/timestamps) are untouched.
      */
-    public static function groupForDisplay(Collection $items): Collection
+    public static function groupForDisplay(Collection $items, string $currency = 'USD'): Collection
     {
+        $decimals = Currency::decimals($currency);
+
         return $items
             ->groupBy(fn (self $item) => $item->menu_item_id.'|'.($item->notes ?? ''))
-            ->map(function (Collection $group) {
+            ->map(function (Collection $group) use ($decimals) {
                 /** @var self $first */
                 $first = $group->sortBy('created_at')->first();
                 $quantity = (int) $group->sum('quantity');
                 $subtotal = (float) $group->sum('subtotal');
-                // Formatted as fixed-2-decimal strings, matching the
-                // `decimal:2` cast's own JSON shape — every other place
-                // these fields are read (frontend included) expects a
-                // string like "37.50", not a bare float.
+                // Formatted as a fixed-decimal string, matching the
+                // model's own `decimal` cast JSON shape — every other
+                // place these fields are read (frontend included) expects
+                // a string like "37.50" (or "37.500" for a 3-decimal
+                // currency), not a bare float.
                 $unitPrice = $quantity > 0 ? $subtotal / $quantity : (float) $first->unit_price;
 
                 return [
@@ -56,9 +60,9 @@ class OrderItem extends Model
                     'menu_item_id' => $first->menu_item_id,
                     'name'         => $first->name,
                     'weight'       => $first->weight,
-                    'unit_price'   => number_format($unitPrice, 2, '.', ''),
+                    'unit_price'   => number_format($unitPrice, $decimals, '.', ''),
                     'quantity'     => $quantity,
-                    'subtotal'     => number_format($subtotal, 2, '.', ''),
+                    'subtotal'     => number_format($subtotal, $decimals, '.', ''),
                     'notes'        => $first->notes,
                     'created_at'   => $first->created_at,
                 ];

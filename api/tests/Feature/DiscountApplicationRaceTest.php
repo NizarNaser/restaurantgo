@@ -38,7 +38,7 @@ it('redeems discount card credit and reduces the order total', function () {
         'password'         => 'password',
     ])->assertCreated();
 
-    expect($this->card->fresh()->accumulated_balance)->toBe('30.00');
+    expect($this->card->fresh()->accumulated_balance)->toBe('30.000');
     expect((float) $order->fresh()->total)->toBe(80.0);
 });
 
@@ -52,7 +52,7 @@ it('refuses to redeem more than the card\'s current balance', function () {
         'password'         => 'password',
     ])->assertStatus(422);
 
-    expect($this->card->fresh()->accumulated_balance)->toBe('50.00');
+    expect($this->card->fresh()->accumulated_balance)->toBe('50.000');
 });
 
 it('never lets two concurrent redemptions push a card\'s balance negative', function () {

@@ -25,7 +25,7 @@ class DiscountApplication extends Model
 
     protected $casts = [
         'discount_percentage' => 'decimal:2',
-        'amount'              => 'decimal:2',
+        'amount'              => 'decimal:3',
         'approved_at'         => 'datetime',
     ];
 

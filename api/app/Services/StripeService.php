@@ -231,7 +231,12 @@ class StripeService
 
         $order->update([
             'stripe_checkout_session_id' => $session->id,
-            'platform_fee_amount'        => round($this->applicationFeeFor($order) / 100, 2),
+            // applicationFeeFor() returns Stripe minor units (cents, fils,
+            // or whole units depending on the order's currency) — converting
+            // it back with a flat /100 undercharges-on-paper three-decimal
+            // currencies 10x and overstates zero-decimal ones 100x, the same
+            // class of bug as the minor-unit conversion itself.
+            'platform_fee_amount'        => Currency::fromMinorUnits($this->applicationFeeFor($order), $order->currency),
         ]);
 
         return $session;
@@ -244,12 +249,6 @@ class StripeService
         return (int) round($this->toMinorUnits((float) $order->total, $order->currency) * ($percent / 100));
     }
 
-    /** Stripe's own three-decimal currencies — see https://stripe.com/docs/currencies#zero-decimal. */
-    private const THREE_DECIMAL_CURRENCIES = ['BHD', 'JOD', 'KWD', 'OMR', 'TND'];
-
-    /** Stripe's own zero-decimal currencies that this app's currency picker (SettingsPage.tsx) offers. */
-    private const ZERO_DECIMAL_CURRENCIES = ['JPY', 'KRW', 'VND'];
-
     /**
      * Stripe's minor-unit amount depends on the currency: most are 2-decimal
      * (cents), a handful are 3-decimal (e.g. a Kuwaiti Dinar's fils), and a
@@ -260,17 +259,7 @@ class StripeService
      */
     private function toMinorUnits(float $amount, string $currency): int
     {
-        $currency = strtoupper($currency);
-
-        if (in_array($currency, self::ZERO_DECIMAL_CURRENCIES, true)) {
-            return (int) round($amount);
-        }
-
-        if (in_array($currency, self::THREE_DECIMAL_CURRENCIES, true)) {
-            return (int) round($amount * 1000);
-        }
-
-        return (int) round($amount * 100);
+        return Currency::toMinorUnits($amount, $currency);
     }
 
     /**

@@ -5,6 +5,7 @@ import publicI18n from '../i18n/public';
 import adminI18n, { RTL_LOCALES } from '../i18n/index';
 import { getStoredPublicLocale } from '../lib/publicLocale';
 import { usePublicSlug } from '../hooks/usePublicSlug';
+import CookieConsentBanner from '../components/public/CookieConsentBanner';
 
 function applyDir(locale: string) {
   document.documentElement.dir = RTL_LOCALES.includes(locale) ? 'rtl' : 'ltr';
@@ -83,6 +84,7 @@ export default function PublicI18nLayout() {
   return (
     <I18nextProvider i18n={publicI18n}>
       <Outlet />
+      <CookieConsentBanner />
     </I18nextProvider>
   );
 }

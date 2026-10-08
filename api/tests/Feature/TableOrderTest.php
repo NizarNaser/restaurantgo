@@ -65,7 +65,7 @@ it('lets the opener add items to their own table order and totals update', funct
     ]);
 
     $response->assertCreated();
-    $response->assertJsonPath('total', '25.00');
+    $response->assertJsonPath('total', '25.000');
     $response->assertJsonCount(1, 'items');
     $response->assertJsonPath('items.0.quantity', 2);
 });
@@ -86,7 +86,7 @@ it('merges a repeat order of the same untouched item into one line instead of a 
     $response->assertJsonCount(1, 'items');
     $response->assertJsonPath('items.0.quantity', 3);
     $response->assertJsonPath('items.0.subtotal', '37.50');
-    $response->assertJsonPath('total', '37.50');
+    $response->assertJsonPath('total', '37.500');
 });
 
 it('keeps each addItems() round as its own independent row for the kitchen, even for a repeat item', function () {

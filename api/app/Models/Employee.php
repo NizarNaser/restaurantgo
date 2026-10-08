@@ -19,7 +19,7 @@ class Employee extends Model
     protected $hidden  = ['bank_account'];
     protected $casts   = [
         'hire_date'    => 'date',
-        'base_salary'  => 'decimal:2',
+        'base_salary'  => 'decimal:3',
         'overtime_rate'=> 'decimal:2',
     ];
 

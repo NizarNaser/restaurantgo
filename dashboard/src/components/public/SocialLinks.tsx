@@ -23,7 +23,19 @@ const PLATFORMS: { key: keyof RestaurantSocial; label: string; icon: React.React
   { key: 'snapchat', label: 'Snapchat', icon: <Ghost size={18} /> },
 ];
 
-export default function SocialLinks({ social, className }: { social: RestaurantSocial; className?: string }) {
+export default function SocialLinks({
+  social,
+  className,
+  onDark = false,
+}: {
+  social: RestaurantSocial;
+  className?: string;
+  /** Set when rendering on a dark background (e.g. the site footer) — on a
+   * light/white card, gray-400 barely clears 2.8:1 against white, which
+   * reads as "the icons aren't there" on a phone screen outdoors even
+   * though they're technically rendered. */
+  onDark?: boolean;
+}) {
   const active = PLATFORMS.filter((p) => social[p.key]);
   if (active.length === 0) return null;
 
@@ -37,7 +49,7 @@ export default function SocialLinks({ social, className }: { social: RestaurantS
           rel="noreferrer"
           aria-label={p.label}
           title={p.label}
-          className="text-gray-400 hover:text-[#ff4757] transition-colors"
+          className={`${onDark ? 'text-gray-400' : 'text-gray-500'} hover:text-[#ff4757] transition-colors`}
         >
           {p.icon}
         </a>

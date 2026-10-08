@@ -138,7 +138,7 @@ class InventoryService
                 'reason'         => StockMovement::REASON_PURCHASE,
                 'quantity'       => $quantity,
                 'unit_cost'      => $unitPrice,
-                'total_cost'     => $unitPrice ? round($unitPrice * $quantity, 2) : null,
+                'total_cost'     => $unitPrice ? Currency::round($unitPrice * $quantity, app('tenant')->default_currency ?? 'USD') : null,
                 'occurred_at'    => $occurredAt,
                 'notes'          => $notes,
                 'created_by'     => $user->id,

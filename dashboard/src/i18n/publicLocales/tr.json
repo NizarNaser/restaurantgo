@@ -158,7 +158,9 @@
     "explore": "Keşfet",
     "menu": "Menü",
     "findTable": "Masanı Bul",
-    "legal": "Yasal"
+    "legal": "Yasal",
+    "doNotSell": "Kişisel Bilgilerimi Satma veya Paylaşma",
+    "doNotSellConfirmed": "Kaydedildi — izleme çerezleri reddedildi"
   },
   "legal": {
     "disclaimer": "Bu sayfa {{name}} için standart bilgiler sunar — bu restoranın özel durumuna göre hazırlanmış bir hukuki danışmanlığın yerini tutmaz.",
@@ -173,11 +175,13 @@
       "dataSharingTitle": "Bilgilerinizin Paylaşılması",
       "dataSharingBody": "Bilgilerinizi yalnızca sitemizi işletmemize ve ödemeleri işlememize yardımcı olan hizmet sağlayıcılarla ve yalnızca bu amaç için gerekli ölçüde paylaşıyoruz.",
       "cookiesTitle": "Çerezler",
-      "cookiesBody": "Sitemiz, dil tercihinizi ve sepetinizi hatırlamak için temel çerezler ve yerel depolama kullanır. Bunlar sizi başka web sitelerinde izlemez.",
+      "cookiesBody": "Sitemiz, dil tercihinizi ve sepetinizi hatırlamak için gerekli çerezleri ve yerel depolamayı kullanır. {{name}} analiz veya pazarlama araçlarını etkinleştirdiyse, bunlar yalnızca çerez bildiriminde onay verdikten sonra çalışır ve tarayıcınızdaki site verilerini silerek seçiminizi istediğiniz zaman değiştirebilirsiniz.",
       "rightsTitle": "Haklarınız",
       "rightsBody": "AB Genel Veri Koruma Yönetmeliği (GDPR) kapsamında, kişisel verilerinize erişme, düzeltme veya silme ve işlenmesine itiraz etme veya kısıtlama hakkına sahipsiniz. Bu haklarınızı kullanmak için aşağıdaki iletişim bilgilerinden bize ulaşın.",
       "contactTitle": "Bize Ulaşın",
-      "contactBody": "Gizlilikle ilgili sorularınız veya talepleriniz için lütfen iletişim sayfamızda yer alan telefon numarası veya adres üzerinden doğrudan {{name}} ile iletişime geçin."
+      "contactBody": "Gizlilikle ilgili sorularınız veya talepleriniz için lütfen iletişim sayfamızda yer alan telefon numarası veya adres üzerinden doğrudan {{name}} ile iletişime geçin.",
+      "ccpaTitle": "Kaliforniya Gizlilik Hakları (CCPA/CPRA)",
+      "ccpaBody": "Kaliforniya sakiniyseniz, Kaliforniya Tüketici Gizliliği Yasası (CCPA/CPRA) kapsamında ek haklarınız vardır: hangi kişisel bilgileri topladığımızı öğrenme, bunların silinmesini veya düzeltilmesini talep etme, bilgilerinizin \"satışını\" veya \"paylaşımını\" reddetme (bu sitede, yukarıda açıklanan isteğe bağlı analiz/pazarlama çerezlerini reddetmek anlamına gelir) ve bu hakları kullandığınız için ayrımcılığa uğramama hakkı. Vazgeçmek için site altbilgisindeki \"Kişisel Bilgilerimi Satma veya Paylaşma\" bağlantısını kullanın veya başka herhangi bir talep için aşağıdaki iletişim bilgilerini kullanarak bizimle iletişime geçin."
     },
     "terms": {
       "title": "Kullanım Koşulları ve Telif Hakkı Bildirimi",
@@ -207,5 +211,11 @@
       "contactTitle": "Bize Ulaşın",
       "contactBody": "Erişilebilirlik sorunlarını bildirmek veya yardım talep etmek için iletişim sayfamızdaki telefon numarası veya adres üzerinden {{name}}'e ulaşabilirsiniz."
     }
+  },
+  "cookieConsent": {
+    "title": "Çerez tercihleri",
+    "message": "Bu siteyi çalıştırmak için gerekli çerezleri ve — yalnızca izninizle — restoranın etkinleştirdiği analiz araçlarını kullanıyoruz. Şunu okuyun:",
+    "acceptAll": "Tümünü kabul et",
+    "necessaryOnly": "Yalnızca gerekli"
   }
 }

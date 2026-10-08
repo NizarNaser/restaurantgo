@@ -16,7 +16,7 @@ export type LegalPageKind = 'privacy' | 'terms' | 'accessibility';
 // Each section is rendered from a `legal.<kind>.<key>Title` /
 // `legal.<kind>.<key>Body` pair in the public locale files.
 const SECTIONS: Record<LegalPageKind, string[]> = {
-  privacy: ['intro', 'dataCollected', 'dataUse', 'dataSharing', 'cookies', 'rights', 'contact'],
+  privacy: ['intro', 'dataCollected', 'dataUse', 'dataSharing', 'cookies', 'rights', 'ccpa', 'contact'],
   terms: ['intro', 'intellectualProperty', 'useOfService', 'menuAccuracy', 'liability', 'contact'],
   accessibility: ['intro', 'standards', 'features', 'feedback', 'contact'],
 };
@@ -24,10 +24,11 @@ const SECTIONS: Record<LegalPageKind, string[]> = {
 /**
  * The legal pages every tenant gets automatically (Privacy Policy, Terms &
  * Copyright Notice, Accessibility Statement) — standard template content
- * covering EU requirements (GDPR, the European Accessibility Act) with the
- * restaurant's own name/contact details filled in. Generic boilerplate, not
- * a substitute for the owner's own legal review of their specific situation
- * — see the notice at the bottom of each page.
+ * covering EU requirements (GDPR, the European Accessibility Act) and US
+ * California's CCPA/CPRA, with the restaurant's own name/contact details
+ * filled in. Generic boilerplate, not a substitute for the owner's own
+ * legal review of their specific situation — see the notice at the bottom
+ * of each page.
  */
 export default function PublicLegalPage({ kind }: { kind: LegalPageKind }) {
   const { t, i18n } = useTranslation();

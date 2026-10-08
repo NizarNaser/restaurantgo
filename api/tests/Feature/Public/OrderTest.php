@@ -36,7 +36,7 @@ it('places a dine-in order and computes the total server-side, ignoring any clie
     ]);
 
     $response->assertCreated();
-    $response->assertJsonPath('total', '30.00');
+    $response->assertJsonPath('total', '30.000');
 
     $order = Order::findOrFail($response->json('order_id'));
     expect($order->table_number)->toBe('7');
@@ -159,7 +159,7 @@ it('lets staff enter an order on a customer\'s behalf without a QR code', functi
     $response->assertCreated();
     $response->assertJsonPath('source', 'staff');
     $response->assertJsonPath('table_number', '12');
-    $response->assertJsonPath('total', '20.00');
+    $response->assertJsonPath('total', '20.000');
 });
 
 it('blocks a tenant user without the "manage orders" permission from touching orders', function () {

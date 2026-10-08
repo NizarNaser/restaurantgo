@@ -18,8 +18,8 @@ class Plan extends Model
     ];
 
     protected $casts = [
-        'price_monthly'       => 'decimal:2',
-        'price_yearly'        => 'decimal:2',
+        'price_monthly'       => 'decimal:3',
+        'price_yearly'        => 'decimal:3',
         'has_custom_domain'   => 'boolean',
         'has_white_label'     => 'boolean',
         'has_advanced_reports'=> 'boolean',
