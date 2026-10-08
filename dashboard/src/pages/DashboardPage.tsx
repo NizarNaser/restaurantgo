@@ -2,7 +2,14 @@ import { useEffect, useState } from 'react';
 import { DollarSign, Users, Utensils, LayoutGrid, Loader2, QrCode, ExternalLink } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { QRCodeSVG } from 'qrcode.react';
 import api from '../api/axios';
+import Modal from '../components/Modal';
+
+interface MenuQrCode {
+  id: number;
+  scan_count: number;
+}
 
 interface Stats {
   tenant_slug: string;
@@ -19,6 +26,9 @@ export default function DashboardPage() {
   const { t } = useTranslation();
   const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState(true);
+  const [qrModalOpen, setQrModalOpen] = useState(false);
+  const [qrLoading, setQrLoading] = useState(false);
+  const [menuQrCode, setMenuQrCode] = useState<MenuQrCode | null>(null);
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -47,6 +57,35 @@ export default function DashboardPage() {
   // dine-in flow, so the delivery-vs-dine-in prompt (which only ever renders
   // on the menu root) would just be in the way here.
   const publicMenuUrl = stats?.public_url ? `${stats.public_url}/halls` : null;
+
+  // Shows the tenant's own menu QR in-place, rather than navigating anywhere
+  // — this card used to be a plain <Link to="/menu"> that changed the page
+  // (and, worse, used to point at the wrong URL entirely). Mirrors
+  // MenuPage.tsx's openQrModal(): same target_url (`stats.public_url`,
+  // resolved server-side to the tenant's subdomain/custom domain/`/p/:slug`)
+  // and the same scan-tracked QrCode row, just surfaced here too instead of
+  // forcing a trip to the menu page to see it.
+  const openQrModal = async () => {
+    setQrModalOpen(true);
+    setQrLoading(true);
+    try {
+      const targetUrl = stats?.public_url || `${window.location.protocol}//${window.location.host}/p/${stats?.tenant_slug || 'demo'}`;
+      const existing = await api.get('/qr-codes');
+      const menuQr = (existing.data as { id: number; type: string; scan_count: number }[]).find(
+        (q) => q.type === 'menu',
+      );
+      if (menuQr) {
+        setMenuQrCode(menuQr);
+      } else {
+        const created = await api.post('/qr-codes', { type: 'menu', target_url: targetUrl });
+        setMenuQrCode(created.data);
+      }
+    } catch (error) {
+      console.error('Failed to load QR code', error);
+    } finally {
+      setQrLoading(false);
+    }
+  };
 
   const cards = [
     {
@@ -139,9 +178,9 @@ export default function DashboardPage() {
             <h3 className="font-semibold text-gray-800 text-lg">{t('dashboard.yourMenuQr')}</h3>
             <p className="text-gray-500 text-sm mt-1">{t('dashboard.printQrDesc')}</p>
           </div>
-          <Link to="/menu?qr=1" className="btn btn-primary w-full">
+          <button type="button" onClick={openQrModal} className="btn btn-primary w-full">
             {t('dashboard.viewQrCode')}
-          </Link>
+          </button>
         </div>
 
         {/* Quick Links */}
@@ -175,6 +214,51 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
+
+      <Modal
+        isOpen={qrModalOpen}
+        onClose={() => { setQrModalOpen(false); setMenuQrCode(null); }}
+        title={t('settings.menuQrCode')}
+      >
+        <div className="flex flex-col items-center justify-center p-6 space-y-4">
+          <p className="text-center text-sm text-gray-600 mb-4">
+            {t('menu.qrScanExplain')}
+          </p>
+          {qrLoading || !menuQrCode ? (
+            <div className="w-[200px] h-[200px] flex items-center justify-center">
+              <Loader2 className="animate-spin text-gray-400" size={28} />
+            </div>
+          ) : (
+            <>
+              <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
+                <QRCodeSVG
+                  value={`${(import.meta.env.VITE_API_URL || 'http://localhost:8000/api').replace(/\/$/, '')}/v1/qr/${menuQrCode.id}`}
+                  size={200}
+                  level="H"
+                />
+              </div>
+              <p className="text-xs text-gray-500">
+                {t('menu.scannedTimes', { count: menuQrCode.scan_count })}
+              </p>
+            </>
+          )}
+          <a
+            href={stats?.public_url || `/p/${stats?.tenant_slug || 'demo'}`}
+            target="_blank"
+            rel="noreferrer"
+            className="text-blue-600 hover:underline text-sm font-medium"
+          >
+            {t('menu.viewPublicMenuUrl')}
+          </a>
+          <button
+            onClick={() => window.print()}
+            disabled={!menuQrCode}
+            className="btn btn-primary w-full mt-4 disabled:opacity-60"
+          >
+            {t('settings.printQrCode')}
+          </button>
+        </div>
+      </Modal>
     </div>
   );
 }
