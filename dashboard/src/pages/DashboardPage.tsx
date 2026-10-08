@@ -139,7 +139,7 @@ export default function DashboardPage() {
             <h3 className="font-semibold text-gray-800 text-lg">{t('dashboard.yourMenuQr')}</h3>
             <p className="text-gray-500 text-sm mt-1">{t('dashboard.printQrDesc')}</p>
           </div>
-          <Link to="/menu" className="btn btn-primary w-full">
+          <Link to="/menu?qr=1" className="btn btn-primary w-full">
             {t('dashboard.viewQrCode')}
           </Link>
         </div>
