@@ -65,7 +65,7 @@ it('creates a pending, unpaid delivery order and returns a checkout url, ignorin
     ]));
 
     $response->assertCreated();
-    $response->assertJsonPath('total', '30.00');
+    $response->assertJsonPath('total', '30.000');
     $response->assertJsonPath('checkout_url', 'https://checkout.stripe.com/pay/cs_test_123');
 
     $order = Order::findOrFail($response->json('order_id'));

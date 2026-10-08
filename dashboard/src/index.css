@@ -55,6 +55,24 @@
   .hide-scrollbar::-webkit-scrollbar {
     display: none;
   }
+  /* A slim, on-brand horizontal scrollbar — used where swipe/scroll is the
+     primary way to reach hidden content (e.g. the public menu's category
+     pills) instead of hiding the scrollbar entirely or relying on arrow
+     buttons, which look heavy on a small touch screen. */
+  .thin-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-primary) transparent;
+  }
+  .thin-scrollbar::-webkit-scrollbar {
+    height: 4px;
+  }
+  .thin-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .thin-scrollbar::-webkit-scrollbar-thumb {
+    background-color: var(--color-primary);
+    border-radius: 9999px;
+  }
   /* Continuous "Trending Now" ticker on the public menu — items drift
      left-to-right by default (translateX goes from -50% to 0%, i.e. the
      track slides rightward) and right-to-left for RTL locales (reversed).

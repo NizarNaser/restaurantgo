@@ -29,10 +29,28 @@ class AuditService
             'action'     => $action,
             'model_type' => get_class($model),
             'model_id'   => $model->getKey(),
-            'old_values' => $extra['old'] ?? null,
-            'new_values' => $extra['new'] ?? ($model->wasRecentlyCreated ? null : $model->getChanges()),
+            'old_values' => $this->redact($model, $extra['old'] ?? null),
+            'new_values' => $this->redact($model, $extra['new'] ?? ($model->wasRecentlyCreated ? null : $model->getChanges())),
             'ip_address' => request()->ip(),
             'user_agent' => request()->userAgent(),
         ]);
+    }
+
+    /**
+     * Strips whatever the model itself marks `$hidden` (bank account
+     * numbers, password hashes, 2FA secrets, ...) out of what gets written
+     * to old_values/new_values — the audit trail should prove *that*
+     * something changed, never leak the sensitive value itself in plain
+     * JSON. Reuses the model's own `$hidden` rather than a separate list,
+     * so a field already treated as sensitive everywhere else (API
+     * responses included) can't be forgotten here specifically.
+     */
+    private function redact(Model $model, ?array $values): ?array
+    {
+        if (! $values) {
+            return $values;
+        }
+
+        return collect($values)->except($model->getHidden())->all();
     }
 }

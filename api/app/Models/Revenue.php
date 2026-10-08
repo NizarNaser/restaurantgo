@@ -15,7 +15,7 @@ class Revenue extends Model
     ];
 
     protected $casts = [
-        'amount' => 'decimal:2',
+        'amount' => 'decimal:3',
         'date'   => 'date',
     ];
 

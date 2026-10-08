@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Table;
+use App\Services\Currency;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -25,7 +26,9 @@ class SalesReportController extends Controller
      */
     public function summary(Request $request): JsonResponse
     {
-        $tenantId = app('tenant')->id;
+        $tenant = app('tenant');
+        $tenantId = $tenant->id;
+        $currency = $tenant->default_currency ?? 'USD';
         [$from, $to] = $this->resolveRange($request);
         $itemFiltered = $request->filled('department_id') || $request->filled('category_id') || $request->filled('menu_item_id');
 
@@ -55,7 +58,7 @@ class SalesReportController extends Controller
                 'items_sold'    => (int) $rows->items_sold,
                 'income'        => (float) $rows->income,
                 'discounts'     => null, // not attributable per line item
-                'average_order' => $rows->orders_count > 0 ? round((float) $rows->income / $rows->orders_count, 2) : 0,
+                'average_order' => $rows->orders_count > 0 ? Currency::round((float) $rows->income / $rows->orders_count, $currency) : 0,
             ]);
         }
 
@@ -78,7 +81,7 @@ class SalesReportController extends Controller
             'orders_count'  => $ordersCount,
             'income'        => $income,
             'discounts'     => $discounts,
-            'average_order' => $ordersCount > 0 ? round($income / $ordersCount, 2) : 0,
+            'average_order' => $ordersCount > 0 ? Currency::round($income / $ordersCount, $currency) : 0,
         ]);
     }
 

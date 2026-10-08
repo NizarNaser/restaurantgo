@@ -170,6 +170,7 @@ class StripeService
         if ($couponCode) {
             $coupon = Coupon::usableBy($tenant->id)->where('code', $couponCode)->first();
             abort_if(! $coupon || ! $coupon->isValid(), 422, 'This coupon is invalid or has expired.');
+            abort_unless($coupon->tryReserve(), 422, 'This coupon has just reached its usage limit.');
 
             $params['discounts'] = [['coupon' => $this->stripeCouponIdFor($coupon)]];
             $params['metadata']['coupon_code'] = $coupon->code;
@@ -230,7 +231,12 @@ class StripeService
 
         $order->update([
             'stripe_checkout_session_id' => $session->id,
-            'platform_fee_amount'        => round($this->applicationFeeFor($order) / 100, 2),
+            // applicationFeeFor() returns Stripe minor units (cents, fils,
+            // or whole units depending on the order's currency) — converting
+            // it back with a flat /100 undercharges-on-paper three-decimal
+            // currencies 10x and overstates zero-decimal ones 100x, the same
+            // class of bug as the minor-unit conversion itself.
+            'platform_fee_amount'        => Currency::fromMinorUnits($this->applicationFeeFor($order), $order->currency),
         ]);
 
         return $session;
@@ -244,14 +250,16 @@ class StripeService
     }
 
     /**
-     * Every currency reachable today (USD default, plus EUR/GBP/SAR/AED/EGP
-     * from ExchangeRateService::TARGETS) is 2-decimal, so this is a flat
-     * *100. Revisit this single choke point if a zero-decimal currency
-     * (JPY, KRW, ...) is ever added.
+     * Stripe's minor-unit amount depends on the currency: most are 2-decimal
+     * (cents), a handful are 3-decimal (e.g. a Kuwaiti Dinar's fils), and a
+     * few are zero-decimal (e.g. Japanese Yen has no subunit at all). A flat
+     * *100 silently overcharges zero-decimal currencies 100x and undercharges
+     * three-decimal currencies 10x — both reachable today via the currency
+     * picker in Settings, not hypothetical future cases.
      */
     private function toMinorUnits(float $amount, string $currency): int
     {
-        return (int) round($amount * 100);
+        return Currency::toMinorUnits($amount, $currency);
     }
 
     /**
@@ -281,8 +289,9 @@ class StripeService
         if ($coupon->type === Coupon::TYPE_PERCENT) {
             $params['percent_off'] = (float) $coupon->value;
         } else {
-            $params['amount_off'] = (int) round(((float) $coupon->value) * 100);
-            $params['currency']   = strtolower($coupon->currency ?? 'usd');
+            $currency = $coupon->currency ?? 'usd';
+            $params['amount_off'] = $this->toMinorUnits((float) $coupon->value, $currency);
+            $params['currency']   = strtolower($currency);
         }
 
         $this->client()->coupons->create($params);
@@ -390,9 +399,12 @@ class StripeService
 
         $tenant->update(['plan_id' => $planId, 'trial_ends_at' => null, 'status' => 'active']);
 
-        if ($couponCode = $session->metadata->coupon_code ?? null) {
-            Coupon::where('code', $couponCode)->increment('used_count');
-        }
+        // used_count was already reserved atomically in
+        // createSubscriptionCheckoutSession(), before this checkout session
+        // was even created — incrementing it again here, on completion,
+        // was the race: several concurrent checkouts could all read the
+        // same stale used_count and all get the coupon applied before any
+        // of them completed.
     }
 
     private function onOrderCheckoutCompleted(object $session): void

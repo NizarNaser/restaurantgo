@@ -7,6 +7,7 @@ use App\Http\Controllers\Public\Concerns\ResolvesPublicTenant;
 use App\Models\MenuItem;
 use App\Models\Order;
 use App\Models\QrCode;
+use App\Services\Currency;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -80,7 +81,7 @@ class OrderController extends Controller
             foreach ($data['items'] as $line) {
                 $menuItem = $menuItems[$line['menu_item_id']];
                 $unitPrice = $menuItem->priceIn($currency);
-                $lineSubtotal = round($unitPrice * $line['quantity'], 2);
+                $lineSubtotal = Currency::round($unitPrice * $line['quantity'], $currency);
                 $subtotal += $lineSubtotal;
 
                 $order->items()->create([

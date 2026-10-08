@@ -61,8 +61,8 @@ Tests run against SQLite in-memory (`phpunit.xml`) with `QUEUE_CONNECTION=sync` 
 
 ## Architecture notes
 
-- **Multi-tenancy**: `IdentifyTenant` middleware resolves the current tenant (custom domain →
-  subdomain → `X-Tenant-Id` header → authenticated user) and binds it into the container as
+- **Multi-tenancy**: `IdentifyTenant` middleware resolves the current tenant (authenticated
+  user's own tenant → custom domain → subdomain) and binds it into the container as
   `app('tenant')`. Tenant-scoped models use the `App\Models\Concerns\BelongsToTenant` trait, which
   adds a global scope + auto-fills `tenant_id` on create whenever a tenant is bound — this also
   covers implicit route-model binding (`{model}` route params), not just explicit queries.

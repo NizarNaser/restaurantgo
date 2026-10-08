@@ -56,7 +56,7 @@ it('shows an occupied table\'s running order total and who opened it', function 
         ->assertOk()
         ->assertJsonPath('0.status', 'occupied')
         ->assertJsonPath('0.opened_by', 'Demo Owner')
-        ->assertJsonPath('0.current_order.total', '45.50');
+        ->assertJsonPath('0.current_order.total', '45.500');
 });
 
 it('ignores a completed order when computing the running total', function () {

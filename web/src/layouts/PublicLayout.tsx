@@ -171,11 +171,11 @@ export default function PublicLayout() {
               </div>
               <span className="text-lg font-extrabold text-white">RestaurantGo</span>
             </div>
-            <p className="text-sm text-gray-400">{t('footer.tagline')}</p>
+            <p className="text-sm text-gray-300">{t('footer.tagline')}</p>
           </div>
           <div>
             <h3 className="text-white font-semibold mb-3">{t('footer.quickLinks')}</h3>
-            <ul className="space-y-2 text-sm">
+            <ul className="space-y-2 text-sm text-gray-300">
               <li><Link to="/restaurants" className="hover:text-white transition-colors">{t('footer.browseRestaurants')}</Link></li>
               <li><Link to="/register" className="hover:text-white transition-colors">{t('nav.registerCta')}</Link></li>
               <li><Link to="/contact" className="hover:text-white transition-colors">{t('nav.contact')}</Link></li>
@@ -183,10 +183,10 @@ export default function PublicLayout() {
           </div>
           <div>
             <h3 className="text-white font-semibold mb-3">{t('nav.contact')}</h3>
-            <p className="text-sm text-gray-400">support@restaurantgo.com</p>
+            <p className="text-sm text-gray-300">support@restaurantgo.com</p>
           </div>
         </div>
-        <div className="border-t border-white/10 py-4 text-center text-xs text-gray-500">
+        <div className="border-t border-white/10 py-4 text-center text-xs text-gray-400">
           © {new Date().getFullYear()} RestaurantGo. {t('footer.rightsReserved')}
         </div>
       </footer>

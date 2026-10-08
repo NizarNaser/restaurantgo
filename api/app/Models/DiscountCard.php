@@ -18,7 +18,7 @@ class DiscountCard extends Model
     protected $casts = [
         'customer_birth_date' => 'date',
         'discount_percentage' => 'decimal:2',
-        'accumulated_balance' => 'decimal:2',
+        'accumulated_balance' => 'decimal:3',
         'is_active'           => 'boolean',
     ];
 

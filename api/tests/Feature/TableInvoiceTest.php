@@ -52,7 +52,7 @@ it('splits an invoice by department for kitchen/bar ticket printing', function (
     $response = $this->getJson("/api/orders/{$order['id']}/invoice");
 
     $response->assertOk();
-    $response->assertJsonPath('order.total', '16.00');
+    $response->assertJsonPath('order.total', '16.000');
     $response->assertJsonPath('table.table_number', 'T1');
     $response->assertJsonPath('opened_by', 'Waiter One');
     $response->assertJsonCount(2, 'departments');
@@ -77,7 +77,7 @@ it('applies the tenant\'s tax rate to the invoice total and snapshots each item\
     $response = $this->getJson("/api/orders/{$order['id']}/invoice");
 
     $response->assertOk();
-    $response->assertJsonPath('order.subtotal', '10.00');
+    $response->assertJsonPath('order.subtotal', '10.000');
     $response->assertJsonPath('order.tax_rate', 10);
     $response->assertJsonPath('order.tax_amount', 1);
     $response->assertJsonPath('order.grand_total', 11);

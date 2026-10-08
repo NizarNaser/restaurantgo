@@ -8,6 +8,7 @@ use App\Models\MenuItem;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Services\AuditService;
+use App\Services\Currency;
 use App\Services\OrderCompletionService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -102,7 +103,7 @@ class OrderController extends Controller
             foreach ($data['items'] as $line) {
                 $menuItem = $menuItems[$line['menu_item_id']];
                 $unitPrice = $menuItem->priceIn($currency);
-                $lineSubtotal = round($unitPrice * $line['quantity'], 2);
+                $lineSubtotal = Currency::round($unitPrice * $line['quantity'], $currency);
                 $subtotal += $lineSubtotal;
 
                 $order->items()->create([
@@ -151,7 +152,7 @@ class OrderController extends Controller
         $unassignedItems = [];
         $flatItems = [];
 
-        foreach (OrderItem::groupForDisplay($order->items) as $groupedLine) {
+        foreach (OrderItem::groupForDisplay($order->items, $order->currency) as $groupedLine) {
             $line = collect($groupedLine)->except(['menu_item_id', 'notes'])->all();
             $flatItems[] = $line;
 
@@ -166,16 +167,16 @@ class OrderController extends Controller
 
         $tenant = app('tenant');
         $taxRate = (float) $tenant->tax_rate;
-        $taxAmount = round(((float) $order->total) * $taxRate / 100, 2);
+        $taxAmount = Currency::round(((float) $order->total) * $taxRate / 100, $order->currency);
 
         // Dine-in only (this endpoint only ever serves the Halls & Tables
         // bill/invoice) — delivery/online orders never see this. The owner
         // can disclose the rate to customers without charging it yet (or
         // vice versa), hence the separate apply_to_invoice toggle.
         $serviceChargeRate = $tenant->service_charge_apply_to_invoice ? (float) $tenant->service_charge_rate : 0.0;
-        $serviceChargeAmount = round(((float) $order->total) * $serviceChargeRate / 100, 2);
+        $serviceChargeAmount = Currency::round(((float) $order->total) * $serviceChargeRate / 100, $order->currency);
 
-        $grandTotal = round(((float) $order->total) + $taxAmount + $serviceChargeAmount, 2);
+        $grandTotal = Currency::round(((float) $order->total) + $taxAmount + $serviceChargeAmount, $order->currency);
 
         return response()->json([
             'order' => [
@@ -261,7 +262,7 @@ class OrderController extends Controller
             foreach ($data['items'] as $line) {
                 $menuItem = $menuItems[$line['menu_item_id']];
                 $unitPrice = $menuItem->priceIn($order->currency);
-                $lineSubtotal = round($unitPrice * $line['quantity'], 2);
+                $lineSubtotal = Currency::round($unitPrice * $line['quantity'], $order->currency);
                 $addedSubtotal += $lineSubtotal;
 
                 $order->items()->create([
