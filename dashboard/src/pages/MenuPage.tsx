@@ -431,6 +431,22 @@ export default function MenuPage() {
     }
   };
 
+  // The dashboard home's QR card deep-links here with ?qr=1 instead of
+  // reimplementing QR generation itself — that used to be a plain
+  // `<Link to="/menu">` that didn't show any QR code at all, let alone the
+  // right URL. Reusing this modal keeps one source of truth for the
+  // tenant's own public URL (`publicUrl`, from /dashboard/stats) and the
+  // scan-tracked QR row, instead of a second, divergent implementation.
+  // Waits on `publicUrl` so the fetched tenant URL is actually available
+  // before `openQrModal` builds `targetUrl` from it.
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get('qr') === '1' && publicUrl) {
+      openQrModal();
+      navigate('/menu', { replace: true });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [publicUrl]);
+
   const filteredItems = items
     .filter(item => item.name.toLowerCase().includes(search.toLowerCase()))
     .filter(item => activeCategoryId === 'all' || item.category_id === activeCategoryId);
