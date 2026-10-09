@@ -1,7 +1,8 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useLayoutEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MessageCircle, X, Send, Loader2, Sparkles } from 'lucide-react';
 import axios from 'axios';
+import { useDraggableFab } from '../../hooks/useDraggableFab';
 
 const PUBLIC_API = `${import.meta.env.VITE_API_URL || 'http://localhost:8000/api'}/v1/public`;
 
@@ -9,6 +10,10 @@ interface ChatMessage {
   role: 'user' | 'assistant';
   content: string;
 }
+
+const BUTTON_SIZE = 56;
+const PANEL_GAP = 16;
+const DEFAULT_OFFSET = window.innerWidth < 640 ? 16 : 24;
 
 export default function MenuAssistantWidget({ slug }: { slug: string }) {
   const { t } = useTranslation();
@@ -18,6 +23,23 @@ export default function MenuAssistantWidget({ slug }: { slug: string }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  const { pos, dragHandlers, wasDragged } = useDraggableFab('rg_assistant_fab_pos_menu', { right: DEFAULT_OFFSET, bottom: DEFAULT_OFFSET }, BUTTON_SIZE);
+  const [panelPos, setPanelPos] = useState({ right: pos.right, bottom: pos.bottom + BUTTON_SIZE + PANEL_GAP });
+
+  useLayoutEffect(() => {
+    if (!open) return;
+    const desired = { right: pos.right, bottom: pos.bottom + BUTTON_SIZE + PANEL_GAP };
+    const rect = panelRef.current?.getBoundingClientRect();
+    if (rect) {
+      const maxRight = Math.max(8, window.innerWidth - rect.width - 8);
+      const maxBottom = Math.max(8, window.innerHeight - rect.height - 8);
+      desired.right = Math.min(Math.max(desired.right, 8), maxRight);
+      desired.bottom = Math.min(Math.max(desired.bottom, 8), maxBottom);
+    }
+    setPanelPos(desired);
+  }, [open, pos]);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
@@ -53,7 +75,11 @@ export default function MenuAssistantWidget({ slug }: { slug: string }) {
   return (
     <>
       {open && (
-        <div className="fixed bottom-24 right-4 sm:right-6 w-[calc(100vw-2rem)] sm:w-96 h-[28rem] max-h-[70vh] bg-white rounded-2xl border border-gray-200 shadow-xl flex flex-col z-40 overflow-hidden">
+        <div
+          ref={panelRef}
+          style={{ right: panelPos.right, bottom: panelPos.bottom }}
+          className="fixed w-[calc(100vw-2rem)] sm:w-96 h-[28rem] max-h-[70vh] bg-white rounded-2xl border border-gray-200 shadow-xl flex flex-col z-40 overflow-hidden"
+        >
           <div className="px-4 py-3 bg-[#ff4757] text-white flex items-center justify-between shrink-0">
             <span className="font-semibold text-sm flex items-center gap-2">
               <Sparkles size={16} /> {t('assistant.askAboutMenu')}
@@ -114,8 +140,10 @@ export default function MenuAssistantWidget({ slug }: { slug: string }) {
 
       <button
         type="button"
-        onClick={() => setOpen((o) => !o)}
-        className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 w-14 h-14 rounded-full bg-[#ff4757] text-white shadow-lg flex items-center justify-center hover:bg-[#e63e4d] transition-colors z-40"
+        onClick={() => { if (!wasDragged()) setOpen((o) => !o); }}
+        {...dragHandlers}
+        style={{ right: pos.right, bottom: pos.bottom, touchAction: 'none' }}
+        className="fixed w-14 h-14 rounded-full bg-[#ff4757] text-white shadow-lg flex items-center justify-center hover:bg-[#e63e4d] transition-colors z-40 cursor-grab active:cursor-grabbing"
         aria-label={t('assistant.toggle')}
       >
         {open ? <X size={22} /> : <MessageCircle size={22} />}
