@@ -99,17 +99,17 @@
   to { transform: translateX(-50%); }
 }
 
-/* Print only the element marked #printable-invoice (e.g. a table's bill),
-   hiding the rest of the page/modal chrome around it. */
+/* Print only the element marked #printable-content (e.g. a table's bill,
+   or a QR code), hiding the rest of the page/modal chrome around it. */
 @media print {
   body * {
     visibility: hidden;
   }
-  #printable-invoice,
-  #printable-invoice * {
+  #printable-content,
+  #printable-content * {
     visibility: visible;
   }
-  #printable-invoice {
+  #printable-content {
     position: absolute;
     left: 0;
     top: 0;

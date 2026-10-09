@@ -237,7 +237,7 @@ export default function InvoicesPage() {
       {invoice && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={() => setInvoice(null)}>
           <div className="bg-white rounded-2xl w-full max-w-md max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
-            <div id="printable-invoice" className="p-5 text-sm">
+            <div id="printable-content" className="p-5 text-sm">
               <h3 className="font-bold text-center mb-1">{t('invoices.invoiceNumber', { id: invoice.order.id })}</h3>
               <p className="text-center text-gray-500 text-xs mb-3">
                 {invoice.table ? `${t('orders.tableNumber', { number: invoice.table.table_number })}${invoice.table.hall_name ? ` · ${invoice.table.hall_name}` : ''}` : ''}

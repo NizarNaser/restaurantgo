@@ -229,7 +229,7 @@ export default function DashboardPage() {
               <Loader2 className="animate-spin text-gray-400" size={28} />
             </div>
           ) : (
-            <>
+            <div id="printable-content" className="flex flex-col items-center gap-4">
               <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
                 <QRCodeSVG
                   value={`${(import.meta.env.VITE_API_URL || 'http://localhost:8000/api').replace(/\/$/, '')}/v1/qr/${menuQrCode.id}`}
@@ -240,7 +240,7 @@ export default function DashboardPage() {
               <p className="text-xs text-gray-500">
                 {t('menu.scannedTimes', { count: menuQrCode.scan_count })}
               </p>
-            </>
+            </div>
           )}
           <a
             href={stats?.public_url || `/p/${stats?.tenant_slug || 'demo'}`}
