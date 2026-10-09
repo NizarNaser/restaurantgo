@@ -456,6 +456,36 @@ class StripeService
             ]);
     }
 
+    /**
+     * Pulls a tenant's Connect account status directly from Stripe and
+     * syncs it locally. Used as a fallback for when the account.updated
+     * webhook hasn't flipped charges_enabled/details_submitted yet — e.g.
+     * because it's delivered to the separate Connected Accounts webhook
+     * endpoint, which isn't guaranteed to be configured — so the dashboard
+     * doesn't show "pending" forever while nothing is actually wrong.
+     */
+    public function syncConnectAccount(Tenant $tenant): void
+    {
+        if (! $tenant->stripe_connect_account_id) {
+            return;
+        }
+
+        $this->assertConfigured();
+
+        try {
+            $account = $this->client()->accounts->retrieve($tenant->stripe_connect_account_id);
+        } catch (ApiErrorException $e) {
+            Log::warning('Failed to sync Stripe Connect account status', [
+                'tenant_id' => $tenant->id,
+                'error'     => $e->getMessage(),
+            ]);
+
+            return;
+        }
+
+        $this->onConnectAccountUpdated($account);
+    }
+
     private function onSubscriptionDeleted(StripeSubscription $stripeSub): void
     {
         Subscription::where('stripe_subscription_id', $stripeSub->id)
