@@ -1,11 +1,15 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useLayoutEffect } from 'react';
 import { MessageCircle, X, Send, Loader2, Sparkles } from 'lucide-react';
 import api from '../api/axios';
+import { useDraggableFab } from '../hooks/useDraggableFab';
 
 interface ChatMessage {
   role: 'user' | 'assistant';
   content: string;
 }
+
+const BUTTON_SIZE = 56;
+const PANEL_GAP = 16;
 
 export default function AssistantWidget() {
   const [open, setOpen] = useState(false);
@@ -14,6 +18,23 @@ export default function AssistantWidget() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  const { pos, dragHandlers, wasDragged } = useDraggableFab('rg_assistant_fab_pos_dashboard', { right: 24, bottom: 24 }, BUTTON_SIZE);
+  const [panelPos, setPanelPos] = useState({ right: pos.right, bottom: pos.bottom + BUTTON_SIZE + PANEL_GAP });
+
+  useLayoutEffect(() => {
+    if (!open) return;
+    const desired = { right: pos.right, bottom: pos.bottom + BUTTON_SIZE + PANEL_GAP };
+    const rect = panelRef.current?.getBoundingClientRect();
+    if (rect) {
+      const maxRight = Math.max(8, window.innerWidth - rect.width - 8);
+      const maxBottom = Math.max(8, window.innerHeight - rect.height - 8);
+      desired.right = Math.min(Math.max(desired.right, 8), maxRight);
+      desired.bottom = Math.min(Math.max(desired.bottom, 8), maxBottom);
+    }
+    setPanelPos(desired);
+  }, [open, pos]);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
@@ -49,7 +70,11 @@ export default function AssistantWidget() {
   return (
     <>
       {open && (
-        <div className="fixed bottom-24 right-6 w-96 h-[32rem] max-w-[calc(100vw-3rem)] bg-white rounded-2xl border border-gray-200 shadow-xl flex flex-col z-40 overflow-hidden">
+        <div
+          ref={panelRef}
+          style={{ right: panelPos.right, bottom: panelPos.bottom }}
+          className="fixed w-96 h-[32rem] max-w-[calc(100vw-3rem)] bg-white rounded-2xl border border-gray-200 shadow-xl flex flex-col z-40 overflow-hidden"
+        >
           <div className="px-4 py-3 bg-gray-900 text-white flex items-center justify-between shrink-0">
             <span className="font-semibold text-sm flex items-center gap-2">
               <Sparkles size={16} /> RestaurantGo Assistant
@@ -110,8 +135,10 @@ export default function AssistantWidget() {
 
       <button
         type="button"
-        onClick={() => setOpen((o) => !o)}
-        className="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-[#ff4757] text-white shadow-lg flex items-center justify-center hover:bg-[#e63e4d] transition-colors z-40"
+        onClick={() => { if (!wasDragged()) setOpen((o) => !o); }}
+        {...dragHandlers}
+        style={{ right: pos.right, bottom: pos.bottom, touchAction: 'none' }}
+        className="fixed w-14 h-14 rounded-full bg-[#ff4757] text-white shadow-lg flex items-center justify-center hover:bg-[#e63e4d] transition-colors z-40 cursor-grab active:cursor-grabbing"
         aria-label="Toggle assistant"
       >
         {open ? <X size={22} /> : <MessageCircle size={22} />}
