@@ -95,6 +95,7 @@ class StripeService
         try {
             $account = $this->client()->accounts->create([
                 'type'     => 'standard',
+                'country'  => $tenant->country ?? $tenant->country_code ?? config('services.stripe.connect_country', 'DE'),
                 'email'    => $owner?->email,
                 'metadata' => ['tenant_id' => (string) $tenant->id],
             ]);
