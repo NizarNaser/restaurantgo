@@ -39,6 +39,11 @@ return [
         'key'            => env('STRIPE_KEY'),
         'secret'         => env('STRIPE_SECRET'),
         'webhook_secret' => env('STRIPE_WEBHOOK_SECRET'),
+        // Connect sends account.updated (and other connected-account events)
+        // to a separate "Connected Accounts" webhook endpoint in the Stripe
+        // dashboard, signed with its own secret — distinct from the main
+        // account webhook's STRIPE_WEBHOOK_SECRET above.
+        'connect_webhook_secret' => env('STRIPE_CONNECT_WEBHOOK_SECRET'),
         'order_commission_percent' => (float) env('STRIPE_ORDER_COMMISSION_PERCENT', 0),
         // Country a new Connect account is created in — Stripe fixes this
         // permanently at account creation, so it must match where the

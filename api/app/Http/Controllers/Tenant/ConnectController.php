@@ -20,6 +20,15 @@ class ConnectController extends Controller
     {
         $tenant = app('tenant');
 
+        // The account.updated webhook may not have landed yet (it can be
+        // delivered to a separate Connected Accounts endpoint that isn't
+        // always configured) — pull the real status from Stripe directly
+        // rather than leaving the dashboard stuck on "pending".
+        if ($tenant->stripe_connect_account_id && (! $tenant->stripe_connect_charges_enabled || ! $tenant->stripe_connect_details_submitted)) {
+            $this->stripe->syncConnectAccount($tenant);
+            $tenant->refresh();
+        }
+
         return response()->json([
             'connected'          => (bool) $tenant->stripe_connect_account_id,
             'charges_enabled'    => $tenant->stripe_connect_charges_enabled,
