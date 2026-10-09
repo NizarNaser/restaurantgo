@@ -40,6 +40,11 @@ return [
         'secret'         => env('STRIPE_SECRET'),
         'webhook_secret' => env('STRIPE_WEBHOOK_SECRET'),
         'order_commission_percent' => (float) env('STRIPE_ORDER_COMMISSION_PERCENT', 0),
+        // Country a new Connect account is created in — Stripe fixes this
+        // permanently at account creation, so it must match where the
+        // tenant actually operates. Falls back to this when the tenant has
+        // no country of its own to read.
+        'connect_country' => env('STRIPE_CONNECT_COUNTRY', 'DE'),
     ],
 
     'paypal' => [
