@@ -30,6 +30,7 @@ export default function QrCodesPage() {
   const [tableNumber, setTableNumber] = useState('');
   const [creating, setCreating] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [printingId, setPrintingId] = useState<number | null>(null);
 
   const fetchData = async () => {
     setLoading(true);
@@ -49,6 +50,15 @@ export default function QrCodesPage() {
   };
 
   useEffect(() => { fetchData(); }, []);
+
+  // Wait for the #printable-content id to land on the chosen card before
+  // triggering the browser print dialog, so window.print() doesn't fire
+  // on a render where no element matches the print CSS yet.
+  useEffect(() => {
+    if (printingId === null) return;
+    window.print();
+    setPrintingId(null);
+  }, [printingId]);
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -135,18 +145,20 @@ export default function QrCodesPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 p-5">
             {tableCodes.map((code) => (
               <div key={code.id} className="border border-gray-100 rounded-xl p-4 flex flex-col items-center text-center gap-2">
-                <div className="p-2 bg-white border border-gray-200 rounded-lg">
-                  {/* Encode the scan-tracking redirect, not target_url directly,
-                      so scan_count actually increments on a real scan. */}
-                  <QRCodeSVG value={`${API_URL}/v1/qr/${code.id}`} size={120} level="H" />
+                <div id={printingId === code.id ? 'printable-content' : undefined} className="flex flex-col items-center gap-2">
+                  <div className="p-2 bg-white border border-gray-200 rounded-lg">
+                    {/* Encode the scan-tracking redirect, not target_url directly,
+                        so scan_count actually increments on a real scan. */}
+                    <QRCodeSVG value={`${API_URL}/v1/qr/${code.id}`} size={120} level="H" />
+                  </div>
+                  <p className="font-semibold text-gray-900">{t('orders.tableNumber', { number: code.table_number })}</p>
+                  <p className="text-xs text-gray-400">{branchName(code.branch_id)}</p>
                 </div>
-                <p className="font-semibold text-gray-900">{t('orders.tableNumber', { number: code.table_number })}</p>
-                <p className="text-xs text-gray-400">{branchName(code.branch_id)}</p>
                 <p className="text-xs text-gray-400 flex items-center gap-1">
                   <ScanLine size={12} /> {t('qrCodes.scansCount', { count: code.scan_count })}
                 </p>
                 <div className="flex gap-2 mt-1">
-                  <button onClick={() => window.print()} className="btn btn-secondary border border-gray-200 text-xs px-3 py-1.5 flex items-center gap-1">
+                  <button onClick={() => setPrintingId(code.id)} className="btn btn-secondary border border-gray-200 text-xs px-3 py-1.5 flex items-center gap-1">
                     <Printer size={13} /> {t('common.print')}
                   </button>
                   <button onClick={() => handleDelete(code.id)} className="p-1.5 text-gray-400 hover:text-red-500" aria-label={t('common.delete')}>
