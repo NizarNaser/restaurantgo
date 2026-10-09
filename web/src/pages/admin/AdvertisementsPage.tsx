@@ -27,6 +27,7 @@ const emptyForm = { title: '', advertiser_name: '', link_url: '', placement: 'ho
 export default function AdvertisementsPage() {
   const [ads, setAds] = useState<Ad[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [form, setForm] = useState(emptyForm);
@@ -36,7 +37,23 @@ export default function AdvertisementsPage() {
 
   const fetchAds = () => {
     setLoading(true);
-    api.get('/admin/advertisements').then((res) => setAds(res.data)).finally(() => setLoading(false));
+    setLoadError(null);
+    api.get('/admin/advertisements')
+      .then((res) => {
+        // Guards against a malformed/unexpected response shape crashing the
+        // whole page (ads.map on a non-array) instead of showing an error.
+        if (Array.isArray(res.data)) {
+          setAds(res.data);
+        } else {
+          console.error('Unexpected /admin/advertisements response shape:', res.data);
+          setLoadError('تعذر تحميل الإعلانات — رد غير متوقع من الخادم.');
+        }
+      })
+      .catch((err) => {
+        console.error('Failed to load advertisements:', err);
+        setLoadError(err.response?.data?.message || 'تعذر تحميل الإعلانات.');
+      })
+      .finally(() => setLoading(false));
   };
 
   useEffect(() => { fetchAds(); }, []);
@@ -131,8 +148,12 @@ export default function AdvertisementsPage() {
 
   const handleDelete = async (id: number) => {
     if (!confirm('حذف هذا الإعلان؟')) return;
-    await api.delete(`/admin/advertisements/${id}`);
-    fetchAds();
+    try {
+      await api.delete(`/admin/advertisements/${id}`);
+      fetchAds();
+    } catch (err: any) {
+      alert(err.response?.data?.message || 'تعذر حذف الإعلان.');
+    }
   };
 
   if (loading) return <div className="flex justify-center py-20"><Loader2 className="animate-spin text-gray-400" /></div>;
@@ -143,6 +164,10 @@ export default function AdvertisementsPage() {
         <h1 className="text-2xl font-bold text-gray-900">الإعلانات المدفوعة</h1>
         <button onClick={openCreate} className="btn btn-primary"><Plus size={18} className="ml-2" /> إضافة إعلان</button>
       </div>
+
+      {loadError && (
+        <div className="mt-4 p-3 rounded-lg bg-red-50 border border-red-200 text-red-600 text-sm">{loadError}</div>
+      )}
 
       <div className="mt-6 card overflow-hidden">
         <table className="w-full text-right text-sm">
