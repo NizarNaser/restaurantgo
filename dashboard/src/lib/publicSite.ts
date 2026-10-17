@@ -3,10 +3,10 @@
  * hostname, so the same build serves three different audiences:
  *
  *  - the admin/staff dashboard, at the platform's own host (e.g.
- *    `app.restaurantgo.com`) or on localhost during development — routed at
+ *    `app.restoatlas.com`) or on localhost during development — routed at
  *    `/dashboard`, `/menu`, `/login`, etc.
  *  - a tenant's public menu/blog/ordering pages under ITS OWN subdomain
- *    (e.g. `pizzeria.restaurantgo.com`) — routed at clean root paths (`/`,
+ *    (e.g. `pizzeria.restoatlas.com`) — routed at clean root paths (`/`,
  *    `/halls`, `/blog`, ...) with no slug in the URL at all.
  *  - the same public pages reachable under a connected custom domain
  *    (`menu.pizzeria.com`), or via the legacy `/p/:slug/...` path prefix
@@ -16,6 +16,8 @@
  * `VITE_BASE_DOMAIN` must match the backend's `APP_BASE_DOMAIN` — see
  * SeoService::tenantBaseUrl() in the API, which this file mirrors.
  */
+
+import { APP_DOMAIN } from './brand';
 
 // Keep in sync with api/config/app.php's `reserved_subdomains`.
 const RESERVED_SUBDOMAINS = new Set([
@@ -75,12 +77,11 @@ export function buildPublicPath(slug: string | undefined, suffix: string, isHost
 }
 
 /**
- * The platform's own marketing site (restaurantgo.com, not any tenant's
+ * The platform's own marketing site (restoatlas.com, not any tenant's
  * page) — linked from the "powered by" badge on a tenant's public site.
  * Derived from the same VITE_BASE_DOMAIN as the tenant subdomains
  * themselves, so it always points at the right environment.
  */
 export function getPlatformSiteUrl(): string {
-  const baseDomain = getBaseDomain();
-  return baseDomain ? `https://${baseDomain}` : 'https://restaurantgo.com';
+  return `https://${getBaseDomain() ?? APP_DOMAIN}`;
 }

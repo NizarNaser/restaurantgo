@@ -2,6 +2,7 @@ import { useState, useRef, useEffect, useLayoutEffect } from 'react';
 import { MessageCircle, X, Send, Loader2, Sparkles } from 'lucide-react';
 import api from '../api/axios';
 import { useDraggableFab } from '../hooks/useDraggableFab';
+import { APP_NAME } from '../lib/brand';
 
 interface ChatMessage {
   role: 'user' | 'assistant';
@@ -77,7 +78,7 @@ export default function AssistantWidget() {
         >
           <div className="px-4 py-3 bg-gray-900 text-white flex items-center justify-between shrink-0">
             <span className="font-semibold text-sm flex items-center gap-2">
-              <Sparkles size={16} /> RestaurantGo Assistant
+              <Sparkles size={16} /> {APP_NAME} Assistant
             </span>
             <button onClick={() => setOpen(false)} className="text-white/70 hover:text-white" aria-label="Close">
               <X size={18} />
@@ -87,7 +88,7 @@ export default function AssistantWidget() {
           <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-3">
             {messages.length === 0 && (
               <p className="text-sm text-gray-500">
-                Hi! Ask me anything about setting up your restaurant on RestaurantGo — menus, QR ordering, delivery payments, or anything else in the dashboard.
+                Hi! Ask me anything about setting up your restaurant on {APP_NAME} — menus, QR ordering, delivery payments, or anything else in the dashboard.
               </p>
             )}
             {messages.map((m, i) => (

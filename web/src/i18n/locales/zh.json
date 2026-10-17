@@ -14,8 +14,8 @@
     "rightsReserved": "版权所有。"
   },
   "assistant": {
-    "title": "RestaurantGo 助手",
-    "greeting": "你好！可以问我任何关于 RestaurantGo 的问题——功能、价格或使用方法。",
+    "title": "{{appName}} 助手",
+    "greeting": "你好！可以问我任何关于 {{appName}} 的问题——功能、价格或使用方法。",
     "placeholder": "输入问题...",
     "error": "无法连接助手，请重试。",
     "toggleAriaLabel": "切换助手"

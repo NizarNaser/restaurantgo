@@ -1,6 +1,7 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
+import { APP_DOMAIN, APP_NAME } from '../lib/brand';
 import en from './locales/en.json';
 import ar from './locales/ar.json';
 
@@ -27,7 +28,8 @@ i18n
       caches: ['localStorage'],
       lookupLocalStorage: 'dashboard_locale',
     },
-    interpolation: { escapeValue: false },
+    // {{appName}} / {{appDomain}} in any translation resolve to the brand.
+    interpolation: { escapeValue: false, defaultVariables: { appName: APP_NAME, appDomain: APP_DOMAIN } },
   });
 
 applyDirection(i18n.resolvedLanguage ?? 'en');

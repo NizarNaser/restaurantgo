@@ -8,9 +8,9 @@ import Reveal from '../components/Reveal';
 // TODO: استبدل هذه القيم بروابط/رقم التواصل الفعلية الخاصة بالمطعم/المنصة.
 const SOCIAL_LINKS = [
   { key: 'whatsapp', href: 'https://wa.me/966500000000', icon: WhatsAppIcon, color: '#25D366' },
-  { key: 'facebook', href: 'https://facebook.com/restaurantgo', icon: FacebookIcon, color: '#1877F2' },
-  { key: 'instagram', href: 'https://instagram.com/restaurantgo', icon: InstagramIcon, color: '#E4405F' },
-  { key: 'telegram', href: 'https://t.me/restaurantgo', icon: TelegramIcon, color: '#26A5E4' },
+  { key: 'facebook', href: 'https://facebook.com/restoatlas', icon: FacebookIcon, color: '#1877F2' },
+  { key: 'instagram', href: 'https://instagram.com/restoatlas', icon: InstagramIcon, color: '#E4405F' },
+  { key: 'telegram', href: 'https://t.me/restoatlas', icon: TelegramIcon, color: '#26A5E4' },
 ];
 
 function WhatsAppIcon({ size = 22 }: { size?: number }) {

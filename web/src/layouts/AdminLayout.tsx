@@ -4,6 +4,7 @@ import { ChefHat, LayoutDashboard, Building2, CreditCard, Layers, Ticket, UserCo
 import { useTranslation } from 'react-i18next';
 import { useAdminAuthStore } from '../store/adminAuthStore';
 import LanguageSwitcher from '../components/LanguageSwitcher';
+import { APP_NAME } from '../lib/brand';
 
 export default function AdminLayout() {
   const { t } = useTranslation();
@@ -58,7 +59,7 @@ export default function AdminLayout() {
             <ChefHat size={24} />
           </div>
           <div>
-            <span className="block text-lg font-bold text-gray-800">RestaurantGo</span>
+            <span className="block text-lg font-bold text-gray-800">{APP_NAME}</span>
             <span className="block text-xs text-gray-500">{t('adminNav.panelSubtitle')}</span>
           </div>
         </div>

@@ -6,6 +6,7 @@ import { useAuthStore } from '../store/authStore';
 import LanguageSwitcher from '../components/LanguageSwitcher';
 import AssistantWidget from '../components/AssistantWidget';
 import ShiftGate from '../components/ShiftGate';
+import { APP_NAME } from '../lib/brand';
 
 // Halls, Reservations, and Kitchen Display are the day-to-day operational
 // surface — every staff role that reaches the sidebar can use them (Halls
@@ -55,7 +56,7 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
         <div className="bg-[#ff4757] p-2 rounded-lg text-white">
           <ChefHat size={24} />
         </div>
-        <span className="text-xl font-bold text-gray-800 flex-1">RestaurantGo</span>
+        <span className="text-xl font-bold text-gray-800 flex-1">{APP_NAME}</span>
         {onNavigate && (
           <button onClick={onNavigate} className="text-gray-400 hover:text-gray-700" aria-label="Close menu">
             <X size={22} />
@@ -159,7 +160,7 @@ export default function DashboardLayout() {
               <Menu size={22} />
             </button>
             <h1 className="text-lg font-semibold text-gray-800 truncate">
-              {user?.name || 'RestaurantGo Dashboard'}
+              {user?.name || `${APP_NAME} Dashboard`}
             </h1>
           </div>
           <div className="flex items-center gap-4 shrink-0">

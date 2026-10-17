@@ -7,6 +7,7 @@ import LanguageSwitcher from '../components/LanguageSwitcher';
 import AssistantWidget from '../components/AssistantWidget';
 import api from '../api/axios';
 import { useSeoHead, type SeoPayload } from '../hooks/useSeoHead';
+import { APP_DOMAIN, APP_NAME, APP_TAGLINE } from '../lib/brand';
 
 interface PlatformSeoSettings {
   seo_title: Record<string, string> | null;
@@ -15,7 +16,7 @@ interface PlatformSeoSettings {
   google_site_verification: string | null;
 }
 
-const DEFAULT_TITLE = 'RestaurantGo — Restaurant Management Platform';
+const DEFAULT_TITLE = `${APP_NAME} — ${APP_TAGLINE}`;
 const DEFAULT_DESCRIPTION = 'Online menus, delivery, and dine-in ordering for restaurants — set up in minutes.';
 
 // Resolves a locale-keyed SEO field to one string: exact language match,
@@ -52,7 +53,7 @@ export default function PublicLayout() {
           'og:type': 'website',
           'og:title': title,
           'og:description': description,
-          'og:site_name': 'RestaurantGo',
+          'og:site_name': APP_NAME,
           ...(s.seo_og_image ? { 'og:image': s.seo_og_image } : {}),
         },
         twitter: {
@@ -90,7 +91,7 @@ export default function PublicLayout() {
             <div className="bg-[var(--color-primary)] p-1.5 rounded-xl text-white shadow-[var(--shadow-glow)] transition-transform group-hover:rotate-6 group-hover:scale-105">
               <ChefHat size={22} />
             </div>
-            <span className="text-lg font-extrabold text-gray-800">RestaurantGo</span>
+            <span className="text-lg font-extrabold text-gray-800">{APP_NAME}</span>
           </Link>
 
           <nav className="hidden md:flex items-center gap-1">
@@ -169,7 +170,7 @@ export default function PublicLayout() {
               <div className="bg-[var(--color-primary)] p-1.5 rounded-xl text-white">
                 <ChefHat size={20} />
               </div>
-              <span className="text-lg font-extrabold text-white">RestaurantGo</span>
+              <span className="text-lg font-extrabold text-white">{APP_NAME}</span>
             </div>
             <p className="text-sm text-gray-300">{t('footer.tagline')}</p>
           </div>
@@ -183,11 +184,11 @@ export default function PublicLayout() {
           </div>
           <div>
             <h3 className="text-white font-semibold mb-3">{t('nav.contact')}</h3>
-            <p className="text-sm text-gray-300">support@restaurantgo.com</p>
+            <p className="text-sm text-gray-300">support@{APP_DOMAIN}</p>
           </div>
         </div>
         <div className="border-t border-white/10 py-4 text-center text-xs text-gray-400">
-          © {new Date().getFullYear()} RestaurantGo. {t('footer.rightsReserved')}
+          © {new Date().getFullYear()} {APP_NAME}. {t('footer.rightsReserved')}
         </div>
       </footer>
 

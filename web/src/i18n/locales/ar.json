@@ -14,8 +14,8 @@
     "rightsReserved": "جميع الحقوق محفوظة."
   },
   "assistant": {
-    "title": "مساعد RestaurantGo",
-    "greeting": "أهلاً! اسألني أي شيء عن RestaurantGo — المميزات، الأسعار، أو طريقة العمل.",
+    "title": "مساعد {{appName}}",
+    "greeting": "أهلاً! اسألني أي شيء عن {{appName}} — المميزات، الأسعار، أو طريقة العمل.",
     "placeholder": "اكتب سؤالك...",
     "error": "تعذر الوصول إلى المساعد، حاول مرة أخرى.",
     "toggleAriaLabel": "تبديل المساعد"

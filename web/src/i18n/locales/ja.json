@@ -14,8 +14,8 @@
     "rightsReserved": "全著作権所有。"
   },
   "assistant": {
-    "title": "RestaurantGo アシスタント",
-    "greeting": "こんにちは！RestaurantGoの機能、料金、仕組みについて何でも聞いてください。",
+    "title": "{{appName}} アシスタント",
+    "greeting": "こんにちは！{{appName}}の機能、料金、仕組みについて何でも聞いてください。",
     "placeholder": "質問を入力...",
     "error": "アシスタントに接続できませんでした。もう一度お試しください。",
     "toggleAriaLabel": "アシスタントの表示切替"
