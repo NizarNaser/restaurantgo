@@ -1,4 +1,4 @@
-# خطة الأمان وطرق الدفع والامتثال القانوني — RestaurantGo
+# خطة الأمان وطرق الدفع والامتثال القانوني — RestoAtlas
 
 **تاريخ الإعداد:** 2026-10-08
 **الفرع وقت الإعداد:** `fix/phase-1-critical-security-and-money` (يبني على `a346aed` — "Phase 1: fix critical cross-tenant access, coupon/discount races, and Gulf currency bug")

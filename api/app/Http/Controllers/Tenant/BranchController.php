@@ -176,7 +176,7 @@ class BranchController extends Controller
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_TIMEOUT        => 8,
             CURLOPT_RANGE          => '0-2047',
-            CURLOPT_USERAGENT      => 'Mozilla/5.0 (compatible; RestaurantGoBot/1.0)',
+            CURLOPT_USERAGENT      => 'Mozilla/5.0 (compatible; RestoAtlasBot/1.0)',
         ]);
         curl_exec($ch);
         $effectiveUrl = curl_errno($ch) ? null : curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);

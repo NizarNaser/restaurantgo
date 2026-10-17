@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { ChefHat, Loader2 } from 'lucide-react';
 import { useAdminAuthStore } from '../../store/adminAuthStore';
+import { APP_NAME } from '../../lib/brand';
 
 export default function AdminLoginPage() {
   const { login, isLoading, error, isAuthenticated } = useAdminAuthStore();
@@ -25,7 +26,7 @@ export default function AdminLoginPage() {
             <ChefHat size={26} />
           </div>
           <h1 className="text-xl font-bold text-gray-900">لوحة تحكم الشركة</h1>
-          <p className="text-sm text-gray-500 mt-1">لموظفي RestaurantGo فقط</p>
+          <p className="text-sm text-gray-500 mt-1">لموظفي {APP_NAME} فقط</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">

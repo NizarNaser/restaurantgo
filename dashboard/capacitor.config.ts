@@ -1,8 +1,8 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.restaurantgo.pos',
-  appName: 'RestaurantGo POS',
+  appId: 'com.restoatlas.pos',
+  appName: 'RestoAtlas POS',
   webDir: 'dist'
 };
 

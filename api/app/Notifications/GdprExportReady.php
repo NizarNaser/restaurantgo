@@ -38,6 +38,6 @@ class GdprExportReady extends Notification implements ShouldQueue
             ->line('The data export you requested is ready to download.')
             ->action('Download export', $url)
             ->line('This link expires in 24 hours, for security.')
-            ->salutation('— The RestaurantGo Team');
+            ->salutation('— The ' . config('app.name') . ' Team');
     }
 }

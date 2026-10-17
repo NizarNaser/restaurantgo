@@ -2,7 +2,7 @@
 
 > لديك خطة **Business** (استضافة مشتركة، بدون VPS)؟ استخدم [`HOSTINGER_BUSINESS_DEPLOYMENT.md`](HOSTINGER_BUSINESS_DEPLOYMENT.md) بدلاً من هذا الملف.
 
-دليل تقني خطوة بخطوة لنشر المنصة على Hostinger كبيئة إنتاج حقيقية، بحيث يحصل كل مطعم يسجّل على subdomain خاص به (`restaurant-name.yourdomain.com`) يفتح مباشرة على صفحة المطعم. الخطة التجارية الكاملة (المراحل، التكاليف، الجدول الزمني) في تقرير منفصل — هذا الملف تقني بحت، ويكمل [`docker-compose.prod.yml`](docker-compose.prod.yml) و[`deploy/nginx/restaurantgo.conf`](deploy/nginx/restaurantgo.conf).
+دليل تقني خطوة بخطوة لنشر المنصة على Hostinger كبيئة إنتاج حقيقية، بحيث يحصل كل مطعم يسجّل على subdomain خاص به (`restaurant-name.yourdomain.com`) يفتح مباشرة على صفحة المطعم. الخطة التجارية الكاملة (المراحل، التكاليف، الجدول الزمني) في تقرير منفصل — هذا الملف تقني بحت، ويكمل [`docker-compose.prod.yml`](docker-compose.prod.yml) و[`deploy/nginx/restoatlas.conf`](deploy/nginx/restoatlas.conf).
 
 ## لماذا VPS لا Shared/Cloud Hosting
 
@@ -19,7 +19,7 @@
 
 ## 1) تجهيز الدومين
 
-1. اشترِ دومين (أو استخدم دومين موجود لديك) — مثال افتراضي في هذا الدليل: `restaurantgo.com`.
+1. اشترِ دومين (أو استخدم دومين موجود لديك) — مثال افتراضي في هذا الدليل: `restoatlas.com`.
 2. في لوحة تحكم الدومين (Hostinger أو أي مسجّل آخر)، أضف سجلّات DNS التالية تشير إلى IP الخاص بالـ VPS:
 
    | Type | Name | Value |
@@ -39,7 +39,7 @@
    ```
 3. استنسخ المشروع:
    ```bash
-   git clone <your-repo-url> restaurantgo && cd restaurantgo
+   git clone <your-repo-url> restoatlas && cd restoatlas
    ```
 
 ## 3) ملفات البيئة
@@ -50,16 +50,16 @@ cp api/.env.example api/.env
 
 عدّل `api/.env`:
 - `APP_ENV=production`, `APP_DEBUG=false`
-- `APP_URL=https://api.restaurantgo.com`
-- `APP_BASE_DOMAIN=restaurantgo.com` ← **هذا هو السطر الذي يفعّل الـ subdomains لكل مطعم** (انظر `SeoService::tenantBaseUrl()` و`IdentifyTenant` middleware في الكود — كلاهما جاهز مسبقًا ولا يحتاج أي تعديل، فقط هذا المتغيّر).
-- `APP_PUBLIC_URL=https://app.restaurantgo.com`
+- `APP_URL=https://api.restoatlas.com`
+- `APP_BASE_DOMAIN=restoatlas.com` ← **هذا هو السطر الذي يفعّل الـ subdomains لكل مطعم** (انظر `SeoService::tenantBaseUrl()` و`IdentifyTenant` middleware في الكود — كلاهما جاهز مسبقًا ولا يحتاج أي تعديل، فقط هذا المتغيّر).
+- `APP_PUBLIC_URL=https://app.restoatlas.com`
 - بيانات القاعدة (`DB_*`) — تبقى كما هي (`mysql`/`restaurantgo`)، فقط اختر كلمة مرور حقيقية.
 - `MAIL_*`, `STRIPE_*` وبقية المفاتيح الحقيقية.
 
 أنشئ ملف `.env` في جذر المشروع (يقرأه `docker-compose.prod.yml` لبناء الواجهتين):
 ```bash
 cat > .env <<'EOF'
-BASE_DOMAIN=restaurantgo.com
+BASE_DOMAIN=restoatlas.com
 DB_PASSWORD=<كلمة مرور قوية>
 DB_ROOT_PASSWORD=<كلمة مرور قوية أخرى>
 EOF
@@ -73,7 +73,7 @@ EOF
 ```bash
 docker compose -f docker-compose.prod.yml run --rm certbot certonly \
   --manual --preferred-challenges dns \
-  -d restaurantgo.com -d www.restaurantgo.com -d '*.restaurantgo.com'
+  -d restoatlas.com -d www.restoatlas.com -d '*.restoatlas.com'
 ```
 سيطلب منك certbot إضافة سجل TXT في DNS يدويًا (خطوة واحدة، تُكرَّر كل ~90 يومًا عند التجديد).
 
@@ -82,11 +82,11 @@ docker compose -f docker-compose.prod.yml run --rm certbot certonly \
 ```bash
 docker compose -f docker-compose.prod.yml run --rm certbot certonly \
   --dns-cloudflare --dns-cloudflare-credentials /etc/letsencrypt/cloudflare.ini \
-  -d restaurantgo.com -d www.restaurantgo.com -d '*.restaurantgo.com'
+  -d restoatlas.com -d www.restoatlas.com -d '*.restoatlas.com'
 ```
 وأضف إلى crontab على الـ VPS تجديدًا تلقائيًا شهريًا:
 ```
-0 3 1 * * cd /path/to/restaurantgo && docker compose -f docker-compose.prod.yml run --rm certbot renew --quiet && docker compose -f docker-compose.prod.yml exec nginx nginx -s reload
+0 3 1 * * cd /path/to/restoatlas && docker compose -f docker-compose.prod.yml run --rm certbot renew --quiet && docker compose -f docker-compose.prod.yml exec nginx nginx -s reload
 ```
 
 ## 5) التشغيل
@@ -103,10 +103,10 @@ docker compose -f docker-compose.prod.yml exec api php artisan db:seed --class=R
 
 ## 6) التحقق
 
-- `https://restaurantgo.com` → الموقع التسويقي/الدليل (`web`).
-- `https://app.restaurantgo.com/login` → لوحة تحكم المنصة.
-- `https://api.restaurantgo.com/api/v1/plans` → يجب أن يرجع JSON.
-- سجّل مطعمًا تجريبيًا (subdomain مثلاً `test`) من `https://restaurantgo.com/register`، ثم افتح `https://test.restaurantgo.com` — يجب أن تفتح صفحة المطعم مباشرة بدون أي `/p/` في الرابط.
+- `https://restoatlas.com` → الموقع التسويقي/الدليل (`web`).
+- `https://app.restoatlas.com/login` → لوحة تحكم المنصة.
+- `https://api.restoatlas.com/api/v1/plans` → يجب أن يرجع JSON.
+- سجّل مطعمًا تجريبيًا (subdomain مثلاً `test`) من `https://restoatlas.com/register`، ثم افتح `https://test.restoatlas.com` — يجب أن تفتح صفحة المطعم مباشرة بدون أي `/p/` في الرابط.
 
 ## القيود المعروفة (صادقة، ليست جاهزة للإنتاج الثقيل بعد)
 

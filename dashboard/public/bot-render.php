@@ -10,11 +10,11 @@
  * URL, same content either way, just rendered on the server for bots that
  * can't run the client-side render themselves.
  *
- * Set RESTAURANTGO_API_URL below (or via an Apache SetEnv in .htaccess) to
+ * Set RESTOATLAS_API_URL below (or via an Apache SetEnv in .htaccess) to
  * this deployment's API origin before going live.
  */
 
-$apiUrl = getenv('RESTAURANTGO_API_URL') ?: 'https://api.restaurantgo.org';
+$apiUrl = getenv('RESTOATLAS_API_URL') ?: 'https://api.restoatlas.com';
 
 $slug = '';
 if (preg_match('#/p/([^/]+)#', $_SERVER['REQUEST_URI'] ?? '', $m)) {

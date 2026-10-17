@@ -1,4 +1,4 @@
-# منصة RestaurantGo — الخطة الهندسية الشاملة
+# منصة RestoAtlas — الخطة الهندسية الشاملة
 
 ## 1. مخطط قاعدة البيانات (ERD)
 
@@ -189,7 +189,7 @@ coupons
 ## 2. هيكل مشروع Laravel API
 
 ```
-restaurantgo-api/
+restoatlas-api/
 ├── app/
 │   ├── Console/Commands/
 │   │   ├── ProcessPayroll.php
@@ -277,7 +277,7 @@ restaurantgo-api/
 ## 3. هيكل مشروع React (لوحة التحكم)
 
 ```
-restaurantgo-dashboard/
+restoatlas-dashboard/
 ├── src/
 │   ├── api/
 │   │   ├── client.ts          # Axios instance + interceptors
@@ -505,8 +505,8 @@ restaurantgo-dashboard/
 ## 6. متغيرات البيئة (.env)
 
 ```env
-APP_NAME=RestaurantGo
-APP_URL=https://platform.restaurantgo.com
+APP_NAME=RestoAtlas
+APP_URL=https://platform.restoatlas.com
 
 DB_CONNECTION=pgsql
 DB_HOST=127.0.0.1
@@ -526,7 +526,7 @@ MAIL_MAILER=ses
 AWS_ACCESS_KEY_ID=...
 AWS_SECRET_ACCESS_KEY=...
 AWS_DEFAULT_REGION=eu-west-1
-AWS_BUCKET=restaurantgo-media
+AWS_BUCKET=restoatlas-media
 
 SENTRY_LARAVEL_DSN=https://...
 ```

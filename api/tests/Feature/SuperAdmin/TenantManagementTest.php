@@ -9,7 +9,7 @@ use Laravel\Sanctum\Sanctum;
 
 beforeEach(function () {
     $this->seed();
-    $this->admin = User::where('email', 'admin@restaurantgo.com')->firstOrFail();
+    $this->admin = User::where('email', 'admin@restoatlas.com')->firstOrFail();
     Sanctum::actingAs($this->admin, ['*']);
 });
 

@@ -1,7 +1,7 @@
 #!/bin/sh
 # Post-deploy hook for Hostinger Business (shared hosting, no SSH needed).
 # hPanel cron runs this every minute:
-#   sh /home/USER/domains/restaurantgo.org/public_html/rgo-api/hostinger-cron.sh
+#   sh /home/USER/domains/restoatlas.com/public_html/rgo-api/hostinger-cron.sh
 # It only does work when something changed, so repeated runs are cheap:
 #   - first run: creates .env from .env.hostinger and generates APP_KEY
 #   - composer.lock changed  -> composer install --no-dev

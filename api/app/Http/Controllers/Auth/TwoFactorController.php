@@ -40,7 +40,7 @@ class TwoFactorController extends Controller
 
         return response()->json([
             'secret'      => $secret,
-            'otpauth_url' => $this->google2fa->getQRCodeUrl(config('app.name', 'RestaurantGo'), $user->email, $secret),
+            'otpauth_url' => $this->google2fa->getQRCodeUrl(config('app.name', 'RestoAtlas'), $user->email, $secret),
         ]);
     }
 

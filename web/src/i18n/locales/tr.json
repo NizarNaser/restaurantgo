@@ -14,8 +14,8 @@
     "rightsReserved": "Tüm hakları saklıdır."
   },
   "assistant": {
-    "title": "RestaurantGo Asistanı",
-    "greeting": "Merhaba! RestaurantGo hakkında her şeyi sorabilirsin — özellikler, fiyatlar veya nasıl çalıştığı.",
+    "title": "{{appName}} Asistanı",
+    "greeting": "Merhaba! {{appName}} hakkında her şeyi sorabilirsin — özellikler, fiyatlar veya nasıl çalıştığı.",
     "placeholder": "Bir soru sorun...",
     "error": "Asistana ulaşılamadı, lütfen tekrar deneyin.",
     "toggleAriaLabel": "Asistanı aç/kapat"

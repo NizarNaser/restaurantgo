@@ -41,7 +41,7 @@ class PlansSeeder extends Seeder
             [
                 'name'                => 'Free',
                 'slug'                => 'free',
-                'description'         => 'Try RestaurantGo at no cost, with limited menu size and a single branch.',
+                'description'         => 'Try RestoAtlas at no cost, with limited menu size and a single branch.',
                 'price_monthly'       => 0.00,
                 'price_yearly'        => 0.00,
                 'max_branches'        => 1,

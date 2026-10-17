@@ -26,11 +26,11 @@ it('returns the assistant reply on a valid request, with no authentication neede
         ->shouldReceive('chat')
         ->once()
         ->with(Mockery::type('array'), Mockery::type('string'))
-        ->andReturn('RestaurantGo lets you manage your menu, take orders, and accept online payments.');
+        ->andReturn('RestoAtlas lets you manage your menu, take orders, and accept online payments.');
 
     $this->postJson('/api/v1/assistant/chat', [
-        'messages' => [['role' => 'user', 'content' => 'What does RestaurantGo do?']],
-    ])->assertOk()->assertJson(['reply' => 'RestaurantGo lets you manage your menu, take orders, and accept online payments.']);
+        'messages' => [['role' => 'user', 'content' => 'What does RestoAtlas do?']],
+    ])->assertOk()->assertJson(['reply' => 'RestoAtlas lets you manage your menu, take orders, and accept online payments.']);
 });
 
 it('cleanly rejects when the assistant is not configured', function () {

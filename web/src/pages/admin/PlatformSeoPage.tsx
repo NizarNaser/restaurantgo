@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Globe, Loader2, Save } from 'lucide-react';
 import api from '../../api/axios';
+import { APP_NAME, APP_TAGLINE } from '../../lib/brand';
 
 interface PlatformSettings {
   seo_title: Record<string, string> | null;
@@ -73,7 +74,7 @@ export default function PlatformSeoPage() {
       <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
         <Globe className="text-[var(--color-primary)]" size={24} /> السيو وبحث غوغل
       </h1>
-      <p className="text-gray-500 mt-1">تتحكم في كيفية ظهور موقع الشركة الرئيسي (RestaurantGo) في بحث غوغل وعند مشاركته على وسائل التواصل — لا علاقة لها بصفحات المطاعم الفردية، فكل مطعم يدير سيو صفحته الخاصة من لوحته. العنوان والوصف يُكتبان بكل اللغات التي يدعمها الموقع.</p>
+      <p className="text-gray-500 mt-1">تتحكم في كيفية ظهور موقع الشركة الرئيسي ({APP_NAME}) في بحث غوغل وعند مشاركته على وسائل التواصل — لا علاقة لها بصفحات المطاعم الفردية، فكل مطعم يدير سيو صفحته الخاصة من لوحته. العنوان والوصف يُكتبان بكل اللغات التي يدعمها الموقع.</p>
 
       <form onSubmit={handleSave} className="mt-6 card p-6 space-y-5">
         <div>
@@ -99,7 +100,7 @@ export default function PlatformSeoPage() {
           <input
             type="text"
             className="input w-full"
-            placeholder="RestaurantGo — منصة إدارة المطاعم"
+            placeholder={`${APP_NAME} — ${APP_TAGLINE}`}
             value={settings.seo_title?.[activeLocale] ?? ''}
             onChange={(e) => handleLocalizedChange('seo_title', e.target.value)}
           />

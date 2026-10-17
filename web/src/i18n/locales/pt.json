@@ -14,8 +14,8 @@
     "rightsReserved": "Todos os direitos reservados."
   },
   "assistant": {
-    "title": "Assistente RestaurantGo",
-    "greeting": "Olá! Pergunte-me qualquer coisa sobre o RestaurantGo — recursos, preços ou como funciona.",
+    "title": "Assistente {{appName}}",
+    "greeting": "Olá! Pergunte-me qualquer coisa sobre o {{appName}} — recursos, preços ou como funciona.",
     "placeholder": "Faça uma pergunta...",
     "error": "Não foi possível contatar o assistente, tente novamente.",
     "toggleAriaLabel": "Alternar assistente"

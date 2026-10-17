@@ -26,7 +26,7 @@ class PaymentFailed extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         $message = (new MailMessage)
-            ->subject('Your RestaurantGo payment failed')
+            ->subject('Your ' . config('app.name') . ' payment failed')
             ->greeting("Hi {$notifiable->name},")
             ->line('We were unable to process your latest subscription payment.');
 
@@ -38,6 +38,6 @@ class PaymentFailed extends Notification implements ShouldQueue
         return $message
             ->line('Please update your payment method to avoid any interruption to your account.')
             ->action('Update payment method', url('/billing'))
-            ->salutation('— The RestaurantGo Team');
+            ->salutation('— The ' . config('app.name') . ' Team');
     }
 }

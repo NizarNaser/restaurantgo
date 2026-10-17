@@ -1,4 +1,4 @@
-package com.restaurantgo.pos;
+package com.restoatlas.pos;
 
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
@@ -25,7 +25,7 @@ import java.util.UUID;
  * Sends raw ESC/POS bytes straight to a thermal printer over WiFi (TCP port
  * 9100, the near-universal raw-printing port) or Bluetooth (SPP) — no
  * printer-selection dialog. The connection details (address, type) come
- * from RestaurantGo's Printer settings, looked up ahead of time on the JS
+ * from RestoAtlas's Printer settings, looked up ahead of time on the JS
  * side, so this plugin only ever has to open a socket and write bytes.
  */
 @CapacitorPlugin(

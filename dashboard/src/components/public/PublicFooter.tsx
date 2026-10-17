@@ -8,6 +8,7 @@ import type { RestaurantInfo } from '../../types/public';
 import { countryName } from '../../lib/countryName';
 import { usePublicSlug } from '../../hooks/usePublicSlug';
 import { setCookieConsent } from '../../lib/cookieConsent';
+import { APP_NAME } from '../../lib/brand';
 
 /**
  * Shared dark footer for a restaurant's public pages (menu, blog, article,
@@ -110,7 +111,7 @@ export default function PublicFooter({
             {t('menu.poweredBy')}
             <span className="inline-flex items-center gap-1 font-semibold text-gray-300">
               <span className="bg-[#ff4757] text-white rounded-md p-0.5"><ChefHat size={11} /></span>
-              RestaurantGo
+              {APP_NAME}
             </span>
           </a>
         </div>

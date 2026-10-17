@@ -1,14 +1,17 @@
 # النشر على Hostinger Business (استضافة مشتركة)
 
+> **ملاحظة (2026-10):** هذا الدليل لاستضافة Hostinger Business المشتركة، ولم يعد مستخدمًا منذ الانتقال إلى VPS في 2026-10-01 (انظر `.github/workflows/deploy-vps.yml`). حُدِّثت الدومينات فيه إلى `restoatlas.com` ضمن إعادة التسمية إلى RestoAtlas؛ نتائج الاختبار في §9 أُجريت أصلًا على الدومين القديم. خطوات الانتقال: `docs/REBRAND_CHECKLIST.md`.
+
+
 هذا الدليل مخصص لخطة **Hostinger Business** (استضافة مشتركة/shared hosting عبر hPanel، بدون Docker ولا Root access). إن كانت لديك خطة **VPS**، استخدم [`HOSTINGER_DEPLOYMENT.md`](HOSTINGER_DEPLOYMENT.md) بدلاً من هذا الملف.
 
-المسار الوحيد المدعوم لكل مطعم على هذه الخطة هو `https://app.restaurantgo.org/p/{slug}` (وليس `https://{slug}.restaurantgo.org`). **تحديث (2026-09-30):** جُرِّب تفعيل subdomain حقيقي لكل مطعم فعليًا على حساب Business حقيقي وفشل — راجع §9 أدناه لتفاصيل السبب ولماذا لا يُنصح بإعادة المحاولة على هذه الخطة.
+المسار الوحيد المدعوم لكل مطعم على هذه الخطة هو `https://app.restoatlas.com/p/{slug}` (وليس `https://{slug}.restoatlas.com`). **تحديث (2026-09-30):** جُرِّب تفعيل subdomain حقيقي لكل مطعم فعليًا على حساب Business حقيقي وفشل — راجع §9 أدناه لتفاصيل السبب ولماذا لا يُنصح بإعادة المحاولة على هذه الخطة.
 
 ## الفكرة الأساسية: بدون Wildcard subdomain (الوضع الافتراضي)
 
 Docker وعمليات خلفية دائمة (queue worker/scheduler كـ daemon) غير مدعومة على استضافة مشتركة بأي حال. الكود أصلاً مبني ليدعم بديلاً لكل هذا:
 
-- **مطعم بدون subdomain خاص** يظهر على مسار ثابت: `https://app.restaurantgo.org/p/{slug}` بدلاً من `https://{slug}.restaurantgo.org`. هذا مفعّل تلقائيًا في الكود بمجرد ترك `APP_BASE_DOMAIN` (الباك-إند) و`VITE_BASE_DOMAIN` (الواجهتان) **فارغين** — راجع `SeoService::tenantBaseUrl()` و`dashboard/src/lib/publicSite.ts`، كلاهما جاهز مسبقًا لهذا الوضع ولا يحتاج أي تعديل.
+- **مطعم بدون subdomain خاص** يظهر على مسار ثابت: `https://app.restoatlas.com/p/{slug}` بدلاً من `https://{slug}.restoatlas.com`. هذا مفعّل تلقائيًا في الكود بمجرد ترك `APP_BASE_DOMAIN` (الباك-إند) و`VITE_BASE_DOMAIN` (الواجهتان) **فارغين** — راجع `SeoService::tenantBaseUrl()` و`dashboard/src/lib/publicSite.ts`، كلاهما جاهز مسبقًا لهذا الوضع ولا يحتاج أي تعديل.
 - **الـ queue** (ترجمة AI بالجملة، إلخ) يعمل عبر جدول قاعدة بيانات (`QUEUE_CONNECTION=database`) — يمكن تفريغه بأمر cron كل دقيقة بدل عملية دائمة.
 - **الـ scheduler** (نشر المقالات المجدولة، تحديث أسعار الصرف) خفيف جدًا — يعمل بأمر `schedule:run` عبر cron كل دقيقة، وهو ما تدعمه أغلب خطط Hostinger Business فعليًا رغم أن دليل الـ VPS يذكر خلاف ذلك (كان يقارن مع خطط أضعف).
 
@@ -18,21 +21,21 @@ Docker وعمليات خلفية دائمة (queue worker/scheduler كـ daemon)
 
 | العنوان | يخدم | نوع |
 |---|---|---|
-| `restaurantgo.org` (+`www`) | `web` — الموقع التسويقي + دليل المطاعم + التسجيل | الدومين الرئيسي |
-| `app.restaurantgo.org` | `dashboard` — لوحة تحكم المطاعم **و** صفحات كل مطعم العامة (`/p/{slug}`) | subdomain عادي |
-| `api.restaurantgo.org` | `api` — الباك-إند Laravel | subdomain عادي |
+| `restoatlas.com` (+`www`) | `web` — الموقع التسويقي + دليل المطاعم + التسجيل | الدومين الرئيسي |
+| `app.restoatlas.com` | `dashboard` — لوحة تحكم المطاعم **و** صفحات كل مطعم العامة (`/p/{slug}`) | subdomain عادي |
+| `api.restoatlas.com` | `api` — الباك-إند Laravel | subdomain عادي |
 
 كل subdomain يحصل على شهادة SSL مجانية (Let's Encrypt) تلقائيًا من hPanel → SSL، لأنه عنوان ثابت معروف مسبقًا — لا حاجة لأي تحقق DNS يدوي كما في حالة الـ Wildcard.
 
-> **قيد معروف:** مطعم يربط دومينه الخاص (custom domain) لاحقًا سيحتاج منك إضافة subdomain/addon-domain يدوي له في hPanel وتوجيهه لنفس مكان `app.restaurantgo.org`، لأن التوجيه التلقائي لكل دومين جديد يحتاج Wildcard (VPS فقط). لعدد قليل من المطاعم هذا مقبول تمامًا.
+> **قيد معروف:** مطعم يربط دومينه الخاص (custom domain) لاحقًا سيحتاج منك إضافة subdomain/addon-domain يدوي له في hPanel وتوجيهه لنفس مكان `app.restoatlas.com`، لأن التوجيه التلقائي لكل دومين جديد يحتاج Wildcard (VPS فقط). لعدد قليل من المطاعم هذا مقبول تمامًا.
 
 ## 2) اختيار PHP والرفع
 
-1. من hPanel → **Advanced → PHP Configuration**، اختر **PHP 8.4** لموقع `api.restaurantgo.org` (المشروع يتطلبه صراحة: `"php": "^8.4"` في `api/composer.json` مع Laravel 13).
+1. من hPanel → **Advanced → PHP Configuration**، اختر **PHP 8.4** لموقع `api.restoatlas.com` (المشروع يتطلبه صراحة: `"php": "^8.4"` في `api/composer.json` مع Laravel 13).
 2. ارفع الكود:
-   - إن كان لديك SSH (متوفر في Business): `git clone <repo-url> restaurantgo` ثم `cd restaurantgo/api`.
+   - إن كان لديك SSH (متوفر في Business): `git clone <repo-url> restoatlas` ثم `cd restoatlas/api`.
    - بدون SSH: ارفع ملف zip للمجلد `api/` عبر File Manager وفكّه هناك.
-3. **Document root لـ `api.restaurantgo.org` يجب أن يشير إلى `api/public`** (وليس `api/` نفسه) — من hPanel → Subdomains → Manage → غيّر الـ Document Root. هذا يعادل ما يفعله `php artisan serve` في بيئة Docker، لكن عبر Apache/php-fpm الحقيقيين لأداء أفضل بكثير تحت حمل حقيقي (يحل القيد الوحيد المذكور في دليل الـ VPS عن `artisan serve`).
+3. **Document root لـ `api.restoatlas.com` يجب أن يشير إلى `api/public`** (وليس `api/` نفسه) — من hPanel → Subdomains → Manage → غيّر الـ Document Root. هذا يعادل ما يفعله `php artisan serve` في بيئة Docker، لكن عبر Apache/php-fpm الحقيقيين لأداء أفضل بكثير تحت حمل حقيقي (يحل القيد الوحيد المذكور في دليل الـ VPS عن `artisan serve`).
 
 ## 3) قاعدة البيانات وComposer
 
@@ -48,15 +51,15 @@ Docker وعمليات خلفية دائمة (queue worker/scheduler كـ daemon)
 انسخ `api/.env.example` إلى `api/.env` وعدّل:
 
 ```env
-APP_NAME=RestaurantGo
+APP_NAME=RestoAtlas
 APP_ENV=production
 APP_DEBUG=false
 APP_KEY=                      # سيتولّد تلقائيًا في الخطوة التالية
-APP_URL=https://api.restaurantgo.org
+APP_URL=https://api.restoatlas.com
 
 # اتركهما فارغين — هذا ما يفعّل وضع /p/{slug} بدل الـ wildcard subdomain
 APP_BASE_DOMAIN=
-APP_PUBLIC_URL=https://app.restaurantgo.org
+APP_PUBLIC_URL=https://app.restoatlas.com
 
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
@@ -74,7 +77,7 @@ MAIL_HOST=smtp.postmarkapp.com    # أو Resend/SES — راجع TRIAL_DEPLOYMEN
 MAIL_PORT=587
 MAIL_USERNAME=...
 MAIL_PASSWORD=...
-MAIL_FROM_ADDRESS="hello@restaurantgo.org"
+MAIL_FROM_ADDRESS="support@restoatlas.com"
 
 STRIPE_KEY=pk_live_...
 STRIPE_SECRET=sk_live_...
@@ -100,8 +103,8 @@ php artisan db:seed --class=RolesPermissionsSeeder --force
 hPanel → Advanced → Cron Jobs، أضف سطرين (كل دقيقة):
 
 ```cron
-* * * * * cd /home/USER/restaurantgo/api && php artisan schedule:run >> /dev/null 2>&1
-* * * * * cd /home/USER/restaurantgo/api && php artisan queue:work --stop-when-empty --max-time=50 --tries=3 >> /dev/null 2>&1
+* * * * * cd /home/USER/restoatlas/api && php artisan schedule:run >> /dev/null 2>&1
+* * * * * cd /home/USER/restoatlas/api && php artisan queue:work --stop-when-empty --max-time=50 --tries=3 >> /dev/null 2>&1
 ```
 
 - السطر الأول: يشغّل `articles:publish-scheduled` (كل 5 دقائق) و`exchange-rates:update` (يوميًا 01:00) — معرّفان في `api/routes/console.php`، لا حاجة لأي تعديل.
@@ -113,14 +116,14 @@ Vite build يحدث **محليًا** (أو عبر GitHub Actions) لأن الـ 
 
 **`web/.env.production`:**
 ```env
-VITE_API_URL=https://api.restaurantgo.org/api
-VITE_RESTAURANT_SITE_URL=https://app.restaurantgo.org
+VITE_API_URL=https://api.restoatlas.com/api
+VITE_RESTAURANT_SITE_URL=https://app.restoatlas.com
 VITE_BASE_DOMAIN=
 ```
 
 **`dashboard/.env.production`:**
 ```env
-VITE_API_URL=https://api.restaurantgo.org/api
+VITE_API_URL=https://api.restoatlas.com/api
 VITE_BASE_DOMAIN=
 ```
 
@@ -130,49 +133,49 @@ cd web && npm ci && npm run build        # ينتج web/dist
 cd ../dashboard && npm ci && npm run build   # ينتج dashboard/dist
 ```
 
-ارفع **محتوى** `web/dist/*` إلى document root لـ `restaurantgo.org`، و**محتوى** `dashboard/dist/*` إلى document root لـ `app.restaurantgo.org` (عبر File Manager أو FTP). كلا المجلدين يحتويان أصلاً على `.htaccess` جاهز (أُضيف لهما في هذا التعديل، داخل `web/public/` و`dashboard/public/` فينسخهما Vite تلقائيًا إلى `dist/` عند البناء) يتكفّل بـ:
+ارفع **محتوى** `web/dist/*` إلى document root لـ `restoatlas.com`، و**محتوى** `dashboard/dist/*` إلى document root لـ `app.restoatlas.com` (عبر File Manager أو FTP). كلا المجلدين يحتويان أصلاً على `.htaccess` جاهز (أُضيف لهما في هذا التعديل، داخل `web/public/` و`dashboard/public/` فينسخهما Vite تلقائيًا إلى `dist/` عند البناء) يتكفّل بـ:
 - توجيه أي مسار غير موجود كملف فعلي إلى `index.html` (توجيه SPA، معادل تمامًا لـ `web/vercel.json`/`dashboard/vercel.json` المستخدمين مع Vercel).
 - (في `dashboard` فقط) تحويل طلبات محركات البحث/الذكاء الاصطناعي (Googlebot، GPTBot، ClaudeBot، PerplexityBot، ...) على مسار `/p/{slug}` إلى `bot-render.php` بدل `index.html` — راجع قسم السيو أدناه.
 
-**مهم:** افتح `dashboard/public/bot-render.php` بعد الرفع وتأكد أن `RESTAURANTGO_API_URL` بالأعلى يطابق `https://api.restaurantgo.org` (هذا هو الافتراضي المضبوط مسبقًا، عدّله فقط إن اخترت دومينًا مختلفًا).
+**مهم:** افتح `dashboard/public/bot-render.php` بعد الرفع وتأكد أن `RESTOATLAS_API_URL` بالأعلى يطابق `https://api.restoatlas.com` (هذا هو الافتراضي المضبوط مسبقًا، عدّله فقط إن اخترت دومينًا مختلفًا).
 
 ## 7) التحقق
 
-- `https://restaurantgo.org` → الموقع التسويقي.
-- `https://app.restaurantgo.org/login` → لوحة تحكم المنصة.
-- `https://api.restaurantgo.org/api/v1/plans` → يجب أن يرجع JSON.
-- سجّل مطعمًا تجريبيًا من `https://restaurantgo.org/register`، ثم افتح `https://app.restaurantgo.org/p/{slug}` — يجب أن تفتح صفحة المطعم مباشرة.
-- `https://app.restaurantgo.org/p/{slug}/preview` → يجب أن يرجع HTML كامل (بدون أي JavaScript) فيه اسم المطعم والقائمة — هذا ما يراه الذكاء الاصطناعي/محركات البحث، اختبره بمتصفح بدون تفعيل JS أو بـ `curl`.
+- `https://restoatlas.com` → الموقع التسويقي.
+- `https://app.restoatlas.com/login` → لوحة تحكم المنصة.
+- `https://api.restoatlas.com/api/v1/plans` → يجب أن يرجع JSON.
+- سجّل مطعمًا تجريبيًا من `https://restoatlas.com/register`، ثم افتح `https://app.restoatlas.com/p/{slug}` — يجب أن تفتح صفحة المطعم مباشرة.
+- `https://app.restoatlas.com/p/{slug}/preview` → يجب أن يرجع HTML كامل (بدون أي JavaScript) فيه اسم المطعم والقائمة — هذا ما يراه الذكاء الاصطناعي/محركات البحث، اختبره بمتصفح بدون تفعيل JS أو بـ `curl`.
 
 ## 8) السيو، Google Search Console، والبحث عبر الذكاء الاصطناعي
 
 هذا الجزء جاهز في الكود بالكامل مع هذا التعديل، فقط فعّله بعد الرفع:
 
-1. **Google Search Console**: أضف الموقعين `restaurantgo.org` و`app.restaurantgo.org` كخاصيتين منفصلتين (Domain property إن أمكن، وإلا URL-prefix). التحقق عبر **DNS TXT record** (وليس HTML tag) — أضف السجل من hPanel → DNS Zone، لأن التحقق بوسم HTML لا يعمل بشكل موثوق مع تطبيق client-rendered (نفس الملاحظة موجودة أصلاً في `web/src/hooks/useSeoHead.ts`).
+1. **Google Search Console**: أضف الموقعين `restoatlas.com` و`app.restoatlas.com` كخاصيتين منفصلتين (Domain property إن أمكن، وإلا URL-prefix). التحقق عبر **DNS TXT record** (وليس HTML tag) — أضف السجل من hPanel → DNS Zone، لأن التحقق بوسم HTML لا يعمل بشكل موثوق مع تطبيق client-rendered (نفس الملاحظة موجودة أصلاً في `web/src/hooks/useSeoHead.ts`).
 2. **أرسل الـ sitemaps** التالية من Search Console:
-   - `https://restaurantgo.org/sitemap.xml` (صفحات الموقع التسويقي).
-   - `https://api.restaurantgo.org/sitemap.xml` (فهرس يضم sitemap كل مطعم نشط تلقائيًا — مُولَّد بـ `SeoService::platformSitemapIndex()`، لا حاجة لتحديثه يدويًا عند انضمام مطعم جديد).
+   - `https://restoatlas.com/sitemap.xml` (صفحات الموقع التسويقي).
+   - `https://api.restoatlas.com/sitemap.xml` (فهرس يضم sitemap كل مطعم نشط تلقائيًا — مُولَّد بـ `SeoService::platformSitemapIndex()`، لا حاجة لتحديثه يدويًا عند انضمام مطعم جديد).
 3. **البحث عبر الذكاء الاصطناعي (ChatGPT/Perplexity/Claude وغيرها)**: أغلب زواحف الذكاء الاصطناعي (GPTBot، ClaudeBot، PerplexityBot...) **لا تُنفّذ JavaScript** — بعكس Googlebot الحديث. بما أن الواجهتين React (SPA)، أضفنا:
    - `web/public/llms.txt` — ملف وصفي عن المنصة بصيغة متعارف عليها حديثًا لوكلاء الذكاء الاصطناعي.
-   - صفحة معاينة بدون JavaScript لكل مطعم على `https://app.restaurantgo.org/p/{slug}/preview` (تُبنى في Laravel مباشرة عبر `SeoRenderController`، بنفس بيانات `SeoService` المستخدمة في الواجهة).
+   - صفحة معاينة بدون JavaScript لكل مطعم على `https://app.restoatlas.com/p/{slug}/preview` (تُبنى في Laravel مباشرة عبر `SeoRenderController`، بنفس بيانات `SeoService` المستخدمة في الواجهة).
    - في `dashboard/public/.htaccess`: أي طلب من أحد هذه الزواحف على `/p/{slug}` يُوجَّه تلقائيًا (بنفس الرابط الذي يراه الزائر العادي) إلى تلك الصفحة عبر `bot-render.php` بدل `index.html` الفارغ تقنيًا لغير منفّذي JS.
 4. **لكل مطعم**: صفحة "الإعدادات → السيو" في لوحة التحكم (موجودة مسبقًا) تسمح بتعيين عنوان/وصف/صورة OG وربط Google Search Console الخاص بالمطعم (`google_site_verification`) — لا تغيير مطلوب هنا، فقط تأكد من توجيه أصحاب المطاعم لتعبئتها.
 
-## 9) subdomain حقيقي لكل مطعم (`{slug}.restaurantgo.org`) — جُرِّب وفشل على Business
+## 9) subdomain حقيقي لكل مطعم (`{slug}.restoatlas.com`) — جُرِّب وفشل على Business
 
 **نتيجة اختبار فعلي على حساب Hostinger Business حقيقي بتاريخ 2026-09-30:** لا يعمل، ولا يُنصح بإعادة المحاولة على هذه الخطة. لا حاجة لتكرار الخطوات أدناه إلا بعد الترقية لخطة تدعم SSL Wildcard (مثل VPS، راجع `HOSTINGER_DEPLOYMENT.md`).
 
 **ما تم اختباره وتبيّن:**
-1. **DNS** يعمل: سجل `CNAME` بالاسم `*` والقيمة `app.restaurantgo.org` نجح فورًا — أي subdomain عشوائي (`random-test-xyz.restaurantgo.org`) يُحل فعليًا لنفس سيرفر `app.restaurantgo.org`.
+1. **DNS** يعمل: سجل `CNAME` بالاسم `*` والقيمة `app.restoatlas.com` نجح فورًا — أي subdomain عشوائي (`random-test-xyz.restoatlas.com`) يُحل فعليًا لنفس سيرفر `app.restoatlas.com`.
 2. **لا يوجد خيار Wildcard SSL على خطة Business.** لوحة SSL (Websites → Security → SSL) تعرض فقط شهادات لكل subdomain **مُنشأ يدويًا مسبقًا** (الدومين الرئيسي، `app`، `api`) بخيارَي "Uninstall"/"Enforce HTTPS" فقط — لا زر لطلب شهادة wildcard. لوحة الدومين (DNS/Nameservers → SSL) تعرض شهادة "Lifetime SSL" عادية فقط، وهي لا تغطي subdomains غير مُنشأة.
-3. **نتيجة الفتح الفعلي لـ `https://random-test-xyz.restaurantgo.org`:** خطأ شهادة SSL في المتصفح (متوقع، لعدم وجود شهادة تغطيه). وعبر `http://` (لعزل مشكلة الشهادة عن التوجيه): ظهرت صفحة Hostinger الافتراضية "Registered at Hostinger / Manage domain" (صفحة parking)، وليس موقع `app.restaurantgo.org` — أي أن سيرفرات الاستضافة المشتركة تعرض المحتوى فقط للعناوين المُنشأة يدويًا في hPanel، وأي subdomain آخر (رغم وصول DNS الصحيح) يذهب لصفحة parking بدلاً من أي موقع فعلي.
+3. **نتيجة الفتح الفعلي لـ `https://random-test-xyz.restoatlas.com`:** خطأ شهادة SSL في المتصفح (متوقع، لعدم وجود شهادة تغطيه). وعبر `http://` (لعزل مشكلة الشهادة عن التوجيه): ظهرت صفحة Hostinger الافتراضية "Registered at Hostinger / Manage domain" (صفحة parking)، وليس موقع `app.restoatlas.com` — أي أن سيرفرات الاستضافة المشتركة تعرض المحتوى فقط للعناوين المُنشأة يدويًا في hPanel، وأي subdomain آخر (رغم وصول DNS الصحيح) يذهب لصفحة parking بدلاً من أي موقع فعلي.
 
 **الخلاصة:** المشكلتان معًا (لا Wildcard SSL + لا توجيه تلقائي لـ subdomain غير مُسجَّل يدويًا) تمنعان هذا الأسلوب على خطة Business بشكل قاطع — وليس فقط بشكل غير مؤكد كما افترضت نسخة سابقة من هذا القسم. إنشاء subdomain باسم `*` يدويًا من hPanel → Domains → Subdomains (احتمال لم يُختبر) لن يحل مشكلة الشهادة أصلاً حتى لو نجح في التوجيه، فلا فائدة من تجربته.
 
-**تنظيف اختياري:** سجل `CNAME *` الذي أُضيف للاختبار لا يؤثر على `restaurantgo.org`/`app.restaurantgo.org`/`api.restaurantgo.org` الحاليين، لكن يمكن حذفه من DNS Zone بأمان بما أنه لا فائدة منه الآن (أي subdomain عشوائي سيستمر بالذهاب لصفحة parking سواء بقي السجل أو حُذف، فحذفه تنظيف فقط وليس ضروريًا).
+**تنظيف اختياري:** سجل `CNAME *` الذي أُضيف للاختبار لا يؤثر على `restoatlas.com`/`app.restoatlas.com`/`api.restoatlas.com` الحاليين، لكن يمكن حذفه من DNS Zone بأمان بما أنه لا فائدة منه الآن (أي subdomain عشوائي سيستمر بالذهاب لصفحة parking سواء بقي السجل أو حُذف، فحذفه تنظيف فقط وليس ضروريًا).
 
 **الخيارات المتبقية لكل مطعم:**
-- البقاء على `https://app.restaurantgo.org/p/{slug}` (الوضع الافتراضي في هذا الدليل، §1-8) — يعمل بشكل مضمون بدون أي قيد.
+- البقاء على `https://app.restoatlas.com/p/{slug}` (الوضع الافتراضي في هذا الدليل، §1-8) — يعمل بشكل مضمون بدون أي قيد.
 - ربط دومين مطعم خاص به يدويًا (custom domain، راجع §1 والقيد رقم 1 أدناه) — ممكن لعدد قليل من المطاعم.
 - الانتقال لخطة VPS (`HOSTINGER_DEPLOYMENT.md`) إن أصبح subdomain تلقائي لكل مطعم أولوية حقيقية — هناك Wildcard SSL والتوجيه التلقائي مضمونان دون قيد الاستضافة المشتركة.
 

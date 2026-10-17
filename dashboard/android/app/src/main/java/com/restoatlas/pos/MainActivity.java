@@ -1,4 +1,4 @@
-package com.restaurantgo.pos;
+package com.restoatlas.pos;
 
 import android.os.Bundle;
 

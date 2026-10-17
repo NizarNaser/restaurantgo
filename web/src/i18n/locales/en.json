@@ -14,8 +14,8 @@
     "rightsReserved": "All rights reserved."
   },
   "assistant": {
-    "title": "RestaurantGo Assistant",
-    "greeting": "Hi! Ask me anything about RestaurantGo — features, pricing, or how it works.",
+    "title": "{{appName}} Assistant",
+    "greeting": "Hi! Ask me anything about {{appName}} — features, pricing, or how it works.",
     "placeholder": "Ask a question...",
     "error": "Could not reach the assistant, please try again.",
     "toggleAriaLabel": "Toggle assistant"

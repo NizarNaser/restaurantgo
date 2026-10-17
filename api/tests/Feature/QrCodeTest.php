@@ -14,7 +14,7 @@ beforeEach(function () {
 it('creates a tracked QR code for the tenant\'s public menu', function () {
     $response = $this->postJson('/api/qr-codes', [
         'type'       => 'menu',
-        'target_url' => 'https://restaurantgo.test/p/demo-restaurant',
+        'target_url' => 'https://restoatlas.test/p/demo-restaurant',
     ]);
 
     $response->assertCreated();
@@ -72,12 +72,12 @@ it('increments the scan count and redirects when a QR code is scanned', function
     $qr = QrCode::create([
         'tenant_id'  => $this->owner->tenant_id,
         'type'       => 'menu',
-        'target_url' => 'https://restaurantgo.test/p/demo-restaurant',
+        'target_url' => 'https://restoatlas.test/p/demo-restaurant',
         'scan_count' => 3,
     ]);
 
     $response = $this->get("/api/v1/qr/{$qr->id}");
 
-    $response->assertRedirect('https://restaurantgo.test/p/demo-restaurant');
+    $response->assertRedirect('https://restoatlas.test/p/demo-restaurant');
     expect($qr->fresh()->scan_count)->toBe(4);
 });

@@ -333,7 +333,7 @@ function DangerZoneCard({ slug }: { slug: string }) {
 const TIMEZONES = ['UTC', 'America/New_York', 'America/Los_Angeles', 'Europe/London', 'Europe/Paris', 'Europe/Kyiv', 'Asia/Dubai', 'Asia/Riyadh', 'Asia/Beirut', 'Africa/Cairo', 'Asia/Baghdad'];
 // A starting set of common currencies shown as suggestions — not an
 // exhaustive list (ISO 4217 has ~180 of them, and this restaurant's own
-// list of operating currencies keeps growing as RestaurantGo reaches new
+// list of operating currencies keeps growing as RestoAtlas reaches new
 // countries). The field below accepts any 3-letter code typed in, exactly
 // like the per-item price currency field on the Menu page already does —
 // this is just the autocomplete list, not a hard restriction.
