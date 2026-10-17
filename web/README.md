@@ -1,9 +1,9 @@
-# RestaurantGo — Marketing Site & Super-Admin
+# RestoAtlas — Marketing Site & Super-Admin
 
 React/Vite app serving two audiences from one deployment:
 
 - **Public marketing site** (`/`, `/restaurants`, `/restaurants/:slug`, `/contact`, `/register`) —
-  RestaurantGo's own company site, the restaurant directory, and self-service tenant signup.
+  RestoAtlas's own company site, the restaurant directory, and self-service tenant signup.
 - **Super-admin panel** (`/admin/*`) — the platform team's own operations console: tenants,
   payments, subscription plans, coupons, internal staff + payroll, advertisements, contact inbox.
   Role-gated by Spatie permissions on the API side, not just hidden UI.

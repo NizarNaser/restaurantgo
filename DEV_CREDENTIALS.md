@@ -8,7 +8,7 @@
 ## سوبر أدمن (لوحة الشركة)
 
 - الرابط: `http://localhost:5174/admin/login`
-- البريد: `admin@restaurantgo.com`
+- البريد: `admin@restoatlas.com` (قاعدة بيانات محلية أُنشئت قبل إعادة التسمية ما زال فيها البريد القديم — أعد تشغيل الـ seeder أو سجّل به)
 - كلمة المرور: `password`
 
 الحساب له دور `super_admin` بكل الصلاحيات — مصدره [`PlatformStaffSeeder`](api/database/seeders/PlatformStaffSeeder.php).
