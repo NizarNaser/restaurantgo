@@ -122,7 +122,7 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ./deploy/nginx/restaurantgo.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./deploy/nginx/restoatlas.conf:/etc/nginx/conf.d/default.conf:ro
       - certbot-etc:/etc/letsencrypt:ro
       - certbot-www:/var/www/certbot:ro
 

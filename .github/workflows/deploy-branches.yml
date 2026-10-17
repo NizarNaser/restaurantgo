@@ -10,7 +10,7 @@ name: Build Hostinger deploy branches
 # Hostinger Business account and per-tenant subdomains don't work on this
 # plan (no Wildcard SSL option; an unregistered subdomain hits Hostinger's
 # parking page, not this app) — see §9. Restaurants are served at
-# app.restaurantgo.org/p/{slug} instead. Do not re-enable without first
+# app.restoatlas.com/p/{slug} instead. Do not re-enable without first
 # re-testing §9 step 1 on an upgraded/VPS plan.
 #
 # Production moved off this Hostinger Business account to a VPS on
@@ -41,14 +41,14 @@ jobs:
       - name: Build web
         working-directory: web
         run: |
-          printf 'VITE_API_URL=https://api.restaurantgo.org/api\nVITE_RESTAURANT_SITE_URL=https://app.restaurantgo.org\nVITE_BASE_DOMAIN=\n' > .env.production
+          printf 'VITE_API_URL=https://api.restoatlas.com/api\nVITE_RESTAURANT_SITE_URL=https://app.restoatlas.com\nVITE_BASE_DOMAIN=\n' > .env.production
           npm ci
           npm run build
 
       - name: Build dashboard
         working-directory: dashboard
         run: |
-          printf 'VITE_API_URL=https://api.restaurantgo.org/api\nVITE_BASE_DOMAIN=\n' > .env.production
+          printf 'VITE_API_URL=https://api.restoatlas.com/api\nVITE_BASE_DOMAIN=\n' > .env.production
           npm ci
           npm run build
 
@@ -57,12 +57,12 @@ jobs:
           mkdir -p out/api
           rsync -a --exclude vendor --exclude node_modules --exclude .env api/ out/api/
           # The api folder sits inside public_html on shared hosting. Only
-          # api.restaurantgo.org (whose document root is api/public) may reach
-          # it; any other host (e.g. restaurantgo.org/<folder>/.env) gets 403.
+          # api.restoatlas.com (whose document root is api/public) may reach
+          # it; any other host (e.g. restoatlas.com/<folder>/.env) gets 403.
           cat > out/api/.htaccess <<'EOF'
           <IfModule mod_rewrite.c>
               RewriteEngine On
-              RewriteCond %{HTTP_HOST} !^api\.restaurantgo\.org$ [NC]
+              RewriteCond %{HTTP_HOST} !^api\.restoatlas\.com$ [NC]
               RewriteRule ^ - [F]
           </IfModule>
           <FilesMatch "^\.">
@@ -94,9 +94,9 @@ jobs:
           }
           # hPanel allows one Git deployment per website, so everything goes
           # into a single "deploy" branch deployed to public_html:
-          #   /            -> web (restaurantgo.org)
-          #   /rgo-app/    -> dashboard (app.restaurantgo.org)
-          #   /rgo-api/    -> api (api.restaurantgo.org -> rgo-api/public)
+          #   /            -> web (restoatlas.com)
+          #   /rgo-app/    -> dashboard (app.restoatlas.com)
+          #   /rgo-api/    -> api (api.restoatlas.com -> rgo-api/public)
           # rgo-api/.gitignore keeps vendor/, .env and uploads on the server
           # across deployments (hPanel preserves git-ignored paths).
           mkdir -p out/deploy
