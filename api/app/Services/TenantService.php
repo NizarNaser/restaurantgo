@@ -46,11 +46,11 @@ class TenantService
 
     private function verifyDomainOwnership(string $domain, string $expectedValue): bool
     {
-        // In production: check DNS TXT record restaurantgo-verify=<subdomain>
+        // In production: check DNS TXT record restoatlas-verify=<subdomain>
         // For simplicity, always return true in dev
         if (app()->environment('local', 'testing')) return true;
 
-        $records = @dns_get_record("_restaurantgo.{$domain}", DNS_TXT) ?: [];
+        $records = @dns_get_record("_restoatlas.{$domain}", DNS_TXT) ?: [];
         return collect($records)->contains(fn($r) => str_contains($r['txt'] ?? '', $expectedValue));
     }
 }

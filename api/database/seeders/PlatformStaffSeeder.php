@@ -12,7 +12,7 @@ class PlatformStaffSeeder extends Seeder
     public function run(): void
     {
         $user = User::firstOrCreate([
-            'email' => 'admin@restaurantgo.com',
+            'email' => 'admin@restoatlas.com',
         ], [
             'tenant_id' => null,
             'name'      => 'Platform Admin',
@@ -28,7 +28,7 @@ class PlatformStaffSeeder extends Seeder
             'user_id' => $user->id,
         ], [
             'name'       => 'Platform Admin',
-            'email'      => 'admin@restaurantgo.com',
+            'email'      => 'admin@restoatlas.com',
             'position'   => 'Platform Administrator',
             'department' => 'Operations',
             'base_salary'=> 0,

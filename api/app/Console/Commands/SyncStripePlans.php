@@ -35,7 +35,7 @@ class SyncStripePlans extends Command
             }
 
             $product = $stripe->products->create([
-                'name'        => "RestaurantGo {$plan->name}",
+                'name'        => config('app.name') . " {$plan->name}",
                 'description' => $plan->description,
                 'metadata'    => ['plan_id' => $plan->id, 'plan_slug' => $plan->slug],
             ]);

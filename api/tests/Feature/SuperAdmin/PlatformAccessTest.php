@@ -17,7 +17,7 @@ it('blocks a tenant user from the company admin API even with matching permissio
 
 it('blocks a platform user without the required permission', function () {
     $user = User::create([
-        'tenant_id' => null, 'name' => 'Support', 'email' => 'support@restaurantgo.com',
+        'tenant_id' => null, 'name' => 'Support', 'email' => 'support@restoatlas.com',
         'password' => bcrypt('password'), 'is_active' => true,
     ]);
     $user->assignRole(Role::firstOrCreate(['name' => 'support_agent']));
@@ -29,7 +29,7 @@ it('blocks a platform user without the required permission', function () {
 });
 
 it('allows a super_admin platform user full access to tenants', function () {
-    $user = User::where('email', 'admin@restaurantgo.com')->firstOrFail();
+    $user = User::where('email', 'admin@restoatlas.com')->firstOrFail();
     Sanctum::actingAs($user, ['*']);
 
     $this->getJson('/api/admin/tenants')->assertOk();

@@ -24,11 +24,11 @@ class WelcomeTenant extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject("Welcome to RestaurantGo, {$this->tenant->name}!")
+            ->subject("Welcome to " . config('app.name') . ", {$this->tenant->name}!")
             ->greeting("Hi {$notifiable->name},")
             ->line("Your account for **{$this->tenant->name}** is ready, with a 3-month free trial.")
             ->line('You can start adding your menu, branches, and team right away.')
             ->action('Go to your dashboard', config('app.public_url'))
-            ->salutation('— The RestaurantGo Team');
+            ->salutation('— The ' . config('app.name') . ' Team');
     }
 }

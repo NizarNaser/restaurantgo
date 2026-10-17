@@ -26,7 +26,7 @@ class TenantSuspended extends Notification implements ShouldQueue
         $message = (new MailMessage)
             ->subject("Your {$this->tenant->name} account has been suspended")
             ->greeting("Hi {$notifiable->name},")
-            ->line("Access to your RestaurantGo account for **{$this->tenant->name}** has been suspended.");
+            ->line("Access to your " . config('app.name') . " account for **{$this->tenant->name}** has been suspended.");
 
         if ($this->reason) {
             $message->line("Reason: {$this->reason}");
@@ -34,6 +34,6 @@ class TenantSuspended extends Notification implements ShouldQueue
 
         return $message
             ->line('If you believe this is a mistake, please contact support.')
-            ->salutation('— The RestaurantGo Team');
+            ->salutation('— The ' . config('app.name') . ' Team');
     }
 }

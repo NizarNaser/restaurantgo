@@ -8,7 +8,7 @@ namespace App\Services;
  * city can read "Kyiv", "Kiev" or "Київ" depending on who typed it, and it
  * never changes with the visitor's chosen site language.
  *
- * This translates the common, well-known cities a RestaurantGo tenant is
+ * This translates the common, well-known cities a RestoAtlas tenant is
  * likely to be in (the Gulf/MENA region, Ukraine, Turkey, and a handful of
  * major world capitals) into whichever of the 12 supported locales the
  * visitor is browsing in. Anything not recognised — a small town, or a

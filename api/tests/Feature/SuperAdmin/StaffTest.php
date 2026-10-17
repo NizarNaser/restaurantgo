@@ -7,7 +7,7 @@ use Laravel\Sanctum\Sanctum;
 
 beforeEach(function () {
     $this->seed();
-    $this->admin = User::where('email', 'admin@restaurantgo.com')->firstOrFail();
+    $this->admin = User::where('email', 'admin@restoatlas.com')->firstOrFail();
     Sanctum::actingAs($this->admin, ['*']);
 });
 
@@ -26,14 +26,14 @@ it('creates a staff member with a gated login when requested', function () {
     $response = $this->postJson('/api/admin/staff', [
         'name' => 'Karim Finance', 'position' => 'Finance Manager', 'base_salary' => 3000,
         'hire_date' => now()->toDateString(), 'status' => 'active',
-        'create_login' => true, 'login_email' => 'karim@restaurantgo.com',
+        'create_login' => true, 'login_email' => 'karim@restoatlas.com',
         'login_password' => 'Passw0rd123', 'role' => 'finance_manager',
     ]);
 
     $response->assertCreated();
     $response->assertJsonPath('has_login', true);
 
-    $user = User::where('email', 'karim@restaurantgo.com')->firstOrFail();
+    $user = User::where('email', 'karim@restoatlas.com')->firstOrFail();
     expect($user->tenant_id)->toBeNull();
     expect($user->hasRole('finance_manager'))->toBeTrue();
 });

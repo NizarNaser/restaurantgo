@@ -5,21 +5,21 @@ use Laravel\Sanctum\Sanctum;
 
 beforeEach(function () {
     $this->seed();
-    $this->admin = User::where('email', 'admin@restaurantgo.com')->firstOrFail();
+    $this->admin = User::where('email', 'admin@restoatlas.com')->firstOrFail();
 });
 
 it('lets platform staff update and read back the marketing site\'s per-locale SEO settings', function () {
     Sanctum::actingAs($this->admin, ['*']);
 
     $update = $this->putJson('/api/admin/platform-settings', [
-        'seo_title'                => ['en' => 'RestaurantGo — Restaurant Management Platform', 'ar' => 'RestaurantGo — منصة إدارة المطاعم'],
+        'seo_title'                => ['en' => 'RestoAtlas — Restaurant Management Platform', 'ar' => 'RestoAtlas — منصة إدارة المطاعم'],
         'seo_description'          => ['en' => 'Everything a restaurant needs to run online ordering.'],
         'seo_og_image'             => 'https://example.com/platform-og.jpg',
         'google_site_verification' => 'platform-verify-code',
     ]);
     $update->assertOk();
-    $update->assertJsonPath('seo_title.en', 'RestaurantGo — Restaurant Management Platform');
-    $update->assertJsonPath('seo_title.ar', 'RestaurantGo — منصة إدارة المطاعم');
+    $update->assertJsonPath('seo_title.en', 'RestoAtlas — Restaurant Management Platform');
+    $update->assertJsonPath('seo_title.ar', 'RestoAtlas — منصة إدارة المطاعم');
 
     $show = $this->getJson('/api/admin/platform-settings');
     $show->assertOk();
@@ -35,7 +35,7 @@ it('rejects a plain string for a platform SEO field — it must be per-locale', 
 
 it('blocks platform staff without the right permission from the platform settings', function () {
     $supportAgent = User::create([
-        'name' => 'Support', 'email' => 'support-noperm@restaurantgo.com', 'password' => bcrypt('password'), 'is_active' => true,
+        'name' => 'Support', 'email' => 'support-noperm@restoatlas.com', 'password' => bcrypt('password'), 'is_active' => true,
     ]);
     $supportAgent->assignRole('support_agent');
     Sanctum::actingAs($supportAgent, ['*']);

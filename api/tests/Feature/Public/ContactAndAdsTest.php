@@ -32,7 +32,7 @@ it('only lists active, in-window advertisements publicly', function () {
 });
 
 it('lets platform staff manage advertisements and read the contact inbox', function () {
-    $admin = User::where('email', 'admin@restaurantgo.com')->firstOrFail();
+    $admin = User::where('email', 'admin@restoatlas.com')->firstOrFail();
     Sanctum::actingAs($admin, ['*']);
 
     $create = $this->postJson('/api/admin/advertisements', [

@@ -1,6 +1,6 @@
-# RestaurantGo API
+# RestoAtlas API
 
-Laravel API powering the RestaurantGo platform: multi-tenant restaurant management (menus, HR,
+Laravel API powering the RestoAtlas platform: multi-tenant restaurant management (menus, HR,
 payroll, financials), Stripe billing, and the platform's own super-admin operations. See
 [`restaurant_saas_plan.md`](../restaurant_saas_plan.md) at the repo root for the original schema/architecture
 plan, and [`../DEV_CREDENTIALS.md`](../DEV_CREDENTIALS.md) for local demo logins.
