@@ -129,7 +129,7 @@ APP_NAME=RestoAtlas
 APP_URL=https://api.restoatlas.com
 APP_BASE_DOMAIN=restoatlas.com
 APP_PUBLIC_URL=https://app.restoatlas.com
-MAIL_FROM_ADDRESS="hello@restoatlas.com"
+MAIL_FROM_ADDRESS="support@restoatlas.com"
 # MAIL_FROM_NAME="${APP_NAME}"  ← يبقى كما هو، يأخذ الاسم الجديد تلقائيًا
 ```
 
@@ -183,12 +183,12 @@ pm2 restart restoatlas-queue restoatlas-scheduler
 
 ## 8) البريد: restoatlas.com
 
-1. أنشئ صناديق البريد: `hello@` (المرسِل)، `support@` (يظهر في تذييل الموقع)، و`admin@` إن أردته.
+1. أنشئ صندوق البريد `support@restoatlas.com` — هو بريد الموقع الرسمي: المرسِل لكل الإيميلات، ويظهر في تذييل الموقع. و`admin@` إن أردته.
 2. في مزوّد البريد المستخدم في `MAIL_HOST`، أضف الدومين `restoatlas.com` وانسخ سجلاته إلى DNS في Hostinger:
    - **SPF** (TXT على `@`)، مثال: `v=spf1 include:<مزوّدك> ~all` — سجل SPF واحد فقط للدومين.
    - **DKIM** (TXT أو CNAME بالاسم الذي يعطيه المزوّد، مثل `default._domainkey`).
-   - **DMARC** (TXT على `_dmarc`)، ابدأ بـ: `v=DMARC1; p=none; rua=mailto:hello@restoatlas.com` ثم شدّده إلى `quarantine` بعد أسبوعين من تقارير نظيفة.
-3. اختبر: سجّل مطعمًا تجريبيًا، تأكد أن رسالة الترحيب تصل من `hello@restoatlas.com` وأن SPF/DKIM = pass (Gmail ← Show original).
+   - **DMARC** (TXT على `_dmarc`)، ابدأ بـ: `v=DMARC1; p=none; rua=mailto:support@restoatlas.com` ثم شدّده إلى `quarantine` بعد أسبوعين من تقارير نظيفة.
+3. اختبر: سجّل مطعمًا تجريبيًا، تأكد أن رسالة الترحيب تصل من `support@restoatlas.com` وأن SPF/DKIM = pass (Gmail ← Show original).
 
 ## 9) Google Search Console
 
