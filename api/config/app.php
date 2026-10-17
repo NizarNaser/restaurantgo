@@ -60,7 +60,7 @@ return [
     |--------------------------------------------------------------------------
     |
     | "base_domain" is the domain tenant subdomains hang off (e.g. a tenant
-    | with subdomain "pizzeria" is served at pizzeria.restaurantgo.com), and
+    | with subdomain "pizzeria" is served at pizzeria.restoatlas.com), and
     | "public_url" is the origin of the customer-facing frontend (the
     | `dashboard` app, which also hosts the tenant admin panel itself), used
     | to build canonical URLs and to link into the dashboard from emails.

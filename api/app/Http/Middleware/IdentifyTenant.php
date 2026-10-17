@@ -55,7 +55,7 @@ class IdentifyTenant
     private function resolveTenant(Request $request): ?Tenant
     {
         $host = $request->getHost();
-        $baseDomain = config('app.base_domain', 'restaurantgo.com');
+        $baseDomain = (string) config('app.base_domain');
 
         if ($request->user()?->tenant_id) {
             return Tenant::find($request->user()->tenant_id);
@@ -66,7 +66,7 @@ class IdentifyTenant
             return Tenant::where('custom_domain', $host)->first();
         }
 
-        // Subdomain (e.g., myrestaurant.restaurantgo.com)
+        // Subdomain (e.g., myrestaurant.restoatlas.com)
         $subdomain = str_replace('.' . $baseDomain, '', $host);
         if ($subdomain && $subdomain !== $baseDomain) {
             return Tenant::where('subdomain', $subdomain)->first();
