@@ -229,5 +229,8 @@
     "message": "我们使用必要的 Cookie 以运行本网站，并且仅在您同意后使用该餐厅已启用的分析工具。请阅读我们的",
     "acceptAll": "全部接受",
     "necessaryOnly": "仅必要项"
+  },
+  "betaBanner": {
+    "message": "🚧 {{appName}} 目前处于测试运行阶段（Beta）——部分功能可能仍会调整。感谢您的试用！"
   }
 }

@@ -229,5 +229,8 @@
     "message": "Wir verwenden essenzielle Cookies für den Betrieb dieser Website und – nur mit Ihrer Zustimmung – Analysetools, die das Restaurant aktiviert hat. Lesen Sie unsere",
     "acceptAll": "Alle akzeptieren",
     "necessaryOnly": "Nur erforderliche"
+  },
+  "betaBanner": {
+    "message": "🚧 {{appName}} läuft derzeit im Testbetrieb (Beta) — einige Funktionen können sich noch ändern. Danke fürs Ausprobieren!"
   }
 }

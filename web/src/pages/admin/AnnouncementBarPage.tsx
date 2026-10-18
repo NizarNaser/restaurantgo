@@ -92,12 +92,12 @@ export default function AnnouncementBarPage() {
       <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
         <BellRing className="text-[var(--color-primary)]" size={24} /> شريط الإعلان
       </h1>
-      <p className="text-gray-500 mt-1">الشريط الأحمر المتحرك أعلى الموقع الرئيسي ({APP_NAME}). أظهره أو أخفه، وغيّر نصه لكل لغة.</p>
+      <p className="text-gray-500 mt-1">الشريط الأحمر المتحرك أعلى الموقع الرئيسي ({APP_NAME}) وأعلى صفحات كل المطاعم. أظهره أو أخفه، وغيّر نصه لكل لغة — الإعداد نفسه يسري على الاثنين.</p>
 
       <form onSubmit={handleSave} className="mt-6 card p-6 space-y-5">
         <label className="flex items-center gap-2 text-sm font-medium text-gray-800">
           <input type="checkbox" className="rounded border-gray-300" checked={enabled} onChange={(e) => setEnabled(e.target.checked)} />
-          إظهار الشريط على الموقع
+          إظهار الشريط (الموقع الرئيسي وصفحات المطاعم)
         </label>
 
         <div>
