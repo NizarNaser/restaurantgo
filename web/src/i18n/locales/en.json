@@ -238,5 +238,8 @@
       "siteReadyAt": "Your restaurant's page is live at:",
       "cta": "Go to dashboard"
     }
+  },
+  "betaBanner": {
+    "message": "🚧 {{appName}} is currently running in beta — some features may still change. Thank you for trying it!"
   }
 }

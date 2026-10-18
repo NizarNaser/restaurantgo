@@ -100,3 +100,34 @@
 .animate-float {
   animation: float 6s ease-in-out infinite;
 }
+
+/* Beta notice above the site nav (PublicLayout): the text scrolls left → right,
+   or right → left on RTL pages. The text starts at the line's start edge,
+   so it begins just outside that edge and travels a full viewport across. */
+@keyframes beta-marquee-ltr {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(100vw); }
+}
+@keyframes beta-marquee-rtl {
+  from { transform: translateX(100%); }
+  to { transform: translateX(-100vw); }
+}
+.beta-marquee {
+  display: inline-block;
+  white-space: nowrap;
+  padding-inline: 2rem;
+  animation: beta-marquee-ltr 22s linear infinite;
+  /* Start mid-way so the message is on screen right at page load,
+     instead of an empty red bar while it slides in. */
+  animation-delay: -9s;
+}
+[dir="rtl"] .beta-marquee {
+  animation-name: beta-marquee-rtl;
+}
+.beta-banner:hover .beta-marquee {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .beta-banner { text-align: center; }
+  .beta-marquee { animation: none; white-space: normal; }
+}

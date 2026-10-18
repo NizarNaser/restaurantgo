@@ -238,5 +238,8 @@
       "siteReadyAt": "Your restaurant's page is live at:",
       "cta": "コントロールパネルへ"
     }
+  },
+  "betaBanner": {
+    "message": "🚧 {{appName}} は現在ベータ版として試験運用中です — 一部の機能は今後変更される場合があります。ご利用ありがとうございます！"
   }
 }

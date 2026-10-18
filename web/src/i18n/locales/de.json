@@ -238,5 +238,8 @@
       "siteReadyAt": "Your restaurant's page is live at:",
       "cta": "Zum Kontrollzentrum"
     }
+  },
+  "betaBanner": {
+    "message": "🚧 {{appName}} läuft derzeit im Testbetrieb (Beta) — einige Funktionen können sich noch ändern. Danke fürs Ausprobieren!"
   }
 }
