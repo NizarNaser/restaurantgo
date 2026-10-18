@@ -5,6 +5,8 @@ import { AnimatePresence, motion } from 'motion/react';
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from '../components/LanguageSwitcher';
 import AssistantWidget from '../components/AssistantWidget';
+import AnnouncementBar from '../components/AnnouncementBar';
+import { pick } from '../lib/localized';
 import api from '../api/axios';
 import { useSeoHead, type SeoPayload } from '../hooks/useSeoHead';
 import { APP_DOMAIN, APP_NAME, APP_TAGLINE } from '../lib/brand';
@@ -14,19 +16,11 @@ interface PlatformSeoSettings {
   seo_description: Record<string, string> | null;
   seo_og_image: string | null;
   google_site_verification: string | null;
+  announcement?: { enabled: boolean; message: Record<string, string> | null };
 }
 
 const DEFAULT_TITLE = `${APP_NAME} — ${APP_TAGLINE}`;
 const DEFAULT_DESCRIPTION = 'Online menus, delivery, and dine-in ordering for restaurants — set up in minutes.';
-
-// Resolves a locale-keyed SEO field to one string: exact language match,
-// then the first available translation, then the site-wide default.
-function pick(localized: Record<string, string> | null, locale: string, fallback: string): string {
-  if (!localized) return fallback;
-  const short = locale.split('-')[0];
-  const value = localized[locale] ?? localized[short] ?? Object.values(localized)[0];
-  return value || fallback;
-}
 
 export default function PublicLayout() {
   const { t, i18n } = useTranslation();
@@ -34,6 +28,8 @@ export default function PublicLayout() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [platformSeo, setPlatformSeo] = useState<SeoPayload | null>(null);
+  // Unknown until the settings load, so a bar the admin turned off never flashes.
+  const [announcement, setAnnouncement] = useState<PlatformSeoSettings['announcement'] | null>(null);
 
   // Refetched whenever the site language changes so the title/description
   // stay in the visitor's language — this is the site-wide default; any
@@ -42,6 +38,7 @@ export default function PublicLayout() {
   useEffect(() => {
     api.get<PlatformSeoSettings>('/v1/platform/seo').then((res) => {
       const s = res.data;
+      setAnnouncement(s.announcement ?? { enabled: true, message: null });
       const title = pick(s.seo_title, i18n.language, DEFAULT_TITLE);
       const description = pick(s.seo_description, i18n.language, DEFAULT_DESCRIPTION);
       setPlatformSeo({
@@ -63,7 +60,7 @@ export default function PublicLayout() {
           ...(s.seo_og_image ? { 'twitter:image': s.seo_og_image } : {}),
         },
       });
-    }).catch(() => {});
+    }).catch(() => setAnnouncement({ enabled: true, message: null }));
   }, [i18n.language]);
 
   useSeoHead(platformSeo);
@@ -86,9 +83,9 @@ export default function PublicLayout() {
   return (
     <div className="min-h-screen flex flex-col bg-[var(--color-background)]">
       <header className={`bg-white/90 backdrop-blur-md sticky top-0 z-40 transition-shadow duration-300 ${scrolled ? 'shadow-[var(--shadow-soft)]' : 'border-b border-gray-100'}`}>
-        <div className="beta-banner bg-red-600 text-white text-sm font-semibold overflow-hidden py-1.5" role="status">
-          <span className="beta-marquee">{t('betaBanner.message', { appName: APP_NAME })}</span>
-        </div>
+        {announcement?.enabled && (
+          <AnnouncementBar message={pick(announcement.message, i18n.language, t('betaBanner.message', { appName: APP_NAME }))} />
+        )}
         <div className="container-page flex items-center justify-between h-16">
           <Link to="/" className="flex items-center gap-2 group">
             <div className="bg-[var(--color-primary)] p-1.5 rounded-xl text-white shadow-[var(--shadow-glow)] transition-transform group-hover:rotate-6 group-hover:scale-105">

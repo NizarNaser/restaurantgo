@@ -101,19 +101,26 @@
   animation: float 6s ease-in-out infinite;
 }
 
-/* Beta notice above the site nav (PublicLayout): the text scrolls left → right,
-   or right → left on RTL pages. The text starts at the line's start edge,
-   so it begins just outside that edge and travels a full viewport across. */
+/* Announcement bar above the site nav (AnnouncementBar): the text scrolls
+   left → right, or right → left on RTL. It is positioned against the bar's
+   own width (left: 0% → 100%), not the viewport, so it crosses any width —
+   the full site header or the narrower admin preview — the same way. */
 @keyframes beta-marquee-ltr {
-  from { transform: translateX(-100%); }
-  to { transform: translateX(100vw); }
+  from { left: 0; transform: translateX(-100%); }
+  to { left: 100%; transform: translateX(0); }
 }
 @keyframes beta-marquee-rtl {
-  from { transform: translateX(100%); }
-  to { transform: translateX(-100vw); }
+  from { left: 100%; transform: translateX(0); }
+  to { left: 0; transform: translateX(-100%); }
+}
+.beta-banner {
+  position: relative;
+  height: 2rem;
 }
 .beta-marquee {
-  display: inline-block;
+  position: absolute;
+  top: 0;
+  line-height: 2rem;
   white-space: nowrap;
   padding-inline: 2rem;
   animation: beta-marquee-ltr 22s linear infinite;
@@ -121,13 +128,15 @@
      instead of an empty red bar while it slides in. */
   animation-delay: -9s;
 }
-[dir="rtl"] .beta-marquee {
+/* :dir() follows the nearest dir attribute, so a preview inside an
+   ltr/rtl wrapper scrolls its own way. */
+.beta-marquee:dir(rtl) {
   animation-name: beta-marquee-rtl;
 }
 .beta-banner:hover .beta-marquee {
   animation-play-state: paused;
 }
 @media (prefers-reduced-motion: reduce) {
-  .beta-banner { text-align: center; }
-  .beta-marquee { animation: none; white-space: normal; }
+  .beta-banner { height: auto; padding-block: 0.375rem; text-align: center; }
+  .beta-marquee { position: static; animation: none; white-space: normal; line-height: inherit; }
 }

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Outlet, Link, Navigate, useNavigate, useLocation } from 'react-router-dom';
-import { ChefHat, LayoutDashboard, Building2, CreditCard, Layers, Ticket, UserCog, Clock, Wallet, Megaphone, Mail, ScrollText, LogOut, Globe } from 'lucide-react';
+import { ChefHat, LayoutDashboard, Building2, CreditCard, Layers, Ticket, UserCog, Clock, Wallet, Megaphone, Mail, ScrollText, LogOut, Globe, BellRing } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useAdminAuthStore } from '../store/adminAuthStore';
 import LanguageSwitcher from '../components/LanguageSwitcher';
@@ -25,6 +25,7 @@ export default function AdminLayout() {
     { to: '/admin/contact-messages', label: t('adminNav.contactMessages'), icon: Mail, permission: 'manage contact messages' },
     { to: '/admin/audit-logs', label: t('adminNav.auditLogs'), icon: ScrollText, permission: 'view audit logs' },
     { to: '/admin/seo', label: t('adminNav.seo'), icon: Globe, permission: 'manage platform settings' },
+    { to: '/admin/announcement', label: t('adminNav.announcement'), icon: BellRing, permission: 'manage platform settings' },
   ];
 
   // The zustand store only holds `user` (roles/permissions) in memory — it
