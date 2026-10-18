@@ -58,3 +58,41 @@ it('serves the platform SEO settings, for every configured locale, on the public
     $response->assertJsonPath('seo_title.ar', 'عنوان عام');
     $response->assertJsonPath('seo_description.en', 'Public description');
 });
+
+it('shows the announcement bar with the default text until platform staff change it', function () {
+    $this->getJson('/api/v1/platform/seo')
+        ->assertOk()
+        ->assertJsonPath('announcement.enabled', true)
+        ->assertJsonPath('announcement.message', null);
+});
+
+it('lets platform staff hide the announcement bar and set its text per locale', function () {
+    Sanctum::actingAs($this->admin, ['*']);
+
+    $this->putJson('/api/admin/platform-settings', [
+        'announcement_enabled' => false,
+        'announcement_message' => ['en' => 'Maintenance tonight', 'ar' => 'صيانة الليلة'],
+    ])->assertOk();
+
+    $this->getJson('/api/v1/platform/seo')
+        ->assertJsonPath('announcement.enabled', false)
+        ->assertJsonPath('announcement.message.en', 'Maintenance tonight')
+        ->assertJsonPath('announcement.message.ar', 'صيانة الليلة');
+});
+
+it('leaves the SEO settings alone when only the announcement bar is saved', function () {
+    Sanctum::actingAs($this->admin, ['*']);
+    $this->putJson('/api/admin/platform-settings', ['seo_title' => ['en' => 'Kept title']])->assertOk();
+
+    $this->putJson('/api/admin/platform-settings', ['announcement_enabled' => false])->assertOk();
+
+    $this->getJson('/api/v1/platform/seo')->assertJsonPath('seo_title.en', 'Kept title');
+});
+
+it('rejects an announcement message longer than 300 characters', function () {
+    Sanctum::actingAs($this->admin, ['*']);
+
+    $this->putJson('/api/admin/platform-settings', ['announcement_message' => ['en' => str_repeat('a', 301)]])
+        ->assertStatus(422)
+        ->assertJsonValidationErrors('announcement_message.en');
+});

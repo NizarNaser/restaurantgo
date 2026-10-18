@@ -23,6 +23,7 @@ const StaffPayrollPage = lazy(() => import('./pages/admin/StaffPayrollPage'));
 const AdvertisementsPage = lazy(() => import('./pages/admin/AdvertisementsPage'));
 const ContactMessagesPage = lazy(() => import('./pages/admin/ContactMessagesPage'));
 const PlatformSeoPage = lazy(() => import('./pages/admin/PlatformSeoPage'));
+const AnnouncementBarPage = lazy(() => import('./pages/admin/AnnouncementBarPage'));
 
 function PageLoader() {
   return (
@@ -60,6 +61,7 @@ function App() {
             <Route path="/admin/advertisements" element={<AdvertisementsPage />} />
             <Route path="/admin/contact-messages" element={<ContactMessagesPage />} />
             <Route path="/admin/seo" element={<PlatformSeoPage />} />
+            <Route path="/admin/announcement" element={<AnnouncementBarPage />} />
           </Route>
 
           <Route path="*" element={<Navigate to="/" replace />} />

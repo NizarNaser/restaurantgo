@@ -23,6 +23,13 @@ class PlatformController extends Controller
             'seo_description'          => $settings->seo_description,
             'seo_og_image'             => $settings->seo_og_image,
             'google_site_verification' => $settings->google_site_verification,
+            // Not SEO, but read by the same layout on every page load — one
+            // request instead of two. A null message means "use the site's
+            // own translated default".
+            'announcement' => [
+                'enabled' => $settings->announcement_enabled,
+                'message' => $settings->announcement_message,
+            ],
         ]);
     }
 }
