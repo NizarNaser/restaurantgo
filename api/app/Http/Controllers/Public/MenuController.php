@@ -43,6 +43,11 @@ class MenuController extends Controller
                 // Dine-in only — never shown/charged for delivery orders.
                 'service_charge_rate'         => (float) $tenant->service_charge_rate,
                 'service_charge_message'      => $tenant->service_charge_show_message ? $this->seo->pick($tenant->service_charge_message, $locale) : null,
+                // Which payment choices the cart offers for delivery/pickup.
+                'payment_options' => [
+                    'online' => $tenant->hasActiveConnectAccount(),
+                    'cash'   => $tenant->acceptsCashOrders(),
+                ],
                 'public_url'  => $this->seo->menuUrl($tenant),
                 'blog_url'    => $this->seo->blogUrl($tenant),
                 'analytics'   => [

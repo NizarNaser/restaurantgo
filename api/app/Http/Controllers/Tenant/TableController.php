@@ -127,9 +127,15 @@ class TableController extends Controller
      * was actually sold, so it shouldn't show up as a $0 "paid" sale later
      * on the Sales page.
      */
-    public function close(Table $table): JsonResponse
+    public function close(Request $request, Table $table): JsonResponse
     {
         $this->authorizeTenant($table);
+
+        // Optional so an older POS build that doesn't send it can still
+        // close tables — the method is then simply not recorded.
+        $data = $request->validate([
+            'payment_method' => ['nullable', Rule::in([Order::PAYMENT_METHOD_CASH, Order::PAYMENT_METHOD_CARD])],
+        ]);
         abort_if($table->isVacant(), 422, 'This table is already vacant.');
 
         $order = Order::where('tenant_id', app('tenant')->id)
@@ -142,11 +148,12 @@ class TableController extends Controller
         abort_if(! $order, 422, 'This table has no open order to close.');
         abort_unless($table->canBeManagedBy(auth()->user()), 403, 'This table is locked to another staff member.');
 
-        DB::transaction(function () use ($table, $order) {
+        DB::transaction(function () use ($table, $order, $data) {
             if ($order->items_count > 0) {
                 $order->update([
                     'status'         => 'completed',
                     'payment_status' => Order::PAYMENT_STATUS_PAID,
+                    'payment_method' => $data['payment_method'] ?? null,
                     'paid_at'        => now(),
                 ]);
                 $this->orderCompletion->complete($order);

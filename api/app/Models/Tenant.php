@@ -23,6 +23,7 @@ class Tenant extends Model
         'settings',
         'stripe_connect_account_id', 'stripe_connect_charges_enabled', 'stripe_connect_details_submitted',
         'paypal_merchant_id', 'paypal_payments_receivable', 'paypal_email_confirmed',
+        'cash_payments_enabled',
     ];
 
     protected $casts = [
@@ -36,6 +37,7 @@ class Tenant extends Model
         'stripe_connect_details_submitted'  => 'boolean',
         'paypal_payments_receivable'        => 'boolean',
         'paypal_email_confirmed'            => 'boolean',
+        'cash_payments_enabled'             => 'boolean',
         'tax_rate'                          => 'decimal:2',
         'service_charge_rate'               => 'decimal:2',
         'service_charge_show_message'       => 'boolean',
@@ -130,6 +132,16 @@ class Tenant extends Model
     public function hasActiveConnectAccount(): bool
     {
         return $this->stripe_connect_charges_enabled;
+    }
+
+    /**
+     * Whether customers may choose cash on delivery / pickup. An opt-in on
+     * top of online ordering, not a replacement: online ordering itself
+     * still needs an active Connect account.
+     */
+    public function acceptsCashOrders(): bool
+    {
+        return $this->cash_payments_enabled && $this->hasActiveConnectAccount();
     }
 
     /** The PayPal equivalent of hasActiveConnectAccount(). */
