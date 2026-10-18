@@ -101,6 +101,8 @@ class ShiftController extends Controller
             'shift'         => $shift,
             'orders_count'  => (clone $orders)->count(),
             'total_sales'   => (clone $orders)->sum('total'),
+            // The cash figure is what the drawer should hold at close.
+            'by_payment_method' => Order::totalsByPaymentMethod($orders),
         ]);
     }
 

@@ -68,7 +68,16 @@
     "missingAddress": "Будь ласка, вкажіть адресу доставки.",
     "placeOrderFailed": "Не вдалося оформити замовлення, спробуйте ще раз.",
     "checkoutFailed": "Не вдалося розпочати оплату, спробуйте ще раз.",
-    "placeOrder": "Оформити замовлення · {{amount}}"
+    "placeOrder": "Оформити замовлення · {{amount}}",
+    "orderMethod": "Як ви хочете отримати замовлення?",
+    "delivery": "Доставка",
+    "pickup": "Самовивіз",
+    "paymentMethod": "Оплата",
+    "payOnline": "Оплатити карткою онлайн",
+    "payCashOnDelivery": "Готівкою при доставці",
+    "payCashAtPickup": "Готівкою при самовивозі",
+    "cashDeliveryPaymentNote": "Оплатіть кур'єру готівкою, коли замовлення прибуде.",
+    "cashPickupPaymentNote": "Оплатіть готівкою, коли заберете замовлення в ресторані."
   },
   "order": {
     "steps": {
@@ -84,7 +93,10 @@
     "confirmingPayment": "Підтвердження оплати…",
     "cancelledNotice": "Це замовлення було скасовано.",
     "orderSummary": "Підсумок замовлення",
-    "deliveringTo": "Доставка за адресою"
+    "deliveringTo": "Доставка за адресою",
+    "cashOnDeliveryNotice": "Оплатіть готівкою, коли замовлення прибуде.",
+    "cashAtPickupNotice": "Оплатіть готівкою при отриманні замовлення.",
+    "pickupAt": "Заберіть замовлення в ресторані"
   },
   "halls": {
     "findYourTable": "Знайдіть свій столик",

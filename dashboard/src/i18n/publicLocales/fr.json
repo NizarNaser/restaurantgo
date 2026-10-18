@@ -68,7 +68,16 @@
     "missingAddress": "Veuillez indiquer votre adresse de livraison.",
     "placeOrderFailed": "Impossible de passer votre commande, veuillez réessayer.",
     "checkoutFailed": "Impossible de démarrer le paiement, veuillez réessayer.",
-    "placeOrder": "Commander · {{amount}}"
+    "placeOrder": "Commander · {{amount}}",
+    "orderMethod": "Comment souhaitez-vous recevoir votre commande ?",
+    "delivery": "Livraison",
+    "pickup": "À emporter",
+    "paymentMethod": "Paiement",
+    "payOnline": "Payer en ligne par carte",
+    "payCashOnDelivery": "Espèces à la livraison",
+    "payCashAtPickup": "Espèces au retrait",
+    "cashDeliveryPaymentNote": "Payez le livreur en espèces à l'arrivée de votre commande.",
+    "cashPickupPaymentNote": "Payez en espèces lorsque vous récupérez votre commande au restaurant."
   },
   "order": {
     "steps": {
@@ -84,7 +93,10 @@
     "confirmingPayment": "Confirmation du paiement en cours…",
     "cancelledNotice": "Cette commande a été annulée.",
     "orderSummary": "Récapitulatif de la commande",
-    "deliveringTo": "Livraison à"
+    "deliveringTo": "Livraison à",
+    "cashOnDeliveryNotice": "Payez en espèces à l'arrivée de votre commande.",
+    "cashAtPickupNotice": "Payez en espèces au retrait de votre commande.",
+    "pickupAt": "Récupérez votre commande au restaurant"
   },
   "halls": {
     "findYourTable": "Trouvez votre table",

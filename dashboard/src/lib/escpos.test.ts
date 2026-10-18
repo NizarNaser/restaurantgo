@@ -70,6 +70,7 @@ describe('buildFullBillTicket', () => {
       openedAt: '2026-01-01T12:00:00Z',
       closedAt: '2026-01-01T13:00:00Z',
       staffName: 'Demo Owner',
+      paymentMethod: 'card',
     });
     const text = decode(bytes);
 
@@ -82,6 +83,7 @@ describe('buildFullBillTicket', () => {
     expect(text).toContain('Served by: Demo Owner');
     expect(text).toContain('Opened:');
     expect(text).toContain('Closed:');
+    expect(text).toContain('Paid: Card');
   });
 
   it('omits the tax and service charge lines when both rates are 0, and the closed line for a still-open table', () => {
@@ -102,6 +104,7 @@ describe('buildFullBillTicket', () => {
     expect(text).not.toContain('Tax (');
     expect(text).not.toContain('Service charge (');
     expect(text).not.toContain('Closed:');
+    expect(text).not.toContain('Paid:');
     expect(text).toContain('TOTAL: USD 6.00');
   });
 });

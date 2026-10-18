@@ -19,6 +19,7 @@ interface Order {
   total: string;
   currency: string;
   paid_at: string | null;
+  payment_method: 'online' | 'cash' | 'card' | null;
   created_at: string;
   items: OrderItem[];
 }
@@ -36,6 +37,7 @@ interface InvoiceRecord {
     service_charge_rate: number; service_charge_amount: number;
     grand_total: number;
     currency: string; created_at: string; paid_at: string | null;
+    payment_method: 'online' | 'cash' | 'card' | null;
   };
   table: { table_number: string; hall_name: string | null } | null;
   opened_by: string | null;
@@ -180,6 +182,7 @@ export default function InvoicesPage() {
                 <th className="px-5 py-3 font-medium">#</th>
                 <th className="px-5 py-3 font-medium">{t('orders.tableGuest')}</th>
                 <th className="px-5 py-3 font-medium">{t('invoices.paidAt')}</th>
+                <th className="px-5 py-3 font-medium">{t('invoices.paymentMethod')}</th>
                 <th className="px-5 py-3 font-medium">{t('orders.total')}</th>
                 <th className="px-5 py-3 font-medium text-right">{t('orders.actionsLabel')}</th>
               </tr>
@@ -192,6 +195,7 @@ export default function InvoicesPage() {
                     {order.table_number ? t('orders.tableNumber', { number: order.table_number }) : order.customer_name || '—'}
                   </td>
                   <td className="px-5 py-3 text-gray-500">{order.paid_at ? new Date(order.paid_at).toLocaleString() : '—'}</td>
+                  <td className="px-5 py-3 text-gray-500">{order.payment_method ? t(`orders.paymentMethods.${order.payment_method}`) : '—'}</td>
                   <td className="px-5 py-3 font-semibold text-gray-900">{parseFloat(order.total).toFixed(2)} {order.currency}</td>
                   <td className="px-5 py-3">
                     <div className="flex items-center justify-end gap-1">
@@ -245,6 +249,7 @@ export default function InvoicesPage() {
               <div className="text-xs text-gray-500 mb-3 space-y-0.5">
                 <p>{t('invoices.opened')}: {new Date(invoice.order.created_at).toLocaleString()}</p>
                 {invoice.order.paid_at && <p>{t('invoices.paid')}: {new Date(invoice.order.paid_at).toLocaleString()}</p>}
+                {invoice.order.payment_method && <p>{t('invoices.paymentMethod')}: {t(`orders.paymentMethods.${invoice.order.payment_method}`)}</p>}
                 <p>{t('invoices.servedBy')}: {invoice.opened_by ?? '—'}</p>
               </div>
               <div className="divide-y divide-gray-100 border-t border-b border-gray-200">

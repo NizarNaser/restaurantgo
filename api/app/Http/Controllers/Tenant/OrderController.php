@@ -31,8 +31,10 @@ class OrderController extends Controller
             ->when($request->status, fn ($q) => $q->where('status', $request->status))
             ->when($request->branch_id, fn ($q) => $q->where('branch_id', $request->branch_id))
             ->when($request->shift_id, fn ($q) => $q->where('shift_id', $request->shift_id))
-            // Delivery/takeout orders awaiting payment aren't real kitchen
-            // orders yet — hide them unless explicitly asked for.
+            // Online delivery/pickup orders awaiting payment aren't real
+            // kitchen orders yet — hide them unless explicitly asked for.
+            // (Cash orders have no payment_status until handed over, so
+            // they show up straight away, like an open table.)
             ->unless($request->boolean('include_unpaid'), fn ($q) => $q->where(
                 fn ($q) => $q->whereNull('payment_status')->orWhere('payment_status', Order::PAYMENT_STATUS_PAID)
             ))
@@ -193,6 +195,7 @@ class OrderController extends Controller
                 'currency'    => $order->currency,
                 'created_at'  => $order->created_at,
                 'paid_at'     => $order->paid_at,
+                'payment_method' => $order->payment_method,
             ],
             'table'            => $order->table ? [
                 'table_number' => $order->table->table_number,
@@ -302,6 +305,12 @@ class OrderController extends Controller
             $order->update($data);
 
             if ($order->wasChanged('status') && $order->status === 'completed') {
+                // Completing a cash delivery/pickup order means the cash was
+                // collected at hand-over.
+                if ($order->awaitsCashOnHandover()) {
+                    $order->update(['payment_status' => Order::PAYMENT_STATUS_PAID, 'paid_at' => now()]);
+                }
+
                 $this->orderCompletion->complete($order);
             }
         });

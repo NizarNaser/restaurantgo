@@ -65,6 +65,8 @@ export interface RestaurantInfo {
   blog_url: string;
   service_charge_rate: number;
   service_charge_message: string | null;
+  /** Payment choices the cart offers for delivery/pickup orders. */
+  payment_options?: { online: boolean; cash: boolean };
   contact: RestaurantContact | null;
   service_rating: { average: number | null; count: number };
   analytics: RestaurantAnalytics;

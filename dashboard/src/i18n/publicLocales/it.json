@@ -68,7 +68,16 @@
     "missingAddress": "Inserisci il tuo indirizzo di consegna.",
     "placeOrderFailed": "Impossibile effettuare l'ordine, riprova.",
     "checkoutFailed": "Impossibile avviare il pagamento, riprova.",
-    "placeOrder": "Ordina · {{amount}}"
+    "placeOrder": "Ordina · {{amount}}",
+    "orderMethod": "Come vuoi ricevere il tuo ordine?",
+    "delivery": "Consegna",
+    "pickup": "Ritiro",
+    "paymentMethod": "Pagamento",
+    "payOnline": "Paga online con carta",
+    "payCashOnDelivery": "Contanti alla consegna",
+    "payCashAtPickup": "Contanti al ritiro",
+    "cashDeliveryPaymentNote": "Paga il fattorino in contanti all'arrivo dell'ordine.",
+    "cashPickupPaymentNote": "Paga in contanti quando ritiri l'ordine al ristorante."
   },
   "order": {
     "steps": {
@@ -84,7 +93,10 @@
     "confirmingPayment": "Conferma del pagamento in corso…",
     "cancelledNotice": "Questo ordine è stato annullato.",
     "orderSummary": "Riepilogo dell'ordine",
-    "deliveringTo": "Consegna a"
+    "deliveringTo": "Consegna a",
+    "cashOnDeliveryNotice": "Paga in contanti all'arrivo dell'ordine.",
+    "cashAtPickupNotice": "Paga in contanti al ritiro dell'ordine.",
+    "pickupAt": "Ritira il tuo ordine al ristorante"
   },
   "halls": {
     "findYourTable": "Trova il tuo tavolo",

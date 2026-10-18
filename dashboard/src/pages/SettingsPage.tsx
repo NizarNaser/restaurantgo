@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Save, Loader2, Globe, Clock, DollarSign, Languages, QrCode, ExternalLink, BarChart3, Image as ImageIcon, Upload, Palette, KeyRound, Mail, Share2, MapPin, Phone, AlertTriangle, Percent } from 'lucide-react';
+import { Save, Loader2, Globe, Clock, DollarSign, Languages, QrCode, ExternalLink, BarChart3, Image as ImageIcon, Upload, Palette, KeyRound, Mail, Share2, MapPin, Phone, AlertTriangle, Percent, Banknote } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -17,6 +17,7 @@ interface TenantSettings {
   service_charge_message: Record<string, string> | null;
   service_charge_show_message: boolean;
   service_charge_apply_to_invoice: boolean;
+  cash_payments_enabled: boolean;
   supported_locales: string[];
   logo_path: string | null;
   favicon_path: string | null;
@@ -527,6 +528,7 @@ export default function SettingsPage() {
         service_charge_message: settings.service_charge_message || null,
         service_charge_show_message: settings.service_charge_show_message ?? false,
         service_charge_apply_to_invoice: settings.service_charge_apply_to_invoice ?? false,
+        cash_payments_enabled: settings.cash_payments_enabled ?? false,
         supported_locales: settings.supported_locales,
         seo_title: settings.seo_title || null,
         seo_description: settings.seo_description || null,
@@ -1071,6 +1073,23 @@ export default function SettingsPage() {
               {t('settings.serviceChargeApplyToInvoice')}
             </label>
             <p className="text-xs text-gray-400 -mt-3">{t('settings.serviceChargeApplyToInvoiceHint')}</p>
+          </div>
+
+          {/* Cash payments — an opt-in on top of online delivery/pickup ordering */}
+          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 space-y-5">
+            <h2 className="text-base font-semibold text-gray-800 flex items-center gap-2">
+              <Banknote size={18} className="text-[#ff4757]" /> {t('settings.cashPayments')}
+            </h2>
+            <p className="text-sm text-gray-500 -mt-2">{t('settings.cashPaymentsDesc')}</p>
+            <label className="flex items-center gap-2 text-sm text-gray-700">
+              <input
+                type="checkbox"
+                className="rounded border-gray-300"
+                checked={settings?.cash_payments_enabled ?? false}
+                onChange={(e) => settings && setSettings({ ...settings, cash_payments_enabled: e.target.checked })}
+              />
+              {t('settings.cashPaymentsEnable')}
+            </label>
           </div>
 
           {/* Social Media */}

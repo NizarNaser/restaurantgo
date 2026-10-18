@@ -68,7 +68,16 @@
     "missingAddress": "Bitte geben Sie Ihre Lieferadresse ein.",
     "placeOrderFailed": "Ihre Bestellung konnte nicht aufgegeben werden, bitte versuchen Sie es erneut.",
     "checkoutFailed": "Bezahlvorgang konnte nicht gestartet werden, bitte versuchen Sie es erneut.",
-    "placeOrder": "Bestellen · {{amount}}"
+    "placeOrder": "Bestellen · {{amount}}",
+    "orderMethod": "Wie möchtest du deine Bestellung erhalten?",
+    "delivery": "Lieferung",
+    "pickup": "Abholung",
+    "paymentMethod": "Zahlung",
+    "payOnline": "Online mit Karte bezahlen",
+    "payCashOnDelivery": "Barzahlung bei Lieferung",
+    "payCashAtPickup": "Barzahlung bei Abholung",
+    "cashDeliveryPaymentNote": "Bezahle den Fahrer bar, wenn deine Bestellung ankommt.",
+    "cashPickupPaymentNote": "Bezahle bar, wenn du deine Bestellung im Restaurant abholst."
   },
   "order": {
     "steps": {
@@ -84,7 +93,10 @@
     "confirmingPayment": "Zahlung wird bestätigt…",
     "cancelledNotice": "Diese Bestellung wurde storniert.",
     "orderSummary": "Bestellübersicht",
-    "deliveringTo": "Lieferung an"
+    "deliveringTo": "Lieferung an",
+    "cashOnDeliveryNotice": "Bezahle bar, wenn deine Bestellung ankommt.",
+    "cashAtPickupNotice": "Bezahle bar bei der Abholung.",
+    "pickupAt": "Hole deine Bestellung im Restaurant ab"
   },
   "halls": {
     "findYourTable": "Finden Sie Ihren Tisch",

@@ -68,7 +68,16 @@
     "missingAddress": "Please enter your delivery address.",
     "placeOrderFailed": "Could not place your order, please try again.",
     "checkoutFailed": "Could not start checkout, please try again.",
-    "placeOrder": "Place order · {{amount}}"
+    "placeOrder": "Place order · {{amount}}",
+    "orderMethod": "How would you like to get your order?",
+    "delivery": "Delivery",
+    "pickup": "Pickup",
+    "paymentMethod": "Payment",
+    "payOnline": "Pay online by card",
+    "payCashOnDelivery": "Cash on delivery",
+    "payCashAtPickup": "Cash at pickup",
+    "cashDeliveryPaymentNote": "Pay the driver in cash when your order arrives.",
+    "cashPickupPaymentNote": "Pay in cash when you pick up your order at the restaurant."
   },
   "order": {
     "steps": {
@@ -84,7 +93,10 @@
     "confirmingPayment": "Confirming your payment…",
     "cancelledNotice": "This order was cancelled.",
     "orderSummary": "Order summary",
-    "deliveringTo": "Delivering to"
+    "deliveringTo": "Delivering to",
+    "cashOnDeliveryNotice": "Pay in cash when your order arrives.",
+    "cashAtPickupNotice": "Pay in cash when you pick up your order.",
+    "pickupAt": "Pick up your order at the restaurant"
   },
   "halls": {
     "findYourTable": "Find your table",

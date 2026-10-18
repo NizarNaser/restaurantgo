@@ -9,7 +9,7 @@ export interface CartItem {
   notes?: string;
 }
 
-export type OrderType = 'delivery' | 'dine_in' | null;
+export type OrderType = 'delivery' | 'pickup' | 'dine_in' | null;
 
 interface StoredCart {
   items: CartItem[];

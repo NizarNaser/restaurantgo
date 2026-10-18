@@ -68,7 +68,16 @@
     "missingAddress": "请输入您的配送地址。",
     "placeOrderFailed": "无法提交您的订单，请重试。",
     "checkoutFailed": "无法开始结账，请重试。",
-    "placeOrder": "下单 · {{amount}}"
+    "placeOrder": "下单 · {{amount}}",
+    "orderMethod": "您希望如何取餐？",
+    "delivery": "外送",
+    "pickup": "到店自取",
+    "paymentMethod": "付款方式",
+    "payOnline": "在线刷卡支付",
+    "payCashOnDelivery": "货到付款（现金）",
+    "payCashAtPickup": "自取时现金支付",
+    "cashDeliveryPaymentNote": "订单送达时以现金付款给配送员。",
+    "cashPickupPaymentNote": "到餐厅取餐时以现金付款。"
   },
   "order": {
     "steps": {
@@ -84,7 +93,10 @@
     "confirmingPayment": "正在确认付款…",
     "cancelledNotice": "此订单已取消。",
     "orderSummary": "订单摘要",
-    "deliveringTo": "送达地址"
+    "deliveringTo": "送达地址",
+    "cashOnDeliveryNotice": "订单送达时请以现金付款。",
+    "cashAtPickupNotice": "取餐时请以现金付款。",
+    "pickupAt": "请到餐厅取餐"
   },
   "halls": {
     "findYourTable": "查找您的桌位",

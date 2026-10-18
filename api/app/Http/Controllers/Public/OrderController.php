@@ -125,6 +125,7 @@ class OrderController extends Controller
             'currency' => $order->currency,
             'type' => $order->type,
             'payment_status' => $order->payment_status,
+            'payment_method' => $order->payment_method,
             'delivery_address_line' => $order->delivery_address_line,
             'delivery_city' => $order->delivery_city,
             'delivery_instructions' => $order->delivery_instructions,

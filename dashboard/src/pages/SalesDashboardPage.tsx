@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { TrendingUp, DollarSign, Receipt, Percent, Loader2 } from 'lucide-react';
+import { TrendingUp, DollarSign, Receipt, Percent, Loader2, Banknote, CreditCard, Globe, HelpCircle } from 'lucide-react';
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
 import { useTranslation } from 'react-i18next';
 import api from '../api/axios';
@@ -11,6 +11,15 @@ interface SummaryReport {
   income: number;
   discounts: number | null;
   average_order: number;
+  /** Null when filtered by product/category/department (payment is per order). */
+  by_payment_method?: PaymentTotals | null;
+}
+
+interface PaymentTotals {
+  cash: number;
+  card: number;
+  online: number;
+  unrecorded: number;
 }
 
 interface StaffRow {
@@ -199,6 +208,17 @@ export default function SalesDashboardPage() {
             <StatTile icon={TrendingUp} label={t('salesDashboard.averageOrder')} value={summary ? summary.average_order.toFixed(2) : '—'} />
             <StatTile icon={Percent} label={t('salesDashboard.discountsGiven')} value={summary?.discounts !== null && summary?.discounts !== undefined ? summary.discounts.toFixed(2) : t('salesDashboard.notAvailable')} hint={summary?.mode === 'items' ? t('salesDashboard.notAvailableForProduct') : undefined} />
           </div>
+
+          {summary?.by_payment_method && (
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+              <StatTile icon={Banknote} label={t('orders.paymentMethods.cash')} value={summary.by_payment_method.cash.toFixed(2)} />
+              <StatTile icon={CreditCard} label={t('orders.paymentMethods.card')} value={summary.by_payment_method.card.toFixed(2)} />
+              <StatTile icon={Globe} label={t('orders.paymentMethods.online')} value={summary.by_payment_method.online.toFixed(2)} />
+              {summary.by_payment_method.unrecorded > 0 && (
+                <StatTile icon={HelpCircle} label={t('salesDashboard.paymentUnrecorded')} value={summary.by_payment_method.unrecorded.toFixed(2)} hint={t('salesDashboard.paymentUnrecordedHint')} />
+              )}
+            </div>
+          )}
 
           <div className="bg-white rounded-xl border border-gray-200 p-4">
             <h3 className="text-sm font-semibold text-gray-700 mb-3">{t('salesDashboard.incomeOverTime')}</h3>

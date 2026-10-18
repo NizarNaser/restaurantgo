@@ -68,7 +68,16 @@
     "missingAddress": "Lütfen teslimat adresinizi girin.",
     "placeOrderFailed": "Siparişiniz verilemedi, lütfen tekrar deneyin.",
     "checkoutFailed": "Ödeme başlatılamadı, lütfen tekrar deneyin.",
-    "placeOrder": "Sipariş ver · {{amount}}"
+    "placeOrder": "Sipariş ver · {{amount}}",
+    "orderMethod": "Siparişinizi nasıl almak istersiniz?",
+    "delivery": "Teslimat",
+    "pickup": "Gel al",
+    "paymentMethod": "Ödeme",
+    "payOnline": "Kartla online öde",
+    "payCashOnDelivery": "Kapıda nakit",
+    "payCashAtPickup": "Gel alırken nakit",
+    "cashDeliveryPaymentNote": "Siparişiniz geldiğinde kuryeye nakit ödeyin.",
+    "cashPickupPaymentNote": "Siparişinizi restorandan alırken nakit ödeyin."
   },
   "order": {
     "steps": {
@@ -84,7 +93,10 @@
     "confirmingPayment": "Ödemeniz onaylanıyor…",
     "cancelledNotice": "Bu sipariş iptal edildi.",
     "orderSummary": "Sipariş özeti",
-    "deliveringTo": "Teslimat adresi"
+    "deliveringTo": "Teslimat adresi",
+    "cashOnDeliveryNotice": "Siparişiniz geldiğinde nakit ödeyin.",
+    "cashAtPickupNotice": "Siparişinizi alırken nakit ödeyin.",
+    "pickupAt": "Siparişinizi restorandan alın"
   },
   "halls": {
     "findYourTable": "Masanızı bulun",
