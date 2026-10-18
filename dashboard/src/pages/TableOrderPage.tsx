@@ -320,6 +320,7 @@ export default function TableOrderPage() {
             openedAt: res.data.order.created_at,
             closedAt: res.data.order.paid_at,
             staffName: res.data.opened_by,
+            paymentMethod: res.data.order.payment_method,
           });
           await PosPrinter.print({ connectionType: primaryPrinter.connection_type, address: primaryPrinter.address, data: bytesToBase64(bytes) });
         } catch (err: any) {

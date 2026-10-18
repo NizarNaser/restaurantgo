@@ -79,6 +79,8 @@ export interface BillLine {
   subtotal: string;
 }
 
+const PAYMENT_METHOD_LABELS = { online: 'Online', cash: 'Cash', card: 'Card' } as const;
+
 /** The full itemized bill, printed on the primary/bar printer when the customer asks to pay. */
 export function buildFullBillTicket(params: {
   tableNumber: string;
@@ -94,6 +96,8 @@ export function buildFullBillTicket(params: {
   openedAt: string;
   closedAt?: string | null;
   staffName?: string | null;
+  /** Only known once the bill was paid; omitted from the ticket otherwise. */
+  paymentMethod?: 'online' | 'cash' | 'card' | null;
 }): Uint8Array {
   const bytes: number[] = [
     ...init(),
@@ -130,6 +134,9 @@ export function buildFullBillTicket(params: {
 
   if (params.closedAt) {
     bytes.push(...line(`Closed: ${new Date(params.closedAt).toLocaleString()}`));
+  }
+  if (params.paymentMethod) {
+    bytes.push(...line(`Paid: ${PAYMENT_METHOD_LABELS[params.paymentMethod]}`));
   }
   if (params.staffName) {
     bytes.push(...line(`Served by: ${params.staffName}`));

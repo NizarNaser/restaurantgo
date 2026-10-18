@@ -41,6 +41,7 @@ export interface InvoiceRecord {
     service_charge_rate: number; service_charge_amount: number;
     grand_total: number;
     currency: string; created_at: string; paid_at: string | null;
+    payment_method?: 'online' | 'cash' | 'card' | null;
   };
   table: { table_number: string; hall_name: string | null } | null;
   opened_by: string | null;
