@@ -238,5 +238,8 @@
       "siteReadyAt": "Your restaurant's page is live at:",
       "cta": "Vai al pannello di controllo"
     }
+  },
+  "betaBanner": {
+    "message": "🚧 {{appName}} è attualmente in versione beta — alcune funzionalità potrebbero ancora cambiare. Grazie per averlo provato!"
   }
 }

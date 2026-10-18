@@ -86,6 +86,9 @@ export default function PublicLayout() {
   return (
     <div className="min-h-screen flex flex-col bg-[var(--color-background)]">
       <header className={`bg-white/90 backdrop-blur-md sticky top-0 z-40 transition-shadow duration-300 ${scrolled ? 'shadow-[var(--shadow-soft)]' : 'border-b border-gray-100'}`}>
+        <div className="beta-banner bg-red-600 text-white text-sm font-semibold overflow-hidden py-1.5" role="status">
+          <span className="beta-marquee">{t('betaBanner.message', { appName: APP_NAME })}</span>
+        </div>
         <div className="container-page flex items-center justify-between h-16">
           <Link to="/" className="flex items-center gap-2 group">
             <div className="bg-[var(--color-primary)] p-1.5 rounded-xl text-white shadow-[var(--shadow-glow)] transition-transform group-hover:rotate-6 group-hover:scale-105">

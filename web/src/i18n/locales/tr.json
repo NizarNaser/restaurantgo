@@ -238,5 +238,8 @@
       "siteReadyAt": "Your restaurant's page is live at:",
       "cta": "Kontrol paneline git"
     }
+  },
+  "betaBanner": {
+    "message": "🚧 {{appName}} şu anda beta sürümünde çalışıyor — bazı özellikler hâlâ değişebilir. Denediğiniz için teşekkürler!"
   }
 }
