@@ -68,7 +68,16 @@
     "missingAddress": "Пожалуйста, укажите адрес доставки.",
     "placeOrderFailed": "Не удалось оформить заказ, попробуйте ещё раз.",
     "checkoutFailed": "Не удалось начать оплату, попробуйте ещё раз.",
-    "placeOrder": "Оформить заказ · {{amount}}"
+    "placeOrder": "Оформить заказ · {{amount}}",
+    "orderMethod": "Как вы хотите получить заказ?",
+    "delivery": "Доставка",
+    "pickup": "Самовывоз",
+    "paymentMethod": "Оплата",
+    "payOnline": "Оплатить картой онлайн",
+    "payCashOnDelivery": "Наличными при доставке",
+    "payCashAtPickup": "Наличными при самовывозе",
+    "cashDeliveryPaymentNote": "Оплатите курьеру наличными, когда заказ прибудет.",
+    "cashPickupPaymentNote": "Оплатите наличными, когда заберёте заказ в ресторане."
   },
   "order": {
     "steps": {
@@ -84,7 +93,10 @@
     "confirmingPayment": "Подтверждение оплаты…",
     "cancelledNotice": "Этот заказ был отменён.",
     "orderSummary": "Сводка заказа",
-    "deliveringTo": "Доставка по адресу"
+    "deliveringTo": "Доставка по адресу",
+    "cashOnDeliveryNotice": "Оплатите наличными, когда заказ прибудет.",
+    "cashAtPickupNotice": "Оплатите наличными при получении заказа.",
+    "pickupAt": "Заберите заказ в ресторане"
   },
   "halls": {
     "findYourTable": "Найдите свой столик",

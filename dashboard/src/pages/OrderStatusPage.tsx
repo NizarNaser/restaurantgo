@@ -30,6 +30,7 @@ interface OrderStatus {
   items: OrderItem[];
   type: string;
   payment_status: string | null;
+  payment_method?: 'online' | 'cash' | 'card' | null;
   delivery_address_line?: string | null;
   delivery_city?: string | null;
   delivery_instructions?: string | null;
@@ -89,7 +90,11 @@ export default function OrderStatusPage() {
 
         {order.type !== 'dine_in' && (
           <div className={`mt-6 rounded-2xl border p-4 text-sm font-medium ${order.payment_status === 'paid' ? 'bg-green-50 border-green-200 text-green-700' : 'bg-amber-50 border-amber-200 text-amber-700'}`}>
-            {order.payment_status === 'paid' ? t('order.paymentConfirmed') : t('order.confirmingPayment')}
+            {order.payment_status === 'paid'
+              ? t('order.paymentConfirmed')
+              : order.payment_method === 'cash'
+                ? (order.type === 'pickup' ? t('order.cashAtPickupNotice') : t('order.cashOnDeliveryNotice'))
+                : t('order.confirmingPayment')}
           </div>
         )}
 
@@ -131,6 +136,12 @@ export default function OrderStatusPage() {
             <span dir="ltr">{money(order.total, order.currency)} {order.currency}</span>
           </div>
         </div>
+
+        {order.type === 'pickup' && (
+          <div className="mt-6 bg-white rounded-2xl border border-gray-100 shadow-sm p-6 text-left">
+            <h2 className="font-semibold text-gray-800">{t('order.pickupAt')}</h2>
+          </div>
+        )}
 
         {order.type === 'delivery' && order.delivery_address_line && (
           <div className="mt-6 bg-white rounded-2xl border border-gray-100 shadow-sm p-6 text-left">

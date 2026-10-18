@@ -137,7 +137,7 @@ export default function PublicMenuPage() {
   const orderType = useCartStore((s) => s.orderType);
   const setOrderType = useCartStore((s) => s.setOrderType);
   const isDineIn = qrCodeId != null;
-  const canOrder = isDineIn || orderType === 'delivery';
+  const canOrder = isDineIn || orderType === 'delivery' || orderType === 'pickup';
   const [showScanner, setShowScanner] = useState(false);
 
   const [loading, setLoading] = useState(true);

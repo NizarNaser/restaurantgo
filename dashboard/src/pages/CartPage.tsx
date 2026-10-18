@@ -1,12 +1,13 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeft, Loader2, Minus, Plus, Trash2, ShoppingCart } from 'lucide-react';
+import { ArrowLeft, Loader2, Minus, Plus, Trash2, ShoppingCart, Truck, ShoppingBag, CreditCard, Banknote } from 'lucide-react';
 import { useCartStore } from '../store/cartStore';
 import { useAuthStore } from '../store/authStore';
 import { usePublicSlug } from '../hooks/usePublicSlug';
 import { formatMoney as money } from '../lib/money';
+import type { RestaurantInfo } from '../types/public';
 
 const PUBLIC_API = `${import.meta.env.VITE_API_URL || 'http://localhost:8000/api'}/v1/public`;
 
@@ -24,6 +25,7 @@ export default function CartPage() {
   const storedPhone = useCartStore((s) => s.customerPhone);
   const setCustomerInfo = useCartStore((s) => s.setCustomerInfo);
   const orderType = useCartStore((s) => s.orderType);
+  const setOrderType = useCartStore((s) => s.setOrderType);
   const storedAddressLine = useCartStore((s) => s.deliveryAddressLine);
   const storedCity = useCartStore((s) => s.deliveryCity);
   const storedInstructions = useCartStore((s) => s.deliveryInstructions);
@@ -37,13 +39,27 @@ export default function CartPage() {
   const [notes, setNotes] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [paymentMethod, setPaymentMethod] = useState<'online' | 'cash'>('online');
+  const [paymentOptions, setPaymentOptions] = useState<RestaurantInfo['payment_options']>();
+
+  // Only to know whether this restaurant offers cash on delivery/pickup.
+  useEffect(() => {
+    if (!slug) return;
+    axios.get<{ data: RestaurantInfo }>(`${PUBLIC_API}/${slug}/info`)
+      .then((res) => setPaymentOptions(res.data.data.payment_options))
+      .catch(() => {});
+  }, [slug]);
 
   const currency = items[0]?.currency ?? 'USD';
   const isDineIn = qrCodeId != null;
   const isDelivery = !isDineIn && orderType === 'delivery';
+  const isPickup = !isDineIn && orderType === 'pickup';
+  const isOnlineOrder = isDelivery || isPickup;
+  const cashAvailable = isOnlineOrder && paymentOptions?.cash === true;
+  const payCash = cashAvailable && paymentMethod === 'cash';
   // Chose "Dine-in" on the menu page but hasn't actually scanned their
   // table's QR code yet — browsing is fine, but we can't place this order.
-  const needsQrScan = !isDineIn && !isDelivery;
+  const needsQrScan = !isDineIn && !isOnlineOrder;
   // A staff member placing this dine-in order while logged into the
   // dashboard is identified by their session, not by typing in a customer's
   // name/phone — delivery still needs a real address/contact regardless of
@@ -85,7 +101,7 @@ export default function CartPage() {
       return;
     }
 
-    if (!addressLine.trim() || !city.trim()) {
+    if (isDelivery && (!addressLine.trim() || !city.trim())) {
       setError(t('cart.missingAddress'));
       return;
     }
@@ -93,21 +109,30 @@ export default function CartPage() {
     setSubmitting(true);
     setError(null);
     setCustomerInfo(customerName.trim(), customerPhone.trim());
-    setDeliveryAddress(addressLine.trim(), city.trim(), instructions.trim());
+    if (isDelivery) setDeliveryAddress(addressLine.trim(), city.trim(), instructions.trim());
     try {
       const res = await axios.post(`${PUBLIC_API}/${slug}/orders/checkout`, {
         items: items.map((i) => ({ menu_item_id: i.menu_item_id, quantity: i.quantity, notes: i.notes || undefined })),
         customer_name: customerName.trim(),
         customer_phone: customerPhone.trim(),
         notes: notes || undefined,
-        delivery_address_line: addressLine.trim(),
-        delivery_city: city.trim(),
-        delivery_instructions: instructions.trim() || undefined,
+        type: isPickup ? 'pickup' : 'delivery',
+        payment_method: payCash ? 'cash' : 'online',
+        ...(isDelivery ? {
+          delivery_address_line: addressLine.trim(),
+          delivery_city: city.trim(),
+          delivery_instructions: instructions.trim() || undefined,
+        } : {}),
         success_url: `${window.location.origin}${buildPath('/order')}`,
         cancel_url: `${window.location.origin}${buildPath('/cart')}?payment=cancelled`,
       });
       clear();
-      window.location.href = res.data.checkout_url;
+      if (res.data.checkout_url) {
+        window.location.href = res.data.checkout_url;
+      } else {
+        // Cash order — nothing to pay online, straight to order tracking.
+        navigate(`${buildPath(`/order/${res.data.order_id}`)}?code=${res.data.tracking_code}`);
+      }
     } catch (err: any) {
       setError(err.response?.data?.message || t('cart.checkoutFailed'));
       setSubmitting(false);
@@ -168,6 +193,31 @@ export default function CartPage() {
             </div>
 
             <form onSubmit={handlePlaceOrder} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mt-5 space-y-4">
+              {isOnlineOrder && (
+                <div>
+                  <h2 className="text-base font-semibold text-gray-800 mb-2">{t('cart.orderMethod')}</h2>
+                  <div className="grid grid-cols-2 gap-2">
+                    <ChoiceButton active={isDelivery} onClick={() => setOrderType('delivery')} icon={<Truck size={18} />} label={t('cart.delivery')} />
+                    <ChoiceButton active={isPickup} onClick={() => setOrderType('pickup')} icon={<ShoppingBag size={18} />} label={t('cart.pickup')} />
+                  </div>
+                </div>
+              )}
+
+              {cashAvailable && (
+                <div>
+                  <h2 className="text-base font-semibold text-gray-800 mb-2">{t('cart.paymentMethod')}</h2>
+                  <div className="grid grid-cols-2 gap-2">
+                    <ChoiceButton active={!payCash} onClick={() => setPaymentMethod('online')} icon={<CreditCard size={18} />} label={t('cart.payOnline')} />
+                    <ChoiceButton
+                      active={payCash}
+                      onClick={() => setPaymentMethod('cash')}
+                      icon={<Banknote size={18} />}
+                      label={isPickup ? t('cart.payCashAtPickup') : t('cart.payCashOnDelivery')}
+                    />
+                  </div>
+                </div>
+              )}
+
               <h2 className="text-base font-semibold text-gray-800">{t('cart.yourDetails')}</h2>
 
               {needsQrScan && (
@@ -239,7 +289,11 @@ export default function CartPage() {
               />
               {!needsQrScan && (
                 <p className="text-xs text-gray-400">
-                  {isDineIn ? t('cart.dineInPaymentNote') : t('cart.deliveryPaymentNote')}
+                  {isDineIn
+                    ? t('cart.dineInPaymentNote')
+                    : payCash
+                      ? (isPickup ? t('cart.cashPickupPaymentNote') : t('cart.cashDeliveryPaymentNote'))
+                      : t('cart.deliveryPaymentNote')}
                 </p>
               )}
               {error && <p className="text-sm text-red-500">{error}</p>}
@@ -255,5 +309,20 @@ export default function CartPage() {
         )}
       </div>
     </div>
+  );
+}
+
+function ChoiceButton({ active, onClick, icon, label }: { active: boolean; onClick: () => void; icon: React.ReactNode; label: string }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={active}
+      className={`flex items-center justify-center gap-2 rounded-xl border px-3 py-2.5 text-sm font-medium transition-colors ${
+        active ? 'border-[var(--color-primary)] bg-[var(--color-primary)]/5 text-[var(--color-primary)]' : 'border-gray-200 text-gray-600 hover:border-gray-300'
+      }`}
+    >
+      {icon} {label}
+    </button>
   );
 }

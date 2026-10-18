@@ -68,7 +68,16 @@
     "missingAddress": "الرجاء إدخال عنوان التوصيل.",
     "placeOrderFailed": "تعذّر إرسال طلبك، حاول مرة أخرى.",
     "checkoutFailed": "تعذّر بدء عملية الدفع، حاول مرة أخرى.",
-    "placeOrder": "إرسال الطلب · {{amount}}"
+    "placeOrder": "إرسال الطلب · {{amount}}",
+    "orderMethod": "كيف تريد استلام طلبك؟",
+    "delivery": "توصيل",
+    "pickup": "استلام من المطعم",
+    "paymentMethod": "الدفع",
+    "payOnline": "الدفع أونلاين بالبطاقة",
+    "payCashOnDelivery": "نقدًا عند التوصيل",
+    "payCashAtPickup": "نقدًا عند الاستلام",
+    "cashDeliveryPaymentNote": "ادفع للسائق نقدًا عند وصول طلبك.",
+    "cashPickupPaymentNote": "ادفع نقدًا عند استلام طلبك من المطعم."
   },
   "order": {
     "steps": {
@@ -84,7 +93,10 @@
     "confirmingPayment": "جارٍ تأكيد دفعتك…",
     "cancelledNotice": "تم إلغاء هذا الطلب.",
     "orderSummary": "ملخص الطلب",
-    "deliveringTo": "التوصيل إلى"
+    "deliveringTo": "التوصيل إلى",
+    "cashOnDeliveryNotice": "ادفع نقدًا عند وصول طلبك.",
+    "cashAtPickupNotice": "ادفع نقدًا عند استلام طلبك.",
+    "pickupAt": "استلم طلبك من المطعم"
   },
   "halls": {
     "findYourTable": "ابحث عن طاولتك",

@@ -68,7 +68,16 @@
     "missingAddress": "配達先の住所を入力してください。",
     "placeOrderFailed": "注文を確定できませんでした。もう一度お試しください。",
     "checkoutFailed": "決済を開始できませんでした。もう一度お試しください。",
-    "placeOrder": "注文する · {{amount}}"
+    "placeOrder": "注文する · {{amount}}",
+    "orderMethod": "ご注文の受け取り方法を選択してください",
+    "delivery": "デリバリー",
+    "pickup": "店頭受け取り",
+    "paymentMethod": "お支払い",
+    "payOnline": "カードでオンライン決済",
+    "payCashOnDelivery": "代金引換（現金）",
+    "payCashAtPickup": "受け取り時に現金払い",
+    "cashDeliveryPaymentNote": "注文が届いたら配達員に現金でお支払いください。",
+    "cashPickupPaymentNote": "店舗で注文を受け取る際に現金でお支払いください。"
   },
   "order": {
     "steps": {
@@ -84,7 +93,10 @@
     "confirmingPayment": "お支払いを確認しています…",
     "cancelledNotice": "この注文はキャンセルされました。",
     "orderSummary": "注文内容の確認",
-    "deliveringTo": "配達先"
+    "deliveringTo": "配達先",
+    "cashOnDeliveryNotice": "注文が届いたら現金でお支払いください。",
+    "cashAtPickupNotice": "受け取り時に現金でお支払いください。",
+    "pickupAt": "店舗で注文をお受け取りください"
   },
   "halls": {
     "findYourTable": "テーブルを探す",

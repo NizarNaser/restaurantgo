@@ -68,7 +68,16 @@
     "missingAddress": "Por favor, informe seu endereço de entrega.",
     "placeOrderFailed": "Não foi possível fazer o seu pedido, tente novamente.",
     "checkoutFailed": "Não foi possível iniciar o pagamento, tente novamente.",
-    "placeOrder": "Fazer pedido · {{amount}}"
+    "placeOrder": "Fazer pedido · {{amount}}",
+    "orderMethod": "Como você quer receber seu pedido?",
+    "delivery": "Entrega",
+    "pickup": "Retirada",
+    "paymentMethod": "Pagamento",
+    "payOnline": "Pagar online com cartão",
+    "payCashOnDelivery": "Dinheiro na entrega",
+    "payCashAtPickup": "Dinheiro na retirada",
+    "cashDeliveryPaymentNote": "Pague o entregador em dinheiro quando o pedido chegar.",
+    "cashPickupPaymentNote": "Pague em dinheiro ao retirar seu pedido no restaurante."
   },
   "order": {
     "steps": {
@@ -84,7 +93,10 @@
     "confirmingPayment": "Confirmando seu pagamento…",
     "cancelledNotice": "Este pedido foi cancelado.",
     "orderSummary": "Resumo do pedido",
-    "deliveringTo": "Entregando em"
+    "deliveringTo": "Entregando em",
+    "cashOnDeliveryNotice": "Pague em dinheiro quando o pedido chegar.",
+    "cashAtPickupNotice": "Pague em dinheiro ao retirar seu pedido.",
+    "pickupAt": "Retire seu pedido no restaurante"
   },
   "halls": {
     "findYourTable": "Encontre sua mesa",
