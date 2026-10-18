@@ -229,5 +229,8 @@
     "message": "We use essential cookies to run this site, and — only with your permission — analytics tools the restaurant has enabled. Read our",
     "acceptAll": "Accept all",
     "necessaryOnly": "Necessary only"
+  },
+  "betaBanner": {
+    "message": "🚧 {{appName}} is currently running in beta — some features may still change. Thank you for trying it!"
   }
 }

@@ -229,5 +229,8 @@
     "message": "Bu siteyi çalıştırmak için gerekli çerezleri ve — yalnızca izninizle — restoranın etkinleştirdiği analiz araçlarını kullanıyoruz. Şunu okuyun:",
     "acceptAll": "Tümünü kabul et",
     "necessaryOnly": "Yalnızca gerekli"
+  },
+  "betaBanner": {
+    "message": "🚧 {{appName}} şu anda beta sürümünde çalışıyor — bazı özellikler hâlâ değişebilir. Denediğiniz için teşekkürler!"
   }
 }
