@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { Capacitor } from '@capacitor/core';
-import { Loader2, X, ArrowLeft, Lock, Clock } from 'lucide-react';
+import { Loader2, X, ArrowLeft, Lock, Clock, Banknote, CreditCard } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import api from '../api/axios';
 import PosPrinter from '../plugins/posPrinter';
@@ -73,6 +73,7 @@ export default function TableOrderPage() {
   const [vacantTables, setVacantTables] = useState<{ id: number; table_number: string }[]>([]);
   const [transferTargetId, setTransferTargetId] = useState('');
   const [showTransferApproval, setShowTransferApproval] = useState(false);
+  const [showPaymentChoice, setShowPaymentChoice] = useState(false);
 
   const [showDiscountLookup, setShowDiscountLookup] = useState(false);
   const [discountCardNumber, setDiscountCardNumber] = useState('');
@@ -405,15 +406,23 @@ export default function TableOrderPage() {
     navigate('/halls');
   };
 
-  const handleCloseTable = async () => {
-    const message = order && order.items.length > 0
-      ? t('tableOrder.closeConfirm')
-      : t('tableOrder.releaseConfirm');
-    if (!confirm(message)) return;
+  // A bill with items asks how it was paid (recorded on the sale); an
+  // empty one is just released, nothing was charged.
+  const handleCloseTable = () => {
+    if (order && order.items.length > 0) {
+      setShowPaymentChoice(true);
+      return;
+    }
+    if (!confirm(t('tableOrder.releaseConfirm'))) return;
+    closeTable();
+  };
+
+  const closeTable = async (paymentMethod?: 'cash' | 'card') => {
+    setShowPaymentChoice(false);
     setClosing(true);
     setError('');
     try {
-      await api.post(`/tables/${tableId}/close`);
+      await api.post(`/tables/${tableId}/close`, paymentMethod ? { payment_method: paymentMethod } : {});
       navigate('/halls');
     } catch (err: any) {
       setError(err.response?.data?.message || t('tableOrder.closeFailed'));
@@ -600,6 +609,28 @@ export default function TableOrderPage() {
           >
             {t('tableOrder.transfer')}
           </button>
+        </div>
+      </Modal>
+
+      <Modal isOpen={showPaymentChoice} onClose={() => setShowPaymentChoice(false)} title={t('tableOrder.paymentMethodTitle')}>
+        <div className="space-y-4">
+          <p className="text-sm text-gray-500">{t('tableOrder.closeConfirm')}</p>
+          <div className="grid grid-cols-2 gap-3">
+            <button
+              type="button"
+              onClick={() => closeTable('cash')}
+              className="flex flex-col items-center gap-2 rounded-xl border border-gray-200 p-4 font-medium text-gray-800 hover:border-emerald-400 hover:bg-emerald-50"
+            >
+              <Banknote size={28} className="text-emerald-600" /> {t('tableOrder.payCash')}
+            </button>
+            <button
+              type="button"
+              onClick={() => closeTable('card')}
+              className="flex flex-col items-center gap-2 rounded-xl border border-gray-200 p-4 font-medium text-gray-800 hover:border-blue-400 hover:bg-blue-50"
+            >
+              <CreditCard size={28} className="text-blue-600" /> {t('tableOrder.payCard')}
+            </button>
+          </div>
         </div>
       </Modal>
 

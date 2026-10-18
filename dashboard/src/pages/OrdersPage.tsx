@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Loader2, Utensils, Phone, ChefHat, PackageCheck, CheckCheck, X, ClipboardList, Plus } from 'lucide-react';
+import { Loader2, Utensils, Phone, ChefHat, PackageCheck, CheckCheck, X, ClipboardList, Plus, Truck, ShoppingBag, MapPin } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import api from '../api/axios';
 import { useAuthStore } from '../store/authStore';
@@ -16,6 +16,11 @@ interface OrderItem {
 
 interface Order {
   id: number;
+  type: 'dine_in' | 'delivery' | 'pickup';
+  payment_status: 'pending' | 'paid' | null;
+  payment_method: 'online' | 'cash' | 'card' | null;
+  delivery_address_line: string | null;
+  delivery_city: string | null;
   table_number: string | null;
   source: 'customer' | 'staff';
   customer_name: string | null;
@@ -44,6 +49,21 @@ interface ShiftOption {
 }
 
 const POLL_INTERVAL_MS = 15000;
+
+// Payment badge under the total: a cash delivery/pickup order still to be
+// collected stands out; otherwise how a paid order was paid, if known.
+function paymentBadge(order: Order): { labelKey: string; className: string } | null {
+  if (order.payment_status === 'paid') {
+    if (order.payment_method === 'cash') return { labelKey: 'orders.payment.paidCash', className: 'bg-emerald-50 text-emerald-700' };
+    if (order.payment_method === 'card') return { labelKey: 'orders.payment.paidCard', className: 'bg-emerald-50 text-emerald-700' };
+    if (order.payment_method === 'online') return { labelKey: 'orders.payment.paidOnline', className: 'bg-emerald-50 text-emerald-700' };
+    return null;
+  }
+  if (order.payment_method === 'cash' && order.type !== 'dine_in') {
+    return { labelKey: order.type === 'pickup' ? 'orders.payment.cashAtPickup' : 'orders.payment.cashOnDelivery', className: 'bg-amber-100 text-amber-800' };
+  }
+  return null;
+}
 
 const STATUS_STYLES: Record<Status, string> = {
   pending: 'bg-amber-100 text-amber-700',
@@ -228,8 +248,13 @@ export default function OrdersPage() {
                   <tr key={order.id} className="hover:bg-gray-50 align-top">
                     <td className="px-5 py-3">
                       <div className="font-medium text-gray-900 flex items-center gap-1.5">
-                        <Utensils size={14} className="text-gray-400" />
-                        {order.table_number ? t('orders.tableNumber', { number: order.table_number }) : '—'}
+                        {order.type === 'delivery' ? (
+                          <><Truck size={14} className="text-gray-400" />{t('orders.type.delivery')}</>
+                        ) : order.type === 'pickup' ? (
+                          <><ShoppingBag size={14} className="text-gray-400" />{t('orders.type.pickup')}</>
+                        ) : (
+                          <><Utensils size={14} className="text-gray-400" />{order.table_number ? t('orders.tableNumber', { number: order.table_number }) : '—'}</>
+                        )}
                         {order.source === 'staff' && (
                           <span className="text-[10px] font-semibold uppercase tracking-wide bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded">{t('orders.staffBadge')}</span>
                         )}
@@ -243,6 +268,12 @@ export default function OrdersPage() {
                           {order.customer_phone}
                         </div>
                       )}
+                      {order.type === 'delivery' && order.delivery_address_line && (
+                        <div className="text-xs text-gray-500 flex items-start gap-1 mt-0.5 max-w-xs">
+                          <MapPin size={12} className="mt-0.5 shrink-0" />
+                          {order.delivery_address_line}{order.delivery_city ? `, ${order.delivery_city}` : ''}
+                        </div>
+                      )}
                       {order.notes && <div className="text-xs text-gray-500 mt-1 max-w-xs">{order.notes}</div>}
                     </td>
                     <td className="px-5 py-3 text-gray-700">
@@ -252,6 +283,12 @@ export default function OrdersPage() {
                     </td>
                     <td className="px-5 py-3 font-semibold text-gray-900">
                       {parseFloat(order.total).toFixed(2)} {order.currency}
+                      {(() => {
+                        const badge = paymentBadge(order);
+                        return badge && (
+                          <div className={`mt-1 inline-block px-2 py-0.5 rounded text-[11px] font-medium ${badge.className}`}>{t(badge.labelKey)}</div>
+                        );
+                      })()}
                     </td>
                     <td className="px-5 py-3">
                       <span className={`px-2 py-1 rounded-full text-xs font-medium ${STATUS_STYLES[order.status]}`}>
