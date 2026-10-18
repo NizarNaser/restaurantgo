@@ -28,6 +28,9 @@ class PlatformSettingsController extends Controller
             'seo_description.*'        => ['nullable', 'string', 'max:500'],
             'seo_og_image'             => ['nullable', 'string', 'max:2048'],
             'google_site_verification' => ['nullable', 'string', 'max:255'],
+            'announcement_enabled'     => ['boolean'],
+            'announcement_message'     => ['nullable', 'array'],
+            'announcement_message.*'   => ['nullable', 'string', 'max:300'],
         ]);
 
         $settings = PlatformSetting::current();
