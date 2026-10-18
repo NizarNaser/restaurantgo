@@ -58,6 +58,7 @@ class SalesReportController extends Controller
                 'items_sold'    => (int) $rows->items_sold,
                 'income'        => (float) $rows->income,
                 'discounts'     => null, // not attributable per line item
+                'by_payment_method' => null, // same — payment is per order, not per line
                 'average_order' => $rows->orders_count > 0 ? Currency::round((float) $rows->income / $rows->orders_count, $currency) : 0,
             ]);
         }
@@ -82,6 +83,7 @@ class SalesReportController extends Controller
             'income'        => $income,
             'discounts'     => $discounts,
             'average_order' => $ordersCount > 0 ? Currency::round($income / $ordersCount, $currency) : 0,
+            'by_payment_method' => Order::totalsByPaymentMethod($orders),
         ]);
     }
 

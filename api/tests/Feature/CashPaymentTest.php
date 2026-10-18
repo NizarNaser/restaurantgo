@@ -187,3 +187,30 @@ it('rejects an unknown payment method when closing a table', function () {
         ->assertStatus(422)
         ->assertJsonValidationErrors('payment_method');
 });
+
+it('splits shift and sales totals by payment method', function () {
+    $this->tenant->update(['cash_payments_enabled' => true]);
+    $hall = Hall::create(['tenant_id' => $this->tenant->id, 'name' => 'Main Hall']);
+
+    Sanctum::actingAs($this->owner, ['*']);
+    $shift = $this->postJson('/api/shifts/open')->assertSuccessful()->json();
+
+    // Two table bills (10 cash, 20 card) …
+    foreach ([['T1', 1, 'cash'], ['T2', 2, 'card']] as [$number, $quantity, $method]) {
+        $table = Table::create(['tenant_id' => $this->tenant->id, 'hall_id' => $hall->id, 'table_number' => $number]);
+        $order = $this->postJson("/api/tables/{$table->id}/open")->json('order');
+        $this->postJson("/api/orders/{$order['id']}/items", [
+            'items' => [['menu_item_id' => $this->item->id, 'quantity' => $quantity]],
+        ])->assertCreated();
+        $this->postJson("/api/tables/{$table->id}/close", ['payment_method' => $method])->assertOk();
+    }
+
+    // … plus a 20 cash delivery, collected on hand-over.
+    $deliveryId = $this->postJson($this->checkoutUrl, cashOrderPayload($this->item))->json('order_id');
+    $this->putJson("/api/orders/{$deliveryId}", ['status' => 'completed'])->assertOk();
+
+    $expected = ['cash' => 30.0, 'card' => 20.0, 'online' => 0.0, 'unrecorded' => 0.0];
+
+    expect($this->getJson("/api/shifts/{$shift['id']}/summary")->assertOk()->json('by_payment_method'))->toEqual($expected);
+    expect($this->getJson('/api/reports/sales/summary')->assertOk()->json('by_payment_method'))->toEqual($expected);
+});

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Concerns\BelongsToTenant;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
@@ -92,6 +93,29 @@ class Order extends Model
         return $this->payment_method === self::PAYMENT_METHOD_CASH
             && in_array($this->type, [self::TYPE_DELIVERY, self::TYPE_PICKUP], true)
             && ! $this->isPaid();
+    }
+
+    /**
+     * Income of an (already filtered) order query split by how it was paid
+     * — what the cash drawer should hold vs. card/online. `unrecorded` is
+     * sales from before payment methods were tracked (or closed by an older
+     * POS build that doesn't send one).
+     */
+    public static function totalsByPaymentMethod(Builder $orders): array
+    {
+        $totals = ['cash' => 0.0, 'card' => 0.0, 'online' => 0.0, 'unrecorded' => 0.0];
+
+        (clone $orders)
+            ->selectRaw('payment_method, COALESCE(SUM(total), 0) as income')
+            ->groupBy('payment_method')
+            ->toBase()
+            ->get()
+            ->each(function ($row) use (&$totals) {
+                $key = $row->payment_method && isset($totals[$row->payment_method]) ? $row->payment_method : 'unrecorded';
+                $totals[$key] += (float) $row->income;
+            });
+
+        return $totals;
     }
 
     public function isPaid(): bool

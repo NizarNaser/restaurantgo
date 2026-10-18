@@ -18,6 +18,7 @@ interface Shift {
 interface ShiftSummary {
   orders_count: number;
   total_sales: string;
+  by_payment_method?: { cash: number; card: number; online: number; unrecorded: number };
 }
 
 export default function ShiftsPage() {
@@ -130,6 +131,15 @@ export default function ShiftsPage() {
               {summaries[shift.id] && (
                 <p className="text-xs text-gray-500 mt-2">
                   {t('shifts.summaryLine', { count: summaries[shift.id].orders_count, total: parseFloat(summaries[shift.id].total_sales).toFixed(2) })}
+                </p>
+              )}
+              {summaries[shift.id]?.by_payment_method && (
+                <p className="text-xs text-gray-500 mt-0.5">
+                  {t('shifts.paymentSplit', {
+                    cash: summaries[shift.id].by_payment_method!.cash.toFixed(2),
+                    card: summaries[shift.id].by_payment_method!.card.toFixed(2),
+                    online: summaries[shift.id].by_payment_method!.online.toFixed(2),
+                  })}
                 </p>
               )}
             </div>
