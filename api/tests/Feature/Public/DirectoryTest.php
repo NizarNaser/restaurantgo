@@ -1,5 +1,8 @@
 <?php
 
+use App\Models\Branch;
+use App\Models\Tenant;
+
 beforeEach(function () {
     $this->seed();
 });
@@ -25,6 +28,19 @@ it('returns country/city filter options', function () {
     $this->getJson('/api/v1/directory/filters')
         ->assertOk()
         ->assertJson(['LB' => [['value' => 'Beirut', 'label' => 'Beirut']]]);
+});
+
+it('includes cities of branches with no country in the filter options', function () {
+    Branch::create([
+        'tenant_id' => Tenant::where('slug', 'demo-restaurant')->value('id'),
+        'name' => 'No Country Branch',
+        'city' => 'Kyiv',
+        'is_active' => true,
+    ]);
+
+    $this->getJson('/api/v1/directory/filters')
+        ->assertOk()
+        ->assertJson(['' => [['value' => 'Kyiv']]]);
 });
 
 it('localises filter city labels for the requested language, keeping the filter value raw', function () {

@@ -5,19 +5,13 @@ import { Search, SearchX } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import api from '../api/axios';
 import { countryName } from '../lib/countryName';
+import { citiesFor, countryCodes, type FilterOptions } from '../lib/directoryFilters';
 import AdSlot from '../components/AdSlot';
 import Pagination from '../components/Pagination';
 import Reveal from '../components/Reveal';
 import RestaurantCard, { type Restaurant } from '../components/RestaurantCard';
 
 const PER_PAGE = 10;
-
-interface CityOption {
-  value: string;
-  label: string;
-}
-
-type Filters = Record<string, CityOption[]>;
 
 function CardSkeleton() {
   return (
@@ -35,7 +29,7 @@ export default function DirectoryPage() {
   const { t, i18n } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
-  const [filters, setFilters] = useState<Filters>({});
+  const [filters, setFilters] = useState<FilterOptions>({});
   const [country, setCountry] = useState(searchParams.get('country') ?? '');
   const [city, setCity] = useState(searchParams.get('city') ?? '');
   const [search, setSearch] = useState(searchParams.get('search') ?? '');
@@ -72,7 +66,7 @@ export default function DirectoryPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [country, city, search, page, i18n.resolvedLanguage]);
 
-  const cities = country ? filters[country] ?? [] : Object.values(filters).flat();
+  const cities = citiesFor(filters, country);
 
   return (
     <div className="container-page py-10">
@@ -97,7 +91,7 @@ export default function DirectoryPage() {
           onChange={(e) => { setCountry(e.target.value); setCity(''); }}
         >
           <option value="">{t('directory.allCountries')}</option>
-          {Object.keys(filters).map((c) => <option key={c} value={c}>{countryName(c, i18n.resolvedLanguage ?? 'en')}</option>)}
+          {countryCodes(filters).map((c) => <option key={c} value={c}>{countryName(c, i18n.resolvedLanguage ?? 'en')}</option>)}
         </select>
         <select className="input bg-white sm:w-48" value={city} onChange={(e) => setCity(e.target.value)}>
           <option value="">{t('directory.allCities')}</option>

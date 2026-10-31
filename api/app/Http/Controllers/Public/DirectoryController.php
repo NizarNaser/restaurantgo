@@ -76,7 +76,8 @@ class DirectoryController extends Controller
      * string the `city`/`country` query filters above still match against,
      * `label` is that city localised into the requested `lang` for display —
      * keeping the filter's actual behaviour untouched while fixing what the
-     * visitor sees it as.
+     * visitor sees it as. Branches with no country set are grouped under an
+     * empty key so their cities stay searchable.
      */
     public function filters(Request $request): JsonResponse
     {
@@ -85,7 +86,6 @@ class DirectoryController extends Controller
         $locations = Branch::query()
             ->where('is_active', true)
             ->whereHas('tenant', fn ($q) => $q->where('status', 'active'))
-            ->whereNotNull('country')
             ->select('country', 'city')
             ->distinct()
             ->orderBy('country')
@@ -110,18 +110,18 @@ class DirectoryController extends Controller
         }
 
         return [
-            'tenant_name'    => $branch->tenant->name,
-            'tenant_slug'    => $branch->tenant->slug,
-            'logo_path'      => $branch->tenant->logo_path,
-            'description'    => $this->seo->pick($branch->tenant->seo_description, $locale),
-            'branch_id'      => $branch->id,
-            'address'        => $this->seo->pick($branch->address, $locale),
-            'city'           => $this->cities->translate($branch->city, $locale),
-            'country'        => $branch->country,
-            'latitude'       => $branch->latitude ? (float) $branch->latitude : null,
-            'longitude'      => $branch->longitude ? (float) $branch->longitude : null,
+            'tenant_name' => $branch->tenant->name,
+            'tenant_slug' => $branch->tenant->slug,
+            'logo_path' => $branch->tenant->logo_path,
+            'description' => $this->seo->pick($branch->tenant->seo_description, $locale),
+            'branch_id' => $branch->id,
+            'address' => $this->seo->pick($branch->address, $locale),
+            'city' => $this->cities->translate($branch->city, $locale),
+            'country' => $branch->country,
+            'latitude' => $branch->latitude ? (float) $branch->latitude : null,
+            'longitude' => $branch->longitude ? (float) $branch->longitude : null,
             'rating_average' => $ratingAverage ?: null,
-            'rating_count'   => $ratingCount,
+            'rating_count' => $ratingCount,
         ];
     }
 }

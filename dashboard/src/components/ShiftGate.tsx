@@ -25,26 +25,35 @@ export default function ShiftGate() {
   const isRelevantPage = SHIFT_RELEVANT_PATHS.some(
     (p) => location.pathname === p || location.pathname.startsWith(`${p}/`),
   );
-  const hasPermission = useAuthStore((s) => s.hasPermission);
+  // Subscribes to the permission itself, not the stable hasPermission function:
+  // `user` is still null on the first render after an app restart.
+  const canManageShifts = useAuthStore((s) => s.hasPermission('manage shifts'));
   const [shift, setShift] = useState<Shift | null>(null);
-  const [checked, setChecked] = useState(false);
+  const [checkedPath, setCheckedPath] = useState<string | null>(null);
   const [dismissed, setDismissed] = useState(false);
   const [opening, setOpening] = useState(false);
 
+  // Rechecked on every navigation, since this outlives the pages that change
+  // the answer — a shift opened or closed on /shifts, or on another device.
+  // A failed check leaves checkedPath unset, so a hiccup never prompts.
   useEffect(() => {
-    if (!hasPermission('manage shifts')) return;
+    if (!canManageShifts || !isRelevantPage || dismissed) return;
+    let isStale = false;
     api.get<Shift>('/shifts/current')
-      .then((res) => setShift(res.data?.id ? res.data : null))
-      .catch(() => {})
-      .finally(() => setChecked(true));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+      .then((res) => {
+        if (isStale) return;
+        setShift(res.data?.id ? res.data : null);
+        setCheckedPath(location.pathname);
+      })
+      .catch(() => {});
+    return () => { isStale = true; };
+  }, [canManageShifts, isRelevantPage, dismissed, location.pathname]);
 
   const handleOpen = async () => {
     setOpening(true);
     try {
-      await api.post('/shifts/open', {});
-      setDismissed(true);
+      const res = await api.post<Shift>('/shifts/open', {});
+      setShift(res.data);
     } catch {
       setDismissed(true);
     } finally {
@@ -52,7 +61,7 @@ export default function ShiftGate() {
     }
   };
 
-  if (!isRelevantPage || !hasPermission('manage shifts') || !checked || shift || dismissed) return null;
+  if (!isRelevantPage || !canManageShifts || checkedPath !== location.pathname || shift || dismissed) return null;
 
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
