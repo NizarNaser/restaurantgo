@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import DirectoryPage from './DirectoryPage';
 import api from '../api/axios';
@@ -27,6 +27,20 @@ beforeEach(() => {
 });
 
 describe('DirectoryPage', () => {
+  it('offers cities of branches with no country, without a blank country option', async () => {
+    mockedApi.get.mockImplementation((url: string) => {
+      if (url === '/v1/directory/filters') return Promise.resolve({ data: { '': [{ value: 'Kyiv', label: 'Kyiv' }], LB: [{ value: 'Beirut', label: 'Beirut' }] } });
+      if (url === '/v1/directory/restaurants') return Promise.resolve({ data: { data: [restaurant] } });
+      if (url === '/v1/ads') return Promise.resolve({ data: [] });
+      return Promise.reject(new Error(`Unexpected GET ${url}`));
+    });
+    render(<MemoryRouter><DirectoryPage /></MemoryRouter>);
+
+    expect(await screen.findByRole('option', { name: 'Kyiv' })).toBeInTheDocument();
+    const [countrySelect] = screen.getAllByRole('combobox');
+    expect(within(countrySelect).getAllByRole('option').map((o) => (o as HTMLOptionElement).value)).toEqual(['', 'LB']);
+  });
+
   it('lists restaurants returned by the API', async () => {
     render(<MemoryRouter><DirectoryPage /></MemoryRouter>);
 

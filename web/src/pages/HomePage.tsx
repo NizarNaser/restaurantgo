@@ -5,19 +5,13 @@ import { Utensils, Calendar, BarChart3, Users, ArrowRight, Sparkles, Star, Build
 import { Trans, useTranslation } from 'react-i18next';
 import api from '../api/axios';
 import { countryName } from '../lib/countryName';
+import { citiesFor, countryCodes, type FilterOptions } from '../lib/directoryFilters';
 import AdSlot from '../components/AdSlot';
 import Pagination from '../components/Pagination';
 import Reveal from '../components/Reveal';
 import RestaurantCard, { type Restaurant } from '../components/RestaurantCard';
 
 const PER_PAGE = 10;
-
-interface CityOption {
-  value: string;
-  label: string;
-}
-
-type FilterOptions = Record<string, CityOption[]>;
 
 export default function HomePage() {
   const { t, i18n } = useTranslation();
@@ -72,7 +66,7 @@ export default function HomePage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, i18n.resolvedLanguage]);
 
-  const cities = country ? filters[country] ?? [] : Object.values(filters).flat();
+  const cities = citiesFor(filters, country);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -87,7 +81,41 @@ export default function HomePage() {
     <div className="overflow-hidden">
       {/* Hero */}
       <section className="relative bg-mesh">
-        <div className="container-page py-16 sm:py-24 grid md:grid-cols-2 gap-10 items-center relative">
+        {/* Search + filter */}
+        <div className="container-page pt-8 sm:pt-10 relative">
+          <Reveal delay={0.1}>
+            <form onSubmit={handleSearch} className="card p-3 sm:p-4 flex flex-col sm:flex-row gap-3">
+              <div className="relative flex-1">
+                <Search size={18} className="absolute start-4 top-1/2 -translate-y-1/2 text-gray-400" />
+                <input
+                  className="input ps-11 border-0 bg-gray-50"
+                  placeholder={t('directory.searchPlaceholder')}
+                  aria-label={t('directory.searchPlaceholder')}
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+              </div>
+              <select
+                className="input bg-gray-50 border-0 sm:w-44"
+                aria-label={t('directory.allCountries')}
+                value={country}
+                onChange={(e) => { setCountry(e.target.value); setCity(''); }}
+              >
+                <option value="">{t('directory.allCountries')}</option>
+                {countryCodes(filters).map((c) => <option key={c} value={c}>{countryName(c, i18n.resolvedLanguage ?? 'en')}</option>)}
+              </select>
+              <select className="input bg-gray-50 border-0 sm:w-44" aria-label={t('directory.allCities')} value={city} onChange={(e) => setCity(e.target.value)}>
+                <option value="">{t('directory.allCities')}</option>
+                {cities.map((c) => <option key={c.value} value={c.value}>{c.label}</option>)}
+              </select>
+              <button type="submit" className="btn btn-primary sm:px-6">
+                <Search size={18} /> {t('home.search.button')}
+              </button>
+            </form>
+          </Reveal>
+        </div>
+
+        <div className="container-page py-12 sm:py-16 grid md:grid-cols-2 gap-10 items-center relative">
           <motion.div
             initial={{ opacity: 0, y: 28 }}
             animate={{ opacity: 1, y: 0 }}
@@ -143,37 +171,6 @@ export default function HomePage() {
           </motion.div>
         </div>
 
-        {/* Search + filter */}
-        <div className="container-page pb-16 sm:pb-20 relative">
-          <Reveal delay={0.1}>
-            <form onSubmit={handleSearch} className="card p-3 sm:p-4 flex flex-col sm:flex-row gap-3">
-              <div className="relative flex-1">
-                <Search size={18} className="absolute start-4 top-1/2 -translate-y-1/2 text-gray-400" />
-                <input
-                  className="input ps-11 border-0 bg-gray-50"
-                  placeholder={t('home.search.placeholder')}
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                />
-              </div>
-              <select
-                className="input bg-gray-50 border-0 sm:w-44"
-                value={country}
-                onChange={(e) => { setCountry(e.target.value); setCity(''); }}
-              >
-                <option value="">{t('directory.allCountries')}</option>
-                {Object.keys(filters).map((c) => <option key={c} value={c}>{countryName(c, i18n.resolvedLanguage ?? 'en')}</option>)}
-              </select>
-              <select className="input bg-gray-50 border-0 sm:w-44" value={city} onChange={(e) => setCity(e.target.value)}>
-                <option value="">{t('directory.allCities')}</option>
-                {cities.map((c) => <option key={c.value} value={c.value}>{c.label}</option>)}
-              </select>
-              <button type="submit" className="btn btn-primary sm:px-6">
-                <Search size={18} /> {t('home.search.button')}
-              </button>
-            </form>
-          </Reveal>
-        </div>
       </section>
 
       {/* Stats bar */}
